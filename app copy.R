@@ -33,11 +33,6 @@ Area_Level <- list(
              "West","Central South","North","Central East", 
              "Central North","North West","North East"))
 
-Algorithm_Choice <- list(
-  "*Choose One*" = list(""),
-  "Each vertex in a different stage" = list("","Hill-Climbing" ,"Backwards Hill-Climbing" , "Fast Backwards Hill-Climbing" , "Random Backwards Hill-Climbing" , "Backwards Joining of Stages" , "Hierarchical Clustering of Stages" , "Clustering of Stages using K-Means"),
-  "All vertices in the same stage" = list("","Hill-Climbing" = "stages_hc" ))
-
 homicides$Year <- format(as.Date(homicides$Recorded_Date, format="%Y/%m/%d"),"%Y")
 #transform(homicides, Year = as.numeric(Year))
 homicides[, c(11)] <- sapply(homicides[, c(11)], as.numeric)
@@ -59,7 +54,7 @@ homicides <- homicides[(c(1:4,6:8,11:12))]
 
 
 ui <- fluidPage(
-  titlePanel("Homicide Chain Event Graphs"),
+  titlePanel("Chain Event Graphs"),
   tabsetPanel(
     tabPanel("Data", fluid = TRUE,
       sidebarLayout(
@@ -95,6 +90,7 @@ ui <- fluidPage(
                
                h2('Event
                   Tree'),
+               checkboxInput("toggleLabels", "Hide data values", value = TRUE),
                actionButton("finishedColoring", "Finished Colouring"),
                visNetworkOutput("eventtree_network",height = "800px"),
                h2('Staged
@@ -327,7 +323,7 @@ server <- function(input, output, session) {
     
     data <- toVisNetworkData(g)
     data$nodes$level <- c(1,rep(2,length(col1)), rep(3, (length(col1)*length(col2))), rep(4,length(col1)*length(col2)*length(col3)), rep(5,length(col1)*length(col2)*length(col3)*length(col4)))
-    data$nodes$label = data$nodes$id
+    #data$nodes$label = data$nodes$id
     data$nodes$shape <- 'dot'
     data$nodes$size = 100
     data$nodes$color.background <- "#ffffff"
@@ -336,8 +332,8 @@ server <- function(input, output, session) {
     #data$nodes$color <- "white"
     data$edges$label1 <- c(col1, rep(col2, length(col1)), rep(col3, length(col1)*length(col2)), rep(col4, length(col1)*length(col2)*length(col3)))
     data$edges$label2 <- c(count1$count,count2$count,count3$count,count4$count)
-    data$edges$label3 <- ""
-    data$edges$label <- paste(data$edges$label1, "\n", data$edges$label2)
+    data$edges$label3 <- paste(data$edges$label1, "\n", data$edges$label2)
+    #data$edges$label <- paste(data$edges$label1, "\n", data$edges$label2)
     data$edges$font.size <- 70
     data$edges$color <- "#000000"
     data$edges$arrows <- "to"
@@ -358,9 +354,19 @@ server <- function(input, output, session) {
     data <- homicide_set()  # Assuming homicide_set() is a function that returns your data
     updated_graph_data(data)
   })
+
+  observe({
+    data <- updated_graph_data()
+    if (input$toggleLabels) {
+      data$edges$label <- data$edges$label1
+    } else {
+      data$edges$label <- data$edges$label3
+    }
+    updated_graph_data(data)
+  })
+  # Render the network
+  # Render the network
   
-  # Render the network
-  # Render the network
   output$eventtree_network <- renderVisNetwork({
     data <- updated_graph_data()
     visNetwork(nodes = data$nodes, edges = data$edges, height = "500px") %>%
