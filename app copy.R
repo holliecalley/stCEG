@@ -97,6 +97,7 @@ ui <- fluidPage(
                   Tree'),
                actionButton("finishedPrior", "Finished Prior Specification"),
                DTOutput("colorLevelTable", width = "500px"),
+               checkboxInput("usePriorLabels", "Show Prior Mean", value = TRUE),
                visNetworkOutput("stagedtree",height = "800px"),
                h2('Chain Event Graph'),
                visNetworkOutput("ceg_network", height = "700px")
@@ -609,7 +610,7 @@ server <- function(input, output, session) {
           # Ensure there are enough prior values for the edges
           if (length(adj_prior_values) >= length(edges_from_node)) {
             for (j in 1:length(edges_from_node)) {
-              edge_data$label[edges_from_node[j]] <- paste(edge_data$label1[edges_from_node[j]], "\n", adj_prior_values[j])
+              edge_data$label_prior_frac[edges_from_node[j]] <- paste(edge_data$label1[edges_from_node[j]], "\n", adj_prior_values[j])
               edge_data$label3[edges_from_node[j]] <- adj_prior_values[j]
               }
           } else {
@@ -620,15 +621,160 @@ server <- function(input, output, session) {
       return(edge_data)
     }
     
+    #edited_node_colors_levels_data <- node_colors_levels()
     data$edges <- assignPriorsToEdges(data$nodes, data$edges)
     data$edges$label3 <- as.numeric(data$edges$label3)
+    #data$edges$prior <- data$nodes$prior
+    splitPriors <- function(prior) {
+      as.numeric(strsplit(prior, ",")[[1]])
+    }
     
+    # Function to calculate ratios for each prior
+    calculateRatios <- function(priors) {
+      total <- sum(priors)
+      if (total == 0) return(rep(0, length(priors)))
+      return(priors / total)
+    }
+    
+    
+    
+    assignRatiosToEdges <- function(nodes_data, edges_data) {
+      # Ensure there's a column to store ratios in edges_data
+      if (!"ratio" %in% colnames(edges_data)) {
+        edges_data$ratio <- ""
+      }
+      
+      # Ensure there's a column to store ratios in nodes_data
+      if (!"ratio" %in% colnames(nodes_data)) {
+        nodes_data$ratio <- ""
+      }
+      
+      # Loop through each unique node
+      for (i in 1:nrow(nodes_data)) {
+        node_id <- nodes_data$id[i]
+        prior <- nodes_data$prior[i]
+        
+        if (!is.na(prior) && prior != "") {
+          # Split and calculate the ratios
+          prior_values <- splitPriors(prior)
+          ratios <- round(calculateRatios(prior_values), 3)
+          
+          # Assign the ratios to the node
+          nodes_data$ratio[i] <- paste(ratios, collapse = ", ")
+          
+          # Find edges that originate from this node
+          edges_from_node <- which(edges_data$from == node_id)
+          
+          # Ensure there are enough ratios for the edges
+          if (length(ratios) >= length(edges_from_node)) {
+            for (j in 1:length(edges_from_node)) {
+              # Assign the ratio to the edge
+              edges_data$ratio[edges_from_node[j]] <- ratios[j]
+              edges_data$label_prior_mean[edges_from_node[j]] <- paste(edges_data$label1[edges_from_node[j]], "\n", ratios[j])
+            }
+          } else {
+            warning(paste("Not enough prior values for edges from node", node_id))
+          }
+        }
+      }
+      #edges_data$label_prior_mean <- paste(edges_data$label)
+      return(list(edges = edges_data, nodes = nodes_data))
+    }
+    
+    # Update both edges and nodes with ratios
+    updated_data <- assignRatiosToEdges(data$nodes, data$edges)
+    data$edges <- updated_data$edges
+    data$nodes <- updated_data$nodes
+    
+    
+    splitPriors <- function(prior) {
+      return(as.numeric(unlist(strsplit(prior, ","))))
+    }
+    
+    # Function to calculate the variance for each parameter in the Dirichlet distribution
+    calculateVariance <- function(priors) {
+      total <- sum(priors)
+      if (total == 0) return(rep(0, length(priors)))
+      return((priors * (total - priors)) / (total^2 * (total + 1)))
+    }
+    
+    # Function to assign variances to nodes
+    assignVarianceToNodes <- function(nodes_data) {
+      # Ensure there's a column to store variance in nodes_data
+      if (!"variance" %in% colnames(nodes_data)) {
+        nodes_data$variance <- NA
+      }
+      
+      # Loop through each unique node
+      for (i in 1:nrow(nodes_data)) {
+        prior <- nodes_data$prior[i]  # Get the prior for the current node
+        
+        if (!is.na(prior) && prior != "") {  # Ensure prior is valid
+          prior_values <- splitPriors(prior)  # Split and convert to numeric
+          
+          # Calculate variance for each component
+          variances <- round(calculateVariance(prior_values), 3)  # Increased precision
+          
+          # Combine variances into a single string
+          variance_str <- paste(variances, collapse = ", ")
+          
+          # Assign the variance to the node
+          nodes_data$variance[i] <- variance_str
+        } else {
+          nodes_data$variance[i] <- NA
+        }
+      }
+      
+      return(nodes_data)
+    }
+    
+    # Calculate variance for nodes
+    data$nodes <- assignVarianceToNodes(data$nodes)
     # Print edges to verify
-    print(data$edges)
+    print("NODES DATA!!!!!!!")
+   #print(edited_node_colors_levels_data)
+    print(data$nodes)
+    
+    createTooltipWithPrior <- function(prior, ratio, variance) {
+      if (!is.na(prior) && prior != "") {
+        tooltip_text <- paste(
+          "Prior: Dirichlet(", prior, ")<br>",
+          "Mean: (", ratio, ")<br>",
+          "Variance: (", variance, ")"
+        )
+        return(tooltip_text)
+      } else {
+        return("Leaf nodes have no prior")
+      }
+    }
     
     
     # Update the reactive value
     staged_tree_data(data)
+    
+    observe({
+      data <- staged_tree_data()
+      if (input$usePriorLabels) {
+        data$edges$label <- data$edges$label_prior_mean
+      } else {
+        data$edges$label <- data$edges$label_prior_frac
+      }
+      staged_tree_data(data)
+    })
+    
+    for (i in 1:nrow(data$nodes)) {
+      data <- staged_tree_data()
+      prior <- data$nodes$prior[i]
+      ratio <- data$nodes$ratio[i]
+      variance <- data$nodes$variance[i]
+      
+      # Create the tooltip content with the prior value
+      tooltip_content <- createTooltipWithPrior(prior, ratio, variance)
+      
+      # Update the title property for tooltips
+      data$nodes$title[i] <- tooltip_content
+      staged_tree_data(data)
+    }
     
     output$stagedtree <- renderVisNetwork({
       data = staged_tree_data()
