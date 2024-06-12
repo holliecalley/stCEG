@@ -56,7 +56,6 @@ homicides <- homicides %>% mutate(BCU = ifelse(Borough %in% c("Hammersmith & Ful
                                                                                                                     ifelse(Borough %in% c("Newham", "Waltham Forest"), "North East","Hollie messed up")))))))))))))
 homicides <- homicides[(c(1:4,6:8,11:12))]
 
- 
 
 
 ui <- fluidPage(
