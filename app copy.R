@@ -100,6 +100,7 @@ ui <- fluidPage(
                  visNetworkOutput("eventtree_network",height = "800px"),
                  h2('Staged
                   Tree'),
+ default-priors
                  actionButton("finishedPrior", "Finished Prior Specification"),
                  DTOutput("colorLevelTable", width = "500px"),
                  checkboxInput("usePriorLabels", "Show Prior Mean", value = TRUE),
@@ -110,6 +111,7 @@ ui <- fluidPage(
                ))),
     
   ))
+
 
 server <- function(input, output, session) {
   
@@ -957,7 +959,9 @@ print(flattened_list)
         if (!is.na(prior) && prior != "") {
           # Split and calculate the ratios
           prior_values <- splitPriors(prior)
+
           ratios <- round(calculateRatios(prior_values), 2)
+
           
           # Assign the ratios to the node
           nodes_data$ratio[i] <- paste(ratios, collapse = ", ")
@@ -986,6 +990,7 @@ print(flattened_list)
     data$edges <- updated_data$edges
     data$nodes <- updated_data$nodes
     
+
     
     splitPriors <- function(prior) {
       return(as.numeric(unlist(strsplit(prior, ","))))
@@ -998,6 +1003,7 @@ print(flattened_list)
       return((priors * (total - priors)) / (total^2 * (total + 1)))
     }
     
+
     # Function to assign variances to nodes
     assignVarianceToNodes <- function(nodes_data) {
       # Ensure there's a column to store variance in nodes_data
@@ -1013,7 +1019,9 @@ print(flattened_list)
           prior_values <- splitPriors(prior)  # Split and convert to numeric
           
           # Calculate variance for each component
+
           variances <- round(calculateVariance(prior_values), 2)  # Increased precision
+
           
           # Combine variances into a single string
           variance_str <- paste(variances, collapse = ", ")
@@ -1032,7 +1040,7 @@ print(flattened_list)
     data$nodes <- assignVarianceToNodes(data$nodes)
     # Print edges to verify
     print("NODES DATA!!!!!!!")
-    #print(edited_node_colors_levels_data)
+
     print(data$nodes)
     
     createTooltipWithPrior <- function(prior, ratio, variance) {
