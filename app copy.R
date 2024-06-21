@@ -757,8 +757,11 @@ print(flattened_list)
       color <- colors[i]
       
       # Update the color for each node in the group
+      #nodes$color <- "#ffffff"
       nodes[nodes$id %in% group, "color"] <- color
     }
+    nodes$color[nodes$level == 1] <- "#ffffff"
+    nodes$color[nodes$level == 5] <- "#ffffff"
     
     print(nodes)
     print(edges)
@@ -1275,7 +1278,7 @@ print(flattened_list)
                                      addNodeCols = FALSE,
                                      editEdgeCols = FALSE,
                                      editNodeCols = c("color"),
-                                     multiselect = TRUE), nodesIdSelection = TRUE) %>%
+                                     multiselect = TRUE), nodesIdSelection = FALSE) %>%
       visInteraction(dragNodes = TRUE, multiselect = FALSE, navigationButtons = TRUE) %>%
       visPhysics(hierarchicalRepulsion = list(nodeDistance = 990), stabilization = TRUE) %>%
       visEvents(stabilizationIterationsDone = "function() { this.physics.options.enabled = false; }")
