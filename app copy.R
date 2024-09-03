@@ -100,9 +100,15 @@ ui <- fluidPage(
                  visNetworkOutput("eventtree_network",height = "800px"),
                  h2('Staged
                   Tree'),
- default-priors
+                 
+                 selectInput(
+                   inputId = "priorChoice",
+                   label = "Choose Prior Type:",
+                   choices = c("Specify Prior", "Uniform 1,1 Prior (Type 1)", "Uniform 1,1 Prior (Type 2)", "Phantom Individuals Prior"),
+                 ),
+                 #actionButton("chosenPriortype", "Prior Type Selected"),
+                 DTOutput("colorLevelTable", width = "600px"),
                  actionButton("finishedPrior", "Finished Prior Specification"),
-                 DTOutput("colorLevelTable", width = "500px"),
                  checkboxInput("usePriorLabels", "Show Prior Mean", value = TRUE),
                  visNetworkOutput("stagedtree",height = "800px"),
                  h2('Chain Event Graph'),
@@ -417,19 +423,19 @@ server <- function(input, output, session) {
   # Render the network
   # Render the network
   
-
+  
   node_colors <- reactiveVal(NULL)
   
-
+  
   
   # Reactive expression for updated graph data with node colors
- # updated_graph_data_with_colors <- reactive({
-#    data <- updated_graph_data()
-#    if (!is.null(node_colors())) {
-#      data$nodes$color <- node_colors()
-#    }
-#    data
-#  })
+  # updated_graph_data_with_colors <- reactive({
+  #    data <- updated_graph_data()
+  #    if (!is.null(node_colors())) {
+  #      data$nodes$color <- node_colors()
+  #    }
+  #    data
+  #  })
   
   
   output$eventtree_network <- renderVisNetwork({
@@ -732,21 +738,21 @@ server <- function(input, output, session) {
     # Flatten the nested lists into simple vectors and print them
     flattened_list <- lapply(row_numbers_list, function(x) unlist(x))
     included_ids <- unlist(flattened_list)
-print(flattened_list)
-print(included_ids)
-#print("rownumbers")
-#print(row_numbers)
-# Step 2: Identify missing IDs
-missing_ids <- setdiff(nodes_to_consider2, included_ids)
-#print("missing:")
-#print(missing_ids)
-# Step 3: Add each missing ID as an individual sublist to flattened_list
-for (row_number in missing_ids) {
-  flattened_list <- append(flattened_list, list(row_number))
-}
-
-# Print the updated flattened_list
-print(flattened_list)
+    print(flattened_list)
+    print(included_ids)
+    #print("rownumbers")
+    #print(row_numbers)
+    # Step 2: Identify missing IDs
+    missing_ids <- setdiff(nodes_to_consider2, included_ids)
+    #print("missing:")
+    #print(missing_ids)
+    # Step 3: Add each missing ID as an individual sublist to flattened_list
+    for (row_number in missing_ids) {
+      flattened_list <- append(flattened_list, list(row_number))
+    }
+    
+    # Print the updated flattened_list
+    print(flattened_list)
     
     num_colors <- length(flattened_list) # Number of groups
     colors <- distinctColorPalette(num_colors)
@@ -762,6 +768,7 @@ print(flattened_list)
     }
     nodes$color[nodes$level == 1] <- "#ffffff"
     nodes$color[nodes$level == 5] <- "#ffffff"
+    nodes$number <- 1
     
     print(nodes)
     print(edges)
@@ -775,6 +782,7 @@ print(flattened_list)
   
   node_colors_levels <- reactiveVal(NULL)
   
+  #hi <- reactiveVal(NULL)
   
   # Observe the finishedColoring button click
   observeEvent(input$finishedColoring, {
@@ -782,8 +790,11 @@ print(flattened_list)
     data <- updated_graph_data()
     
     # Extract node colors and levels
-    node_colors_levels_data <- data$nodes[, c("id", "label", "color", "level", "outgoing_edges")]
+    node_colors_levels_data <- data$nodes[, c("id", "label", "color", "level", "outgoing_edges", "number" )]
+    number_edges <- node_colors_levels_data %>% group_by(color, level, outgoing_edges) %>% summarize(number_nodes = sum(number))
+    node_colors_levels_data <- full_join(node_colors_levels_data, number_edges, by = c("color", "level", "outgoing_edges"))
     print(node_colors_levels_data)
+    #print(hi)
     # Add a column with HTML code for colored cells
     #node_colors_levels_data$color_display <- sprintf('<div style="background-color:%s;width:100%%;height:100%%;"></div>', node_colors_levels_data$color)
     
@@ -793,20 +804,66 @@ print(flattened_list)
   })
   
   # Render the color and level table
-  output$colorLevelTable <- renderDT({
+  node_colors_levels2 <- reactiveVal(NULL)
+  observe({
+    prior_type <- input$priorChoice
     node_colors_levels_data <- node_colors_levels()
+    
     if (!is.null(node_colors_levels_data)) {
-      unique_colors_levels_data <- unique(node_colors_levels_data[node_colors_levels_data$level != 5, c("color", "level", "outgoing_edges")])
+      # Filter and select relevant columns
+      unique_colors_levels_data <- unique(node_colors_levels_data[node_colors_levels_data$level != 5, c("color", "level", "outgoing_edges", "number_nodes")])
       unique_colors_levels_data$stage <- paste0("u", seq_len(nrow(unique_colors_levels_data)))
-      unique_colors_levels_data$prior <- ""
-      unique_colors_levels_data <- unique_colors_levels_data[, c("color", "stage", "level", "outgoing_edges", "prior")]
+      
+      # Initialize the `prior` column if it doesn't exist or is empty
+      if (!"prior" %in% colnames(unique_colors_levels_data)) {
+        unique_colors_levels_data$prior <- ""
+      }
+      
+      # Set the `prior` based on the selected `prior_type`
+      if (prior_type == "Specify Prior") {
+        # Preserve existing user inputs if any, otherwise set default "Enter Prior"
+        unique_colors_levels_data$prior[unique_colors_levels_data$prior == ""] <- "Enter Prior"
+      } else if (prior_type == "Uniform 1,1 Prior (Type 1)") {
+        for (i in seq_len(nrow(unique_colors_levels_data))) {
+          edges <- unique_colors_levels_data$outgoing_edges[i]
+          num_repeats <- unique_colors_levels_data$number_nodes[i]
+          unique_colors_levels_data$prior[i] <- ifelse(unique_colors_levels_data$prior[i] == "", paste(rep(num_repeats, edges), collapse = ","), unique_colors_levels_data$prior[i])
+        }
+      } else if (prior_type == "Uniform 1,1 Prior (Type 2)") {
+        for (i in seq_len(nrow(unique_colors_levels_data))) {
+          edges <- unique_colors_levels_data$outgoing_edges[i]
+          unique_colors_levels_data$prior[i] <- ifelse(unique_colors_levels_data$prior[i] == "", paste(rep(1, edges), collapse = ","), unique_colors_levels_data$prior[i])
+        }
+      } else if (prior_type == "Phantom Individuals Prior") {
+        for (i in seq_len(nrow(unique_colors_levels_data))) {
+          edges <- unique_colors_levels_data$outgoing_edges[i]
+          unique_colors_levels_data$prior[i] <- ifelse(unique_colors_levels_data$prior[i] == "", paste(rep(9, edges), collapse = ","), unique_colors_levels_data$prior[i])
+        }
+      }
+      
+      # Store the modified data in the reactive value
       node_colors_levels(unique_colors_levels_data)
-      datatable(unique_colors_levels_data, escape = FALSE, editable = TRUE, options = list(dom = 't', pageLength = 50), rownames = FALSE) %>%
-        formatStyle(columns = "color", valueColumns = "color", backgroundColor = styleEqual(unique_colors_levels_data$color, unique_colors_levels_data$color), color = styleEqual(unique_colors_levels_data$color, unique_colors_levels_data$color)) %>%
-        formatStyle(columns = "level", textAlign = "left")
+      output$colorLevelTable <- renderDT({
+        datatable(
+          node_colors_levels(),
+          escape = FALSE,
+          editable = TRUE,
+          options = list(dom = 't', pageLength = 50),
+          rownames = FALSE
+        ) %>%
+          formatStyle(
+            columns = "color",
+            valueColumns = "color",
+            backgroundColor = styleEqual(node_colors_levels()$color, node_colors_levels()$color),
+            color = styleEqual(node_colors_levels()$color, node_colors_levels()$color)
+          ) %>%
+          formatStyle(columns = "level", textAlign = "left")
+      })
     }
   })
   
+  
+  # Observe and handle cell edit events
   observeEvent(input$colorLevelTable_cell_edit, {
     info <- input$colorLevelTable_cell_edit
     node_colors_levels_data <- node_colors_levels()
@@ -821,26 +878,47 @@ print(flattened_list)
     node_colors_levels_data[info$row, col_name] <- info$value
     
     # Store the updated node_colors_levels_data in the reactive value
-    node_colors_levels(node_colors_levels_data)
+    node_colors_levels2(node_colors_levels_data)
     
     # Debugging: Print the updated node_colors_levels_data
     print("After edit:")
-    print(node_colors_levels())
+    print(node_colors_levels2())
     
-    # Refresh the table to show the updated data
     output$colorLevelTable <- renderDT({
-      datatable(node_colors_levels(), escape = FALSE, editable = TRUE, options = list(dom = 't'), rownames = FALSE) %>%
-        formatStyle(columns = "color", valueColumns = "color", backgroundColor = styleEqual(node_colors_levels()$color, node_colors_levels()$color), color = styleEqual(node_colors_levels()$color, node_colors_levels()$color)) %>%
+      datatable(
+        if (!is.null(node_colors_levels2())) {
+          node_colors_levels_data
+        } else {
+          node_colors_levels_data
+        },
+        escape = FALSE,
+        editable = TRUE,
+        options = list(dom = 't', pageLength = 50),
+        rownames = FALSE
+      ) %>%
+        formatStyle(
+          columns = "color",
+          valueColumns = "color",
+          backgroundColor = styleEqual(node_colors_levels()$color, node_colors_levels()$color),
+          color = styleEqual(node_colors_levels()$color, node_colors_levels()$color)
+        ) %>%
         formatStyle(columns = "level", textAlign = "left")
     })
   })
+  
+  # Render the DataTable based on the reactive value
   
   
   staged_tree_data <- reactiveVal(NULL)
   
   observeEvent(input$finishedPrior, {
     # Get the updated node_colors_levels data
-    edited_node_colors_levels_data <- node_colors_levels()
+    if (!is.null(node_colors_levels2())) {
+      edited_node_colors_levels_data <- node_colors_levels2()
+    } else {
+      edited_node_colors_levels_data <- node_colors_levels()
+    }
+    #edited_node_colors_levels_data <- node_colors_levels2()
     
     # Debugging: Print the edited data to verify prior updates
     print("Edited node_colors_levels_data:")
@@ -962,9 +1040,9 @@ print(flattened_list)
         if (!is.na(prior) && prior != "") {
           # Split and calculate the ratios
           prior_values <- splitPriors(prior)
-
+          
           ratios <- round(calculateRatios(prior_values), 2)
-
+          
           
           # Assign the ratios to the node
           nodes_data$ratio[i] <- paste(ratios, collapse = ", ")
@@ -993,7 +1071,7 @@ print(flattened_list)
     data$edges <- updated_data$edges
     data$nodes <- updated_data$nodes
     
-
+    
     
     splitPriors <- function(prior) {
       return(as.numeric(unlist(strsplit(prior, ","))))
@@ -1006,7 +1084,7 @@ print(flattened_list)
       return((priors * (total - priors)) / (total^2 * (total + 1)))
     }
     
-
+    
     # Function to assign variances to nodes
     assignVarianceToNodes <- function(nodes_data) {
       # Ensure there's a column to store variance in nodes_data
@@ -1022,9 +1100,9 @@ print(flattened_list)
           prior_values <- splitPriors(prior)  # Split and convert to numeric
           
           # Calculate variance for each component
-
+          
           variances <- round(calculateVariance(prior_values), 2)  # Increased precision
-
+          
           
           # Combine variances into a single string
           variance_str <- paste(variances, collapse = ", ")
@@ -1043,7 +1121,7 @@ print(flattened_list)
     data$nodes <- assignVarianceToNodes(data$nodes)
     # Print edges to verify
     print("NODES DATA!!!!!!!")
-
+    
     print(data$nodes)
     
     createTooltipWithPrior <- function(prior, ratio, variance) {
