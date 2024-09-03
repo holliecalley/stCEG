@@ -100,7 +100,8 @@ ui <- fluidPage(
                  visNetworkOutput("eventtree_network",height = "800px"),
                  h2('Staged
                   Tree'),
-                 
+
+                
                  selectInput(
                    inputId = "priorChoice",
                    label = "Choose Prior Type:",
