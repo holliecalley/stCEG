@@ -113,8 +113,12 @@ ui <- fluidPage(
                  checkboxInput("usePriorLabels", "Show Prior Mean", value = TRUE),
                  visNetworkOutput("stagedtree",height = "800px"),
                  h2('Chain Event Graph'),
-                 visNetworkOutput("ceg_network", height = "700px")
-                 
+                 checkboxInput("viewUpdateTable", "View Prior-Posterior Update Table", value = TRUE),
+                 sliderInput("levelSeparation", "Level Separation", min = 500, max = 3000, value = 1000, sep = ""),
+                 visNetworkOutput("ceg_network", height = "700px"),
+                 conditionalPanel(
+                   condition = "input.viewUpdateTable == true",
+                   DTOutput("UpdateTable"))
                ))),
     
   ))
@@ -787,42 +791,36 @@ server <- function(input, output, session) {
   
   # Observe the finishedColoring button click
   observeEvent(input$finishedColoring, {
-    # Get the updated_graph_data
     data <- updated_graph_data()
     
     # Extract node colors and levels
-    node_colors_levels_data <- data$nodes[, c("id", "label", "color", "level", "outgoing_edges", "number" )]
-    number_edges <- node_colors_levels_data %>% group_by(color, level, outgoing_edges) %>% summarize(number_nodes = sum(number))
+    node_colors_levels_data <- data$nodes[, c("id", "label", "color", "level", "outgoing_edges", "number")]
+    number_edges <- node_colors_levels_data %>%
+      group_by(color, level, outgoing_edges) %>%
+      summarize(number_nodes = sum(number))
     node_colors_levels_data <- full_join(node_colors_levels_data, number_edges, by = c("color", "level", "outgoing_edges"))
-    print(node_colors_levels_data)
-    #print(hi)
-    # Add a column with HTML code for colored cells
-    #node_colors_levels_data$color_display <- sprintf('<div style="background-color:%s;width:100%%;height:100%%;"></div>', node_colors_levels_data$color)
     
     # Store the node colors and levels in the reactive value
     node_colors_levels(node_colors_levels_data)
-    
   })
   
   # Render the color and level table
-  node_colors_levels2 <- reactiveVal(NULL)
+  node_colors_levels2 <- reactiveVal(NULL)  # Keep track of edits
+  
   observe({
     prior_type <- input$priorChoice
     node_colors_levels_data <- node_colors_levels()
     
     if (!is.null(node_colors_levels_data)) {
-      # Filter and select relevant columns
       unique_colors_levels_data <- unique(node_colors_levels_data[node_colors_levels_data$level != 5, c("color", "level", "outgoing_edges", "number_nodes")])
       unique_colors_levels_data$stage <- paste0("u", seq_len(nrow(unique_colors_levels_data)))
       
-      # Initialize the `prior` column if it doesn't exist or is empty
       if (!"prior" %in% colnames(unique_colors_levels_data)) {
         unique_colors_levels_data$prior <- ""
       }
       
       # Set the `prior` based on the selected `prior_type`
       if (prior_type == "Specify Prior") {
-        # Preserve existing user inputs if any, otherwise set default "Enter Prior"
         unique_colors_levels_data$prior[unique_colors_levels_data$prior == ""] <- "Enter Prior"
       } else if (prior_type == "Uniform 1,1 Prior (Type 1)") {
         for (i in seq_len(nrow(unique_colors_levels_data))) {
@@ -842,11 +840,12 @@ server <- function(input, output, session) {
         }
       }
       
-      # Store the modified data in the reactive value
-      node_colors_levels(unique_colors_levels_data)
+      # Store the modified data in node_colors_levels2 instead of node_colors_levels
+      node_colors_levels2(unique_colors_levels_data)
+      
       output$colorLevelTable <- renderDT({
         datatable(
-          node_colors_levels(),
+          node_colors_levels2(),  # Render the table using node_colors_levels2
           escape = FALSE,
           editable = TRUE,
           options = list(dom = 't', pageLength = 50),
@@ -855,43 +854,31 @@ server <- function(input, output, session) {
           formatStyle(
             columns = "color",
             valueColumns = "color",
-            backgroundColor = styleEqual(node_colors_levels()$color, node_colors_levels()$color),
-            color = styleEqual(node_colors_levels()$color, node_colors_levels()$color)
+            backgroundColor = styleEqual(node_colors_levels2()$color, node_colors_levels2()$color),
+            color = styleEqual(node_colors_levels2()$color, node_colors_levels2()$color)
           ) %>%
           formatStyle(columns = "level", textAlign = "left")
       })
     }
   })
   
-  
   # Observe and handle cell edit events
   observeEvent(input$colorLevelTable_cell_edit, {
     info <- input$colorLevelTable_cell_edit
-    node_colors_levels_data <- node_colors_levels()
+    node_colors_levels_data <- node_colors_levels2()  # Get the latest edited data
     
-    # Map the `col` index to the correct column name
     col_name <- names(node_colors_levels_data)[info$col + 1]  # Adjust for 0-based index from DataTable
     
-    # Debugging: Print the identified column name and value to be updated
-    print(paste("Editing column:", col_name, "at row:", info$row, "with value:", info$value))
-    
-    # Update the corresponding cell in the node_colors_levels_data
+    # Update the corresponding cell in node_colors_levels_data
     node_colors_levels_data[info$row, col_name] <- info$value
     
-    # Store the updated node_colors_levels_data in the reactive value
+    # Store the updated data back into node_colors_levels2
     node_colors_levels2(node_colors_levels_data)
     
-    # Debugging: Print the updated node_colors_levels_data
-    print("After edit:")
-    print(node_colors_levels2())
-    
+    # Render the updated table using node_colors_levels2
     output$colorLevelTable <- renderDT({
       datatable(
-        if (!is.null(node_colors_levels2())) {
-          node_colors_levels_data
-        } else {
-          node_colors_levels_data
-        },
+        node_colors_levels2(),
         escape = FALSE,
         editable = TRUE,
         options = list(dom = 't', pageLength = 50),
@@ -900,12 +887,13 @@ server <- function(input, output, session) {
         formatStyle(
           columns = "color",
           valueColumns = "color",
-          backgroundColor = styleEqual(node_colors_levels()$color, node_colors_levels()$color),
-          color = styleEqual(node_colors_levels()$color, node_colors_levels()$color)
+          backgroundColor = styleEqual(node_colors_levels2()$color, node_colors_levels2()$color),
+          color = styleEqual(node_colors_levels2()$color, node_colors_levels2()$color)
         ) %>%
         formatStyle(columns = "level", textAlign = "left")
     })
   })
+  
   
   # Render the DataTable based on the reactive value
   
@@ -1090,7 +1078,7 @@ server <- function(input, output, session) {
     assignVarianceToNodes <- function(nodes_data) {
       # Ensure there's a column to store variance in nodes_data
       if (!"variance" %in% colnames(nodes_data)) {
-        nodes_data$variance <- NA
+        nodes_data$priorvariance <- NA
       }
       
       # Loop through each unique node
@@ -1109,9 +1097,9 @@ server <- function(input, output, session) {
           variance_str <- paste(variances, collapse = ", ")
           
           # Assign the variance to the node
-          nodes_data$variance[i] <- variance_str
+          nodes_data$priorvariance[i] <- variance_str
         } else {
-          nodes_data$variance[i] <- NA
+          nodes_data$priorvariance[i] <- NA
         }
       }
       
@@ -1125,12 +1113,12 @@ server <- function(input, output, session) {
     
     print(data$nodes)
     
-    createTooltipWithPrior <- function(prior, ratio, variance) {
+    createTooltipWithPrior <- function(prior, ratio, priorvariance) {
       if (!is.na(prior) && prior != "") {
         tooltip_text <- paste(
           "Prior: Dirichlet(", prior, ")<br>",
           "Mean: (", ratio, ")<br>",
-          "Variance: (", variance, ")"
+          "Variance: (", priorvariance, ")"
         )
         return(tooltip_text)
       } else {
@@ -1156,10 +1144,10 @@ server <- function(input, output, session) {
       data <- staged_tree_data()
       prior <- data$nodes$prior[i]
       ratio <- data$nodes$ratio[i]
-      variance <- data$nodes$variance[i]
+      priorvariance <- data$nodes$priorvariance[i]
       
       # Create the tooltip content with the prior value
-      tooltip_content <- createTooltipWithPrior(prior, ratio, variance)
+      tooltip_content <- createTooltipWithPrior(prior, ratio, priorvariance)
       
       # Update the title property for tooltips
       data$nodes$title[i] <- tooltip_content
@@ -1179,7 +1167,7 @@ server <- function(input, output, session) {
   })
   
   contracted_data <- reactiveVal(NULL)
-  
+  grouped_df2 <- reactiveVal(NULL)
   observeEvent(input$viewceg, {
     data <- staged_tree_data()
     nodes <- data$nodes
@@ -1226,10 +1214,10 @@ server <- function(input, output, session) {
     
     contracted_nodes <- nodes %>%
       group_by(contract_id) %>%
-      summarise(ids = paste(id, collapse = ", "), label = first(label), level = first(level), color = first(color), .groups = 'drop')
+      summarise(ids = paste(id, collapse = ", "), label = first(label), level = first(level), color = first(color), prior_variance = first(priorvariance), .groups = 'drop') #prior_mean = first(ratio),
     
-    #print("Contracted Nodes before:")
-    #print(contracted_nodes)
+    print("Contracted Nodes before:")
+    print(contracted_nodes)
     
     # Sort contracted_nodes by current labels numerically
     contracted_nodes <- contracted_nodes[order(as.numeric(gsub("[^0-9]", "", contracted_nodes$label))), ]
@@ -1297,6 +1285,8 @@ server <- function(input, output, session) {
     contracted_nodes$font <- "80px"
     contracted_data(list(nodes = contracted_nodes, edges = merged_edges))
     data <- contracted_data()
+    print("data:")
+    print(data)
     edges <- data$edges
     nodes <- data$nodes
     edges <- merge(edges, nodes, by.x = "from", by.y = "id", all.x = FALSE, suffixes = c("_from", "_to"))
@@ -1304,40 +1294,69 @@ server <- function(input, output, session) {
     edges2 <- edges %>%
       group_by(color_to, level, label1) %>%
       summarise(
-        sumlabel4 = sum(sumlabel2),
-        sumlabel5 = sum(sumlabel3),
-        sumlabel6 = (sumlabel4 + sumlabel5),
+        data_table = sum(sumlabel2),
+        prior_table = round(sum(sumlabel3), 1),
+        posterior_table = round((prior_table + data_table), 0),
         .groups = 'drop' # Ungroup after summarise
       )
     
     edges3 <- edges2 %>%
       group_by(color_to, level) %>%
       summarise(
-        sumlabel7 = sum(sumlabel6),
+        total_stage_posterior = sum(posterior_table),
+        .groups = 'drop' # Ungroup after summarise
+      )
+    
+    edges4 <- edges2 %>%
+      group_by(color_to, level) %>%
+      summarise(
+        total_stage_prior = sum(prior_table),
         .groups = 'drop' # Ungroup after summarise
       )
     
     edges2 <- edges2 %>%
       left_join(edges3, by = c("color_to", "level"))
+    edges2 <- edges2 %>%
+      left_join(edges4, by = c("color_to", "level"))
     
-    edges2$posteriormean <- round((edges2$sumlabel6/edges2$sumlabel7),2)
-    
+    edges2$posteriormean <- round((edges2$posterior_table/edges2$total_stage_posterior),2)
+    edges2$priormean <- round((edges2$prior_table/edges2$total_stage_prior),2)
     
     #print("Summarised Edges with Grouped Sums:")
-    #print(edges2)
-    #print(edges3)
+    print("edges2")
+    print(edges2)
     # Display the summarised dataframe
     
     edges <- edges %>%
       left_join(edges2, by = c("color_to", "level", "label1"))
     #print(edges)
-    edges <- edges %>% select(from, to, label1, font.size, color_from, smooth, level, posteriormean)
+    edges <- edges %>% select(from, to, label1, font.size, color_to, smooth, level, prior_table, priormean, data_table, posterior_table, posteriormean)
     edges$label <- paste(edges$label1, "\n", edges$posteriormean)
     edges$color <- "#000000"
-    #print(edges)
+    print(edges)
     contracted_data(list(nodes = contracted_nodes, edges = edges))
+    
+    data_number_table <- node_colors_levels2()
+    data_number_table$color_to <- data_number_table$color
+    print(data_number_table)
+    
+    grouped_df <- edges2 %>%
+      group_by(color_to) %>% 
+      summarize(
+        priormean = paste0("(", paste(priormean, collapse = ", "), ")"),
+        posteriormean = paste0("(", paste(posteriormean, collapse = ", "), ")"),
+        data_table = paste0("(", paste(data_table, collapse = ", "), ")"),
+        prior_table = paste0("Dirichlet(", paste(prior_table, collapse = ", "), ")"),
+        posterior_table = paste0("Dirichlet(", paste(posterior_table, collapse = ", "), ")")
+      )
+    print(grouped_df)
+    #grouped_df <- grouped_df %>%
+    #  left_join(data_number_table, by = "color_to")
+    #print("grouped_df")
+    #print(grouped_df)
+    grouped_df2(grouped_df)
   })
-  
+
   # Render the contracted graph
   output$ceg_network <- renderVisNetwork({
     data <- contracted_data()
@@ -1345,11 +1364,11 @@ server <- function(input, output, session) {
     nodes <- data$nodes
     #edges <- merge(edges, nodes, by.x = "from", by.y = "id", all.x = TRUE, suffixes = c("_from", "_to"))
     
-    if (is.null(contracted_data)) {
+    if (is.null(contracted_data())) {
       return(NULL)
     }
-    visNetwork(nodes = data$nodes, edges = data$edges,  height = "900px") %>%
-      visHierarchicalLayout(direction = "LR", levelSeparation = 1200) %>%
+    visNetwork(nodes, edges,  height = "900px") %>%
+      visHierarchicalLayout(direction = "LR", levelSeparation = input$levelSeparation) %>%
       visNodes(scaling = list(min = 900, max = 900)) %>%
       visEdges(smooth = TRUE, arrows = list(to = list(enabled = TRUE, scaleFactor = 5))) %>%
       visOptions(manipulation = list(enabled = FALSE,
@@ -1360,7 +1379,33 @@ server <- function(input, output, session) {
                                      multiselect = TRUE), nodesIdSelection = FALSE) %>%
       visInteraction(dragNodes = TRUE, multiselect = FALSE, navigationButtons = TRUE) %>%
       visPhysics(hierarchicalRepulsion = list(nodeDistance = 990), stabilization = TRUE) %>%
-      visEvents(stabilizationIterationsDone = "function() { this.physics.options.enabled = false; }")
+      visEvents(stabilizationIterationsDone = "function() { this.physics.options.enabled = false; }", dragStart = "function(params) {
+        // Get the initial position of the dragged node
+        this.startX = this.body.nodes[params.nodes[0]].x;
+      }",
+                dragEnd = "function(params) {
+        // Get the id of the dragged node
+        var draggedNodeId = params.nodes[0];
+        
+        // Get the new position of the dragged node
+        var endX = this.body.nodes[draggedNodeId].x;
+        
+        // Find the level of the dragged node
+        var level = this.body.nodes[draggedNodeId].options.level;
+        
+        // Calculate the x-shift
+        var xShift = endX - this.startX;
+        
+        // Update the x position for all nodes at the same level
+        for (var nodeId in this.body.nodes) {
+          if (this.body.nodes[nodeId].options.level === level) {
+            this.body.nodes[nodeId].x += xShift;
+          }
+        }
+        
+        // Redraw the network to reflect the changes
+        this.redraw();
+      }")
   })
   # Render the contracted graph
   # output$ceg_network <- renderVisNetwork({
@@ -1381,6 +1426,10 @@ server <- function(input, output, session) {
   #                  forceAtlas2Based = list(gravitationalConstant = -50), hierarchicalRepulsion = list(nodeDistance = 300))
   #   })
   
+  output$UpdateTable <- renderDT({
+    req(grouped_df2())  # Ensure data is available
+    datatable(grouped_df2())
+  })
   
   
 }
