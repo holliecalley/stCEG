@@ -101,6 +101,7 @@ ui <- fluidPage(
                  h2('Staged
                   Tree'),
 
+                
                  selectInput(
                    inputId = "priorChoice",
                    label = "Choose Prior Type:",
@@ -423,19 +424,19 @@ server <- function(input, output, session) {
   # Render the network
   # Render the network
   
-
+  
   node_colors <- reactiveVal(NULL)
   
-
+  
   
   # Reactive expression for updated graph data with node colors
- # updated_graph_data_with_colors <- reactive({
-#    data <- updated_graph_data()
-#    if (!is.null(node_colors())) {
-#      data$nodes$color <- node_colors()
-#    }
-#    data
-#  })
+  # updated_graph_data_with_colors <- reactive({
+  #    data <- updated_graph_data()
+  #    if (!is.null(node_colors())) {
+  #      data$nodes$color <- node_colors()
+  #    }
+  #    data
+  #  })
   
   
   output$eventtree_network <- renderVisNetwork({
@@ -738,21 +739,21 @@ server <- function(input, output, session) {
     # Flatten the nested lists into simple vectors and print them
     flattened_list <- lapply(row_numbers_list, function(x) unlist(x))
     included_ids <- unlist(flattened_list)
-print(flattened_list)
-print(included_ids)
-#print("rownumbers")
-#print(row_numbers)
-# Step 2: Identify missing IDs
-missing_ids <- setdiff(nodes_to_consider2, included_ids)
-#print("missing:")
-#print(missing_ids)
-# Step 3: Add each missing ID as an individual sublist to flattened_list
-for (row_number in missing_ids) {
-  flattened_list <- append(flattened_list, list(row_number))
-}
-
-# Print the updated flattened_list
-print(flattened_list)
+    print(flattened_list)
+    print(included_ids)
+    #print("rownumbers")
+    #print(row_numbers)
+    # Step 2: Identify missing IDs
+    missing_ids <- setdiff(nodes_to_consider2, included_ids)
+    #print("missing:")
+    #print(missing_ids)
+    # Step 3: Add each missing ID as an individual sublist to flattened_list
+    for (row_number in missing_ids) {
+      flattened_list <- append(flattened_list, list(row_number))
+    }
+    
+    # Print the updated flattened_list
+    print(flattened_list)
     
     num_colors <- length(flattened_list) # Number of groups
     colors <- distinctColorPalette(num_colors)
@@ -1040,9 +1041,9 @@ print(flattened_list)
         if (!is.na(prior) && prior != "") {
           # Split and calculate the ratios
           prior_values <- splitPriors(prior)
-
+          
           ratios <- round(calculateRatios(prior_values), 2)
-
+          
           
           # Assign the ratios to the node
           nodes_data$ratio[i] <- paste(ratios, collapse = ", ")
@@ -1071,7 +1072,7 @@ print(flattened_list)
     data$edges <- updated_data$edges
     data$nodes <- updated_data$nodes
     
-
+    
     
     splitPriors <- function(prior) {
       return(as.numeric(unlist(strsplit(prior, ","))))
@@ -1084,7 +1085,7 @@ print(flattened_list)
       return((priors * (total - priors)) / (total^2 * (total + 1)))
     }
     
-
+    
     # Function to assign variances to nodes
     assignVarianceToNodes <- function(nodes_data) {
       # Ensure there's a column to store variance in nodes_data
@@ -1100,9 +1101,9 @@ print(flattened_list)
           prior_values <- splitPriors(prior)  # Split and convert to numeric
           
           # Calculate variance for each component
-
+          
           variances <- round(calculateVariance(prior_values), 2)  # Increased precision
-
+          
           
           # Combine variances into a single string
           variance_str <- paste(variances, collapse = ", ")
@@ -1121,7 +1122,7 @@ print(flattened_list)
     data$nodes <- assignVarianceToNodes(data$nodes)
     # Print edges to verify
     print("NODES DATA!!!!!!!")
-
+    
     print(data$nodes)
     
     createTooltipWithPrior <- function(prior, ratio, variance) {
