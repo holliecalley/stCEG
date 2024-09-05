@@ -96,6 +96,7 @@ ui <- fluidPage(
                  h2('Event
                   Tree'),
                  checkboxInput("toggleLabels", "Hide data values", value = TRUE),
+                 actionButton("deleteNode", "Delete Selected Node"),
                  actionButton("finishedColoring", "Finished Colouring"),
                  visNetworkOutput("eventtree_network",height = "800px"),
                  h2('Staged
@@ -347,6 +348,7 @@ server <- function(input, output, session) {
     data$nodes$shape <- 'dot'
     data$nodes$size = 100
     data$nodes$color.background <- "#ffffff"
+    #data$nodes$color <- "#ffffff"
     data$nodes$font <- "80px"
     data$nodes$title = data$nodes$id
     #data$nodes$color <- "white"
@@ -509,6 +511,103 @@ server <- function(input, output, session) {
     # Reset selected nodes
     selected_nodes(NULL)
   })
+  
+  observeEvent(input$deleteNode, {
+    # Get the list of currently selected nodes
+    selected_nodes_list <- selected_nodes()
+    print("Selected nodes to delete:")
+    print(selected_nodes_list)  # Debugging statement to print selected nodes
+    
+    if (!is.null(selected_nodes_list) && length(selected_nodes_list) > 0) {
+      # Access current graph data
+      data <- updated_graph_data()
+      
+      # Identify end nodes (nodes with no outgoing edges)
+      end_nodes <- setdiff(data$nodes$id, data$edges$from)
+      
+      # Filter out end nodes from the selected nodes list
+      non_end_nodes <- setdiff(selected_nodes_list, end_nodes)
+      
+      if (length(non_end_nodes) > 0) {
+        for (node in non_end_nodes) {
+          # Find the outgoing edges of the node to be deleted
+          outgoing_edges <- data$edges[data$edges$from == node, ]
+          
+          # Find the incoming edges to the node to be deleted
+          incoming_edges <- data$edges[data$edges$to == node, ]
+          
+          if (nrow(outgoing_edges) > 0 && nrow(incoming_edges) > 0) {
+            # Redirect the outgoing edges to connect to the source of the incoming edges
+            for (i in 1:nrow(outgoing_edges)) {
+              for (j in 1:nrow(incoming_edges)) {
+                # Ensure the new edge has the same structure as the existing edges
+                new_edge <- data.frame(
+                  from = incoming_edges$from[j],
+                  to = outgoing_edges$to[i],
+                  label = outgoing_edges$label[i],
+                  label1 = outgoing_edges$label1[i],
+                  label2 = outgoing_edges$label2[i],
+                  label3 = outgoing_edges$label3[i],
+                  arrows = outgoing_edges$arrows[i],
+                  font.size = outgoing_edges$font.size[i],
+                  # Retain the edge label
+                  color = "#000000",  # Set color to black
+                  stringsAsFactors = FALSE
+                )
+                
+                # Add any other required columns to the new edge to match the structure of data$edges
+                missing_cols <- setdiff(names(data$edges), names(new_edge))
+                new_edge[missing_cols] <- NA  # Assign NA to missing columns if necessary
+                
+                # Append the new edge to the edges data frame
+                data$edges <- rbind(data$edges, new_edge)
+              }
+            }
+          }
+          
+          # Remove the node and its edges
+          data$nodes <- data$nodes[data$nodes$id != node, ]
+          data$edges <- data$edges[data$edges$from != node & data$edges$to != node, ]
+        }
+        
+        # Update the reactive graph data
+        updated_graph_data(data)
+        
+        # Reflect changes in the visNetwork proxy
+        visNetworkProxy("eventtree_network") %>%
+          visUpdateNodes(nodes = data$nodes) %>%
+          visUpdateEdges(edges = data$edges)
+        
+        # Print deletion success message
+        print("Edges and nodes updated:")
+        print(data$edges)  # Debugging statement to print updated edges
+        
+      } else {
+        # Show a modal dialog if only end nodes are selected
+        showModal(modalDialog(
+          title = "Cannot Delete End Nodes",
+          "You cannot delete nodes that are at the end of the graph.",
+          easyClose = TRUE
+        ))
+      }
+    } else {
+      # Show a modal dialog if no nodes are selected
+      showModal(modalDialog(
+        title = "No Nodes Selected",
+        "Please select at least one non-end node to delete.",
+        easyClose = TRUE
+      ))
+    }
+    
+    # Reset selected nodes after the operation
+    selected_nodes(NULL)
+  })
+  
+  
+  
+  
+  
+  
   
   # observeEvent(input$updateColor, {
   #   data <- updated_graph_data()
@@ -793,16 +892,32 @@ server <- function(input, output, session) {
   observeEvent(input$finishedColoring, {
     data <- updated_graph_data()
     
-    # Extract node colors and levels
-    node_colors_levels_data <- data$nodes[, c("id", "label", "color", "level", "outgoing_edges", "number")]
-    number_edges <- node_colors_levels_data %>%
-      group_by(color, level, outgoing_edges) %>%
-      summarize(number_nodes = sum(number))
-    node_colors_levels_data <- full_join(node_colors_levels_data, number_edges, by = c("color", "level", "outgoing_edges"))
+    # Check if the necessary columns exist in the data frame
+    required_columns <- c("id", "label", "color", "level", "outgoing_edges", "number")
     
-    # Store the node colors and levels in the reactive value
-    node_colors_levels(node_colors_levels_data)
-  })
+    if (!all(required_columns %in% colnames(data$nodes))) {
+      showModal(modalDialog(
+        title = "Missing Node Colours",
+        paste("One or more nodes have not been coloured."),
+        easyClose = TRUE
+      ))
+    } else {
+        node_colors_levels_data <- data$nodes[, required_columns]
+        
+        # Group by color, level, and outgoing edges, and calculate the number of nodes
+        number_edges <- node_colors_levels_data %>%
+          group_by(color, level, outgoing_edges) %>%
+          summarize(number_nodes = sum(number))
+        
+        # Join the node colors and levels data with the number of nodes per color/level/outgoing_edges
+        node_colors_levels_data <- full_join(node_colors_levels_data, number_edges, by = c("color", "level", "outgoing_edges"))
+        
+        # Store the node colors and levels in the reactive value
+        node_colors_levels(node_colors_levels_data)
+      }
+    }
+  )
+  
   
   # Render the color and level table
   node_colors_levels2 <- reactiveVal(NULL)  # Keep track of edits
@@ -1162,7 +1277,8 @@ server <- function(input, output, session) {
         ) %>%
         visEdges(arrows = list(to = list(enabled = TRUE, scaleFactor = 5))) %>%
         visOptions(
-          manipulation = list(enabled = TRUE, addEdgeCols = FALSE, addNodeCols = FALSE, editNodeCols = FALSE, editEdgeCols = c("label3"))
+          manipulation = list(enabled = FALSE, addEdgeCols = FALSE, addNodeCols = FALSE, editNodeCols = FALSE, editEdgeCols = c("label3"))
+
         ) %>%
         visInteraction(
           dragNodes = FALSE,
@@ -1423,6 +1539,8 @@ server <- function(input, output, session) {
       return(NULL)
     }
     
+
+
     # Prepare tooltips for nodes
     nodes <- nodes %>%
       left_join(grouped_df3(), by = c("color" = "color")) # Assuming `posterior_variance` is in grouped_df2
@@ -1430,34 +1548,93 @@ server <- function(input, output, session) {
     # Prepare edges (without tooltips)
      # Ensure no tooltip is included for edges
     
+
     visNetwork(nodes, edges, height = "900px") %>%
       visHierarchicalLayout(direction = "LR", levelSeparation = input$levelSeparation) %>%
       visNodes(scaling = list(min = 900, max = 900)) %>%
       visEdges(smooth = TRUE, arrows = list(to = list(enabled = TRUE, scaleFactor = 5))) %>%
-      visOptions(manipulation = list(enabled = FALSE,
-                                     addEdgeCols = FALSE,
-                                     addNodeCols = FALSE,
-                                     editEdgeCols = FALSE,
-                                     editNodeCols = c("color"),
-                                     multiselect = TRUE), nodesIdSelection = FALSE) %>%
-      visInteraction(dragNodes = TRUE, multiselect = FALSE, navigationButtons = TRUE) %>%
+      visOptions(
+        manipulation = list(
+          enabled = FALSE,
+          addEdgeCols = FALSE,
+          addNodeCols = FALSE,
+          editEdgeCols = FALSE,
+          editNodeCols = c("color"),
+          multiselect = TRUE
+        ),
+        nodesIdSelection = FALSE
+      ) %>%
+      visInteraction(
+        dragNodes = TRUE,
+        multiselect = TRUE, 
+        navigationButtons = TRUE
+      ) %>%
       visPhysics(hierarchicalRepulsion = list(nodeDistance = 990), stabilization = TRUE) %>%
-      visEvents(stabilizationIterationsDone = "function() { this.physics.options.enabled = false; }", 
-                dragStart = "function(params) {
-                this.startX = this.body.nodes[params.nodes[0]].x;
-              }",
-                dragEnd = "function(params) {
-                var draggedNodeId = params.nodes[0];
-                var endX = this.body.nodes[draggedNodeId].x;
-                var level = this.body.nodes[draggedNodeId].options.level;
-                var xShift = endX - this.startX;
-                for (var nodeId in this.body.nodes) {
-                  if (this.body.nodes[nodeId].options.level === level) {
-                    this.body.nodes[nodeId].x += xShift;
-                  }
-                }
-                this.redraw();
-              }")
+      
+      visEvents(
+        selectNode = "function(params) {
+        var selectedNodeIds = params.nodes; // Array of selected node IDs
+
+        // Store the original colors of the edges
+        var edges = this.body.data.edges.get();
+        edges.forEach(function(edge) {
+          if (edge.originalColor === undefined) {
+            edge.originalColor = edge.color; // Store the original edge color
+          }
+          if (edge.originalFontColor === undefined) {
+            edge.originalFontColor = (edge.font && edge.font.color) || '#000000'; // Store the original label color
+          }
+        });
+
+        // Reset all edges to their original colors
+        this.body.data.edges.update(edges.map(function(edge) {
+          edge.color = edge.originalColor || '#000000'; // Reset to original or default black
+          edge.font = { color: edge.originalFontColor || '#000000' }; // Reset to original or default black
+          return edge;
+        }));
+
+        // Highlight edges based on selected nodes
+        selectedNodeIds.forEach(function(selectedNodeId) {
+          // Highlight edges going into the selected node (blue)
+          var incomingEdges = this.body.data.edges.get({
+            filter: function(edge) {
+              return edge.to === selectedNodeId;
+            }
+          });
+          incomingEdges.forEach(function(edge) {
+            edge.color = '#0000FF'; // Set color to blue
+            edge.font = { color: '#0000FF' }; // Set label color to blue
+          });
+          this.body.data.edges.update(incomingEdges);
+
+          // Highlight edges going out from the selected node (red)
+          var outgoingEdges = this.body.data.edges.get({
+            filter: function(edge) {
+              return edge.from === selectedNodeId;
+            }
+          });
+          outgoingEdges.forEach(function(edge) {
+            edge.color = '#FF0000'; // Set color to red
+            edge.font = { color: '#FF0000' }; // Set label color to red
+          });
+          this.body.data.edges.update(outgoingEdges);
+        }, this); // Bind `this` to the function to access visNetwork context
+
+        // Redraw network to apply changes
+        this.redraw();
+      }",
+        deselectNode = "function(params) {
+        // When deselecting, reset all edges to their original colors
+        var edges = this.body.data.edges.get();
+        this.body.data.edges.update(edges.map(function(edge) {
+          edge.color = edge.originalColor || '#000000'; // Reset to original or default black
+          edge.font = { color: edge.originalFontColor || '#000000' }; // Reset to original or default black
+          return edge;
+        }));
+        this.redraw();
+      }"
+      ) 
+
   })
   
   
