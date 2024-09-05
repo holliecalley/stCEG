@@ -1633,7 +1633,8 @@ server <- function(input, output, session) {
         }));
         this.redraw();
       }"
-      ) 
+      )%>%
+      visEvents(stabilizationIterationsDone = "function() { this.physics.options.enabled = false; }")
 
   })
   
