@@ -1278,6 +1278,7 @@ server <- function(input, output, session) {
         visEdges(arrows = list(to = list(enabled = TRUE, scaleFactor = 5))) %>%
         visOptions(
           manipulation = list(enabled = FALSE, addEdgeCols = FALSE, addNodeCols = FALSE, editNodeCols = FALSE, editEdgeCols = c("label3"))
+
         ) %>%
         visInteraction(
           dragNodes = FALSE,
@@ -1538,6 +1539,16 @@ server <- function(input, output, session) {
       return(NULL)
     }
     
+
+
+    # Prepare tooltips for nodes
+    nodes <- nodes %>%
+      left_join(grouped_df3(), by = c("color" = "color")) # Assuming `posterior_variance` is in grouped_df2
+    print(nodes)
+    # Prepare edges (without tooltips)
+     # Ensure no tooltip is included for edges
+    
+
     visNetwork(nodes, edges, height = "900px") %>%
       visHierarchicalLayout(direction = "LR", levelSeparation = input$levelSeparation) %>%
       visNodes(scaling = list(min = 900, max = 900)) %>%
@@ -1622,8 +1633,8 @@ server <- function(input, output, session) {
         }));
         this.redraw();
       }"
-      ) %>%
-      visEvents(stabilizationIterationsDone = "function() { this.physics.options.enabled = false; }")
+      ) 
+
   })
   
   
