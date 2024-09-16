@@ -17,60 +17,128 @@ library(dirmult)
 library(hwep)
 library(RColorBrewer)
 library(randomcoloR)
-setwd("/Users/holliecalley/Library/CloudStorage/OneDrive-UniversityofExeter/Documents/R/CEG")
+#setwd("/Users/holliecalley/Library/CloudStorage/OneDrive-UniversityofExeter/Documents/R/CEG")
 #homicides <- read_csv("Data/Homicides_London_03_23.csv")
-homicides <- read_csv("Data/Homicides_London_03_23.csv", col_types = cols(Age_Group = col_factor(levels = c("Adult","Child", "Adolescent/Young Adult","Elderly")), Sex = col_factor(levels = c("Male","Female")), Domestic_Abuse = col_factor(levels = c("Not Domestic Abuse", "Domestic Abuse")), Solved_Status = col_factor(levels = c("Solved", "Unsolved")), Local_MP = col_factor(levels = c("Conservative", "Labour", "Liberal Democrat", "Other")), Same_as_UK_Party = col_factor(levels = c("No","Yes")), Method_of_Killing = col_factor(levels = c("Blunt Implement", "Knife or Sharp Implement", "Not Known/Not Recorded", "Other Methods of Killing", "Physical Assault, no weapon", "Shooting")), Ethnicity = col_factor(levels = c("Asian", "Black", "Not Reported/Not Known", "Other", "White"))))
-
+#homicides <- read_csv("Data/Homicides_London_03_23.csv", col_types = cols(Age_Group = col_factor(levels = c("Adult","Child", "Adolescent/Young Adult","Elderly")), Sex = col_factor(levels = c("Male","Female")), Domestic_Abuse = col_factor(levels = c("Not Domestic Abuse", "Domestic Abuse")), Solved_Status = col_factor(levels = c("Solved", "Unsolved")), Local_MP = col_factor(levels = c("Conservative", "Labour", "Liberal Democrat", "Other")), Same_as_UK_Party = col_factor(levels = c("No","Yes")), Method_of_Killing = col_factor(levels = c("Blunt Implement", "Knife or Sharp Implement", "Not Known/Not Recorded", "Other Methods of Killing", "Physical Assault, no weapon", "Shooting")), Ethnicity = col_factor(levels = c("Asian", "Black", "Not Reported/Not Known", "Other", "White"))))
+homicides <- read_csv("homicides.csv")
 #plot(st_geometry(lnd))
 
-Area_Level <- list(
-  Borough = list("Barking & Dagenham","Barnet","Bexley",
-                 "Brent","Bromley","Camden","Croydon", 
-                 "Ealing","Enfield","Greenwich","Hackney",
-                 "Hammersmith & Fulham","Haringey","Harrow",
-                 "Havering", "Hillingdon","Hounslow","Islington",
-                 "Kensington & Chelsea","Kingston Upon Thames",
-                 "Lambeth","Lewisham","Merton","Newham","Redbridge",
-                 "Richmond Upon Thames","Southwark","Sutton", 
-                 "Tower Hamlets","Waltham Forest","Wandsworth","Westminster"),
-  BCU = list("Central West","South West","South","South East","East", 
-             "West","Central South","North","Central East", 
-             "Central North","North West","North East"))
+#Area_Level <- list(
+#  Borough = list("Barking & Dagenham","Barnet","Bexley",
+#                 "Brent","Bromley","Camden","Croydon", 
+#                 "Ealing","Enfield","Greenwich","Hackney",
+#                 "Hammersmith & Fulham","Haringey","Harrow",
+#                 "Havering", "Hillingdon","Hounslow","Islington",
+#                 "Kensington & Chelsea","Kingston Upon Thames",
+#                 "Lambeth","Lewisham","Merton","Newham","Redbridge",
+#                 "Richmond Upon Thames","Southwark","Sutton", 
+#                 "Tower Hamlets","Waltham Forest","Wandsworth","Westminster"),
+#  BCU = list("Central West","South West","South","South East","East", 
+#             "West","Central South","North","Central East", 
+#             "Central North","North West","North East"))
 
-homicides$Year <- format(as.Date(homicides$Recorded_Date, format="%Y/%m/%d"),"%Y")
+#homicides$Year <- format(as.Date(homicides$Recorded_Date, format="%Y/%m/%d"),"%Y")
 #transform(homicides, Year = as.numeric(Year))
-homicides[, c(11)] <- sapply(homicides[, c(11)], as.numeric)
+#homicides[, c(11)] <- sapply(homicides[, c(11)], as.numeric)
 
-homicides <- homicides %>% mutate(BCU = ifelse(Borough %in% c("Hammersmith & Fulham", "Kensington & Chelsea", "Westminster"), "Central West",
-                                               ifelse(Borough %in% c("Kingston Upon Thames", "Merton", "Richmond Upon Thames", "Wandsworth"), "South West",
-                                                      ifelse(Borough %in% c("Bromley", "Croydon", "Sutton"), "South",
-                                                             ifelse(Borough %in% c("Bexley", "Greenwich", "Lewisham"), "South East",
-                                                                    ifelse(Borough %in% c("Barking & Dagenham", "Havering", "Redbridge"), "East",
-                                                                           ifelse(Borough %in% c("Ealing", "Hillingdon", "Hounslow"), "West",
-                                                                                  ifelse(Borough %in% c("Lambeth", "Southwark"), "Central South",
-                                                                                         ifelse(Borough %in% c("Enfield", "Haringey"), "North",
-                                                                                                ifelse(Borough %in% c("Hackney", "Tower Hamlets"), "Central East",
-                                                                                                       ifelse(Borough %in% c("Camden", "Islington"), "Central North",
-                                                                                                              ifelse(Borough %in% c("Barnet", "Brent", "Harrow"), "North West",
-                                                                                                                     ifelse(Borough %in% c("Newham", "Waltham Forest"), "North East","Hollie messed up")))))))))))))
-homicides <- homicides[(c(1:4,6:8,11:12))]
+#homicides <- homicides %>% mutate(BCU = ifelse(Borough %in% c("Hammersmith & Fulham", "Kensington & Chelsea", "Westminster"), "Central West",
+#                                               ifelse(Borough %in% c("Kingston Upon Thames", "Merton", "Richmond Upon Thames", "Wandsworth"), "South West",
+#                                                      ifelse(Borough %in% c("Bromley", "Croydon", "Sutton"), "South",
+#                                                             ifelse(Borough %in% c("Bexley", "Greenwich", "Lewisham"), "South East",
+#                                                                    ifelse(Borough %in% c("Barking & Dagenham", "Havering", "Redbridge"), "East",
+#                                                                           ifelse(Borough %in% c("Ealing", "Hillingdon", "Hounslow"), "West",
+#                                                                                  ifelse(Borough %in% c("Lambeth", "Southwark"), "Central South",
+#                                                                                         ifelse(Borough %in% c("Enfield", "Haringey"), "North",
+#                                                                                                ifelse(Borough %in% c("Hackney", "Tower Hamlets"), "Central East",
+#                                                                                                       ifelse(Borough %in% c("Camden", "Islington"), "Central North",
+#                                                                                                              ifelse(Borough %in% c("Barnet", "Brent", "Harrow"), "North West",
+#                                                                                                                     ifelse(Borough %in% c("Newham", "Waltham Forest"), "North East","Hollie messed up")))))))))))))
+#homicides <- homicides[(c(1:4,6:8,11:12))]
 #homicides$Borough <- as.factor(homicides$Borough)
 #homicides$BCU <- as.factor(homicides$BCU)
 
 ui <- fluidPage(
   titlePanel("Chain Event Graphs"),
   tabsetPanel(
-    tabPanel("Data", fluid = TRUE,
+    tabPanel("Upload Data", 
+             sidebarLayout(
+               sidebarPanel(fileInput(
+               "file1",
+               "Choose CSV File",
+               multiple = TRUE,
+               accept = c(
+                 "text/csv",
+                 "text/comma-separated-values,text/plain",
+                 ".csv"
+               )
+             ),
+             
+             uiOutput("area_division_checkboxes"),
+             uiOutput("time_division_checkboxes"),
+             
+             
+             # Horizontal line ----
+             tags$hr(),
+             
+             # Input: Checkbox if file has header ----
+             checkboxInput("header", "Header", TRUE),
+             
+             # Input: Select separator ----
+             radioButtons(
+               "sep",
+               "Separator",
+               choices = c(
+                 Comma = ",",
+                 Semicolon = ";",
+                 Tab = "\t"
+               ),
+               selected = ","
+             ),
+             
+             # Input: Select quotes ----
+             radioButtons(
+               "quote",
+               "Quote",
+               choices = c(
+                 None = "",
+                 "Double Quote" = '"',
+                 "Single Quote" = "'"
+               ),
+               selected = '"'
+             ),
+             
+             # Horizontal line ----
+             tags$hr(),
+             
+             # Input: Select number of rows to display ----
+             radioButtons(
+               "disp",
+               "Display",
+               choices = c(
+                 Head = "head",
+                 All = "all"
+               ),
+               selected = "all"
+             ), 
+             uiOutput("prediction_var"),
+             #actionButton("finish", "Finished"),
+             ),
+             mainPanel(DTOutput("rawdata")))),
+    
+    
+    
+    tabPanel("Select Data", fluid = TRUE,
              sidebarLayout(
                
                sidebarPanel(
                  
-                 selectInput("Division", "Choose an area division:", names(Area_Level)),
-                 selectInput("Area", "Select an area:", Area_Level[[1]], multiple = TRUE),
+                 uiOutput("area_dropdown"),
+                 uiOutput("time_dropdown"),
+                 
                  uiOutput("picker1"),
                  uiOutput("picker2"),
                  uiOutput("picker3"),
-                 sliderInput("Timeframe", "Choose a timeframe:", min = min(homicides$Year), max = max(homicides$Year), value = c(2003, 2023), sep=""),
+                 uiOutput("timeframe_slider"),
                  actionButton(inputId = "defaultButton", label = "Set Default Selections"),
                  actionButton("view", "View Selection")),
                
@@ -126,107 +194,299 @@ ui <- fluidPage(
 
 
 server <- function(input, output, session) {
-  
-  observe({
-    updateSelectInput(session, "Area", choices = Area_Level[[input$Division]])
-  })
-  
-  initial_choices <- colnames(homicides)[!colnames(homicides) %in% c("Solved_Status", "Area", "Division")]
-  
-  output$picker1 <- renderUI({
-    pickerInput(
-      inputId = 'pick1', 
-      label = 'Choose first variable:', 
-      choices = initial_choices,
-      options = list(`actions-box` = TRUE),
-      multiple = FALSE
-    )
-  })
-  
-  output$picker2 <- renderUI({
-    pickerInput(
-      inputId = 'pick2', 
-      label = 'Choose second variable:', 
-      choices = initial_choices, 
-      options = list(`actions-box` = TRUE),
-      multiple = FALSE
-    )
-  })
-  
-  output$picker3 <- renderUI({
-    pickerInput(
-      inputId = 'pick3', 
-      label = 'Choose third variable:', 
-      choices = initial_choices, 
-      options = list(`actions-box` = TRUE),
-      multiple = FALSE
-    )
-  })
-  
-  # Function to update choices based on previous selections
-  updatePickers <- function() {
-    selected1 <- input$pick1
-    selected2 <- input$pick2
+    original_data <- reactiveVal()  # To store the original, unfiltered dataframe
+    homicides <- reactiveVal()      # To store the filtered dataframe
     
-    # Update pick2 choices based on pick1 selection
-    remaining_choices_pick2 <- initial_choices[initial_choices != selected1]
-    updatePickerInput(session, "pick2", choices = remaining_choices_pick2, selected = input$pick2)
+    output$rawdata <- renderDT({
+      req(input$file1)
+      
+      df <- read.csv(
+        input$file1$datapath,
+        header = input$header,
+        sep = input$sep,
+        quote = input$quote
+      )
+      
+      # Ensure the Date columns are correctly formatted
+      if ("DateColumn" %in% names(df)) {
+        df$DateColumn <- as.Date(df$DateColumn, format = "%Y-%m-%d")  # Adjust format as needed
+      }
+      
+      original_data(df)  # Save the original data
+      homicides(df)      # Set initial filtered data to the original data
+      
+      datatable(df) %>%
+        formatStyle(
+          columns = input$predict_var,
+          backgroundColor = "rgba(0, 255, 0, 0.1)"
+        )
+    })
     
-    # Update pick3 choices based on pick1 and pick2 selections
-    remaining_choices_pick3 <- remaining_choices_pick2[remaining_choices_pick2 != selected2]
-    updatePickerInput(session, "pick3", choices = remaining_choices_pick3, selected = input$pick3)
-  }
-  
-  observeEvent(input$pick1, {
-    updatePickers()
-  })
-  
-  observeEvent(input$pick2, {
-    updatePickers()
-  })
-  
-  # Handle the default button click
-  observeEvent(input$defaultButton, {
-    # Sample two random boroughs from the available choices
-    available_boroughs <- unique(homicides$Borough)
-    random_boroughs <- sample(available_boroughs, 2)
+    output$prediction_var <- renderUI({
+      req(homicides())
+      df <- homicides()
+      selectInput(
+        "predict_var",
+        "Select Prediction Variable",
+        choices = names(df),
+        selected = NULL
+      )
+    })
     
-    # Update the 'Area' selectInput to the random boroughs
-    updateSelectInput(session, "Division", selected = "Borough")
-    updateSelectInput(session, "Area", selected = random_boroughs)
+    output$area_division_checkboxes <- renderUI({
+      req(homicides())
+      df <- homicides()
+      area_columns <- colnames(df)
+      checkboxGroupInput(
+        "selected_area_columns",
+        "Select Area Divisions",
+        choices = area_columns,
+        selected = NULL
+      )
+    })
     
-    # Set the default selections for pick1, pick2, and pick3
-    updatePickerInput(session, "pick1", choices = initial_choices, selected = "Borough")
-    updatePickerInput(session, "pick2", choices = initial_choices, selected = "Domestic_Abuse")
-    updatePickerInput(session, "pick3", choices = initial_choices, selected = "Sex")
-  })
+    output$time_division_checkboxes <- renderUI({
+      req(homicides())
+      df <- homicides()
+      time_columns <- colnames(df)
+      checkboxGroupInput(
+        "selected_time_columns",
+        "Select Time Divisions",
+        choices = time_columns,
+        selected = NULL
+      )
+    })
+    
+    output$area_dropdown <- renderUI({
+      df_homicides <- homicides()
+      
+      # Check if selected_area_columns is not NULL and has at least one column selected
+      if (!is.null(input$selected_area_columns) && length(input$selected_area_columns) > 0) {
+        
+        # Dynamically select the columns from the dataframe (df_homicides assumed here)
+        selected_columns2 <- df_homicides[, input$selected_area_columns, drop = FALSE]
+        
+        # Get the unique values from the selected columns
+        unique_values_area <- unique(do.call(c, selected_columns2))
+        
+        # Create the selectInput UI with the unique values from the selected columns
+        selectInput(
+          "Area",
+          "Choose Area",
+          choices = unique_values_area,
+          multiple = TRUE  # Enable multiple selections
+        )
+      } else {
+        NULL
+      }
+    })
+    
+    
+    observe({
+      req(original_data())
+      # Reset homicides to the original data
+      homicides(original_data())
+    })
+    
+    output$time_dropdown <- renderUI({
+      req(original_data())
+      
+      if (!is.null(input$selected_time_columns) && length(input$selected_time_columns) > 0) {
+        time_select <- selectInput(
+          "TimeDivision",
+          "Choose Time Column",
+          choices = input$selected_time_columns
+        )
+        
+        df <- original_data()
+        time_col <- input$TimeDivision
+        
+        if (!is.null(time_col) && time_col %in% names(df)) {
+          # Determine column type
+          is_date <- inherits(df[[time_col]], "Date")
+          is_datetime <- inherits(df[[time_col]], "POSIXct") || inherits(df[[time_col]], "POSIXlt")
+          
+          if (is_date || is_datetime) {
+            min_time <- min(df[[time_col]], na.rm = TRUE)
+            max_time <- max(df[[time_col]], na.rm = TRUE)
+            
+            slider <- sliderInput(
+              "Timeframe",
+              "Choose a timeframe:",
+              min = as.Date(min_time),
+              max = as.Date(max_time),
+              value = c(as.Date(min_time), as.Date(max_time)),
+              timeFormat = "%Y-%m-%d",
+              step = 1
+            )
+          } else {
+            # Handle year or year-month
+            min_year <- min(df[[time_col]], na.rm = TRUE)
+            max_year <- max(df[[time_col]], na.rm = TRUE)
+            
+            slider <- sliderInput(
+              "Timeframe",
+              "Choose a timeframe:",
+              min = min_year,
+              max = max_year,
+              value = c(min_year, max_year),
+              step = 1
+            )
+          }
+          
+          tagList(time_select, slider)
+        } else {
+          time_select
+        }
+      } else {
+        NULL
+      }
+    })
+    
+    observe({
+      req(original_data())
+      df <- original_data()
+      
+      if (!is.null(input$TimeDivision) && input$TimeDivision %in% names(df)) {
+        time_col <- input$TimeDivision
+        is_date <- inherits(df[[time_col]], "Date")
+        is_datetime <- inherits(df[[time_col]], "POSIXct") || inherits(df[[time_col]], "POSIXlt")
+        
+        if (is_date || is_datetime) {
+          min_time <- min(df[[time_col]], na.rm = TRUE)
+          max_time <- max(df[[time_col]], na.rm = TRUE)
+          
+          updateSliderInput(session, "Timeframe",
+                            min = as.Date(min_time),
+                            max = as.Date(max_time),
+                            value = c(as.Date(min_time), as.Date(max_time)),
+                            timeFormat = "%Y-%m-%d")
+        } else {
+          min_year <- min(df[[time_col]], na.rm = TRUE)
+          max_year <- max(df[[time_col]], na.rm = TRUE)
+          
+          updateSliderInput(session, "Timeframe",
+                            min = min_year,
+                            max = max_year,
+                            value = c(min_year, max_year))
+        }
+      } else {
+        # Reset the slider if no time column is selected
+        updateSliderInput(session, "Timeframe", min = 2000, max = 2023, value = c(2000, 2023))
+        
+        # Reset homicides to the original data
+        homicides(original_data())
+      }
+    })
+    
+    # Update the picker inputs based on available choices
+    initial_choices <- reactive({
+      df_homicides <- homicides()
+      if (is.null(df_homicides)) return(NULL)
+      
+      choices <- colnames(df_homicides)[!colnames(df_homicides) %in% c(input$predict_var, input$selected_area_columns, input$selected_time_columns)]
+      setNames(choices, choices)
+    })
+    
+    output$picker1 <- renderUI({
+      pickerInput(
+        inputId = 'pick1', 
+        label = 'Choose first variable:', 
+        choices = initial_choices(),
+        options = list(`actions-box` = TRUE),
+        multiple = FALSE
+      )
+    })
+    
+    output$picker2 <- renderUI({
+      pickerInput(
+        inputId = 'pick2', 
+        label = 'Choose second variable:', 
+        choices = initial_choices(), 
+        options = list(`actions-box` = TRUE),
+        multiple = FALSE
+      )
+    })
+    
+    output$picker3 <- renderUI({
+      pickerInput(
+        inputId = 'pick3', 
+        label = 'Choose third variable:', 
+        choices = initial_choices(), 
+        options = list(`actions-box` = TRUE),
+        multiple = FALSE
+      )
+    })
+    
+    observeEvent(input$Division, {
+      req(homicides())
+      df <- homicides()
+      updateSelectInput(session, "Area", choices = unique(df[[input$Division]]))
+    })
+    
+    observeEvent(input$defaultButton, {
+      req(homicides())
+      df <- homicides()
+      
+      selected_area_columns <- input$selected_area_columns
+      if (length(selected_area_columns) > 0) {
+        selected_division <- selected_area_columns[1]
+        available_areas <- unique(df[[selected_division]])
+        random_areas <- if (length(available_areas) >= 2) sample(available_areas, 2) else available_areas
+        
+        updateSelectInput(session, "Area", choices = available_areas, selected = random_areas)
+        
+        updatePickerInput(session, "pick1", choices = initial_choices(), selected = names(initial_choices())[1])
+        updatePickerInput(session, "pick2", choices = initial_choices(), selected = names(initial_choices())[2])
+        updatePickerInput(session, "pick3", choices = initial_choices(), selected = names(initial_choices())[3])
+      }
+    })
+    
+    homicide_data <- eventReactive(input$view, {
+      req(homicides())
+      df_homicides <- homicides()
+      
+      # Apply time filtering if a time column is selected
+      if (!is.null(input$TimeDivision) && input$TimeDivision != "") {
+        time_col <- input$TimeDivision
+        is_date <- inherits(df_homicides[[time_col]], "Date")
+        is_datetime <- inherits(df_homicides[[time_col]], "POSIXct") || inherits(df_homicides[[time_col]], "POSIXlt")
+        
+        if (is_date || is_datetime) {
+          df_homicides <- df_homicides %>%
+            filter(df_homicides[[time_col]] >= as.Date(input$Timeframe[1]) & df_homicides[[time_col]] <= as.Date(input$Timeframe[2]))
+        } else {
+          df_homicides <- df_homicides %>%
+            filter(between(df_homicides[[time_col]], input$Timeframe[1], input$Timeframe[2]))
+        }
+      }
+      
+      # Apply area filtering if an area column is selected
+      selected_area_columns <- input$selected_area_columns
+      if (length(selected_area_columns) > 0 && !is.null(input$Area) && length(input$Area) > 0) {
+        df_homicides <- df_homicides %>%
+          filter(df_homicides[[selected_area_columns[1]]] %in% input$Area)
+      }
+      
+      # Select the columns based on picked variables
+      selected_columns <- c(input$pick1, input$pick2, input$pick3)
+      if (!is.null(input$predict_var) && input$predict_var != "") {
+        selected_columns <- c(selected_columns, input$predict_var)
+      }
+      
+      df_homicides <- df_homicides %>%
+        select(all_of(selected_columns))
+      
+      return(df_homicides)
+    })
+    
+    output$table <- renderDT({
+      req(homicide_data())
+      datatable(homicide_data())
+    })
   
   
   
-  #homicide_data2 <<- homicides 
-  #makeReactiveBinding("homicide_data2")
-  
-  homicide_data <<- eventReactive(input$view,{
-    homicide_data2 <<- homicides
-    reactive(input$Division,{
-      if(input$Division=="Borough")
-      {homicide_data2 <<- subset(homicides, select = -c(BCU))
-      homicide_data2 <<- select(filter(homicides, between(Year, input$Timeframe[1], input$Timeframe[2]) & Borough %in% input$Area),input$pick1, input$pick2, input$pick3, Solved_Status)}
-      else if(input$Division=="BCU") 
-      {homicide_data2 <<- subset(homicides, select = -c(Borough))
-      homicide_data2 <<- select(filter(homicides, between(Year, input$Timeframe[1], input$Timeframe[2]) & BCU %in% input$Area),input$pick1, input$pick2, input$pick3, Solved_Status)}
-      homicide_data2 <<- as.data.frame(homicide_data2)
-      homicide_data2[,1] <<- as.factor(homicide_data2[,1])
-      return(homicide_data2)
-    })})
-  
-  
-  
-  #homicides2 <- read_csv("C:/Users/hc629/OneDrive - University of Exeter/Documents/R/CEG/Data/datasetInput.csv")
-  
-  output$table <- renderDT({
-    homicide_data()
-  })
   #-------------------------------------------------------------------------------------------------- 
   
   #graph_data <- reactiveValues(
@@ -243,56 +503,68 @@ server <- function(input, output, session) {
   homicide_set <<- eventReactive(input$vieweventtree,{
     g <- make_empty_graph()
     parent <- "s0"
-    col1 <- sort(as.vector(unique(homicide_data2[,c(1)])))
+    homicide_data2 <- homicide_data()
+    #print(homicide_data2)
+    col1 <- sort(as.vector(unique(homicide_data2[[1]])))
+    print("col1")
+    print(col1)
     col1s <- paste0("s", 1:length(col1))
-    col2 <- sort(as.vector(unique(homicide_data2[,c(2)])))
+    col2 <- sort(as.vector(unique(homicide_data2[[2]])))
     col2s <- paste0("s", (length(col1)+1):(length(col1) + length(col1)*length(col2)))
-    col3 <- sort(as.vector(unique(homicide_data2[,c(3)])))
+    col3 <- sort(as.vector(unique(homicide_data2[[3]])))
     col3s <- paste0("s", (length(col1) + length(col1)*length(col2)+1):(length(col1) + length(col1)*length(col2) + length(col1)*length(col2)*length(col3)))
-    col4 <- sort(as.vector(unique(homicide_data2[,c(4)])))
+    col4 <- sort(as.vector(unique(homicide_data2[[4]])))
     col4s <- paste0("s", (length(col1) + length(col1)*length(col2) + length(col1)*length(col2)*length(col3)+1):(length(col1) + length(col1)*length(col2) + length(col1)*length(col2)*length(col3) + length(col1)*length(col2)*length(col3)*length(col4)))
+    
+   
+    #print(c(col1, rep(col2, length(col1)), rep(col3, length(col1)*length(col2)), rep(col4, length(col1)*length(col2)*length(col3))))
     g <- add_vertices(g, 1, name = paste0("s", 0))
     g <- add_vertices(g, length(col1), name = paste0("s", 1:length(col1)))
     g <- add_vertices(g, (length(col1)*length(col2)), name = paste0("s", (length(col1)+1):(length(col1) + length(col1)*length(col2))))
     g <- add_vertices(g, (length(col1)*length(col2)*length(col3)), name = paste0("s", (length(col1) + length(col1)*length(col2)+1):(length(col1) + length(col1)*length(col2) + length(col1)*length(col2)*length(col3))))
     g <- add_vertices(g, (length(col1)*length(col2)*length(col3)*length(col4)), name = paste0("s", (length(col1) + length(col1)*length(col2) + length(col1)*length(col2)*length(col3)+1):(length(col1) + length(col1)*length(col2) + length(col1)*length(col2)*length(col3) + length(col1)*length(col2)*length(col3)*length(col4))))
     
-    
-    count1 <- homicide_data2 %>% group_by(homicide_data2[,c(1)], .drop = FALSE) %>% summarise(count=n())
-    for (col in colnames(count1)) {
-      if (col != "count") {
-        count1[[col]] <- as.character(count1[[col]])
-      }
+    generate_combinations <- function(df, cols) {
+      # Convert column indices to column names
+      col_names <- colnames(df)[cols]
+      
+      # Create a data frame with all possible combinations of values
+      all_combinations <- expand.grid(lapply(df[col_names], unique))
+      
+      # Calculate counts for actual data
+      counts <- df %>%
+        group_by(across(all_of(col_names))) %>%
+        summarise(count = n(), .groups = 'drop')
+      
+      # Merge with all combinations
+      full_data <- full_join(all_combinations, counts, by = col_names)
+      
+      # Replace NA counts with 0
+      full_data$count[is.na(full_data$count)] <- 0
+      
+      # Sort the data frame alphabetically by the categorical columns
+      full_data <- full_data %>%
+        arrange(across(all_of(col_names)))
+      
+      return(full_data)
     }
-    count1 <- arrange(count1, count1[(1)]) #,count2[c(2)])
     
+    # Apply to different column subsets (using column indices)
+    count1 <- generate_combinations(homicide_data2, 1)
+    print("count 1")
+    print(count1)
     
+    count2 <- generate_combinations(homicide_data2, 1:2)
+    print("count 2")
+    print(count2)
     
-    count2 <- homicide_data2 %>% group_by(homicide_data2[,c(1,2)], .drop = FALSE) %>% summarise(count=n())
-    for (col in colnames(count2)) {
-      if (col != "count") {
-        count2[[col]] <- as.character(count2[[col]])
-      }
-    }
-    count2 <- arrange(count2, count2[(1)], count2[(2)]) #,count2[c(2)])
+    count3 <- generate_combinations(homicide_data2, 1:3)
+    print("count 3")
+    print(count3)
     
-    
-    
-    count3 <- homicide_data2 %>% group_by(homicide_data2[,c(1,2,3)], .drop = FALSE) %>% summarise(count=n())
-    for (col in colnames(count3)) {
-      if (col != "count") {
-        count3[[col]] <- as.character(count3[[col]])
-      }
-    }
-    count3 <- arrange(count3, count3[(1)], count3[(2)], count3[(3)]) #,count2[c(2)])
-    
-    count4 <- homicide_data2 %>% group_by(homicide_data2[,c(1,2,3,4)], .drop = FALSE) %>% summarise(count=n())
-    for (col in colnames(count4)) {
-      if (col != "count") {
-        count4[[col]] <- as.character(count4[[col]])
-      }
-    }
-    count4 <- arrange(count4, count4[(1)], count4[(2)], count4[(3)], count4[(4)]) #,count2[c(2)])
+    count4 <- generate_combinations(homicide_data2, 1:4)
+    print("count 4")
+    print(count4)
     
     # Add edges between parent and child nodes alternately
     edges <- c()
@@ -351,16 +623,29 @@ server <- function(input, output, session) {
     #data$nodes$color <- "#ffffff"
     data$nodes$font <- "80px"
     data$nodes$title = data$nodes$id
-    #data$nodes$color <- "white"
     data$edges$label1 <- c(col1, rep(col2, length(col1)), rep(col3, length(col1)*length(col2)), rep(col4, length(col1)*length(col2)*length(col3)))
-    data$edges$label2 <- c(count1$count,count2$count,count3$count,count4$count)
-    data$edges$label2 <- as.numeric(data$edges$label2)
+    print(c(count1$count, count2$count, count3$count, count4$count))
+    print(data)
+    data$edges$label2 <- c(count1$count, count2$count, count3$count, count4$count)
+    #data$nodes$color <- "white"
+    print(paste("Length of col1:", length(col1)))
+    print(paste("Length of col2:", length(col2)))
+    print(paste("Length of col3:", length(col3)))
+    print(paste("Length of col4:", length(col4)))
+    
+    # Check the length of label1 and ensure it matches the edges
+    print(paste("Expected edges:", length(data$edges$id)))
+    
+
+    
+    # Create label3 by combining label1 and label2
     data$edges$label3 <- paste(data$edges$label1, "\n", data$edges$label2)
+    
     #data$edges$label <- paste(data$edges$label1, "\n", data$edges$label2)
     data$edges$font.size <- 70
     data$edges$color <- "#000000"
     data$edges$arrows <- "to"
-    #
+    print(data)
     return(data)
   })
   
@@ -493,13 +778,13 @@ server <- function(input, output, session) {
   # Observe the updateColor button
   observeEvent(input$updateColor, {
     print("Update Color button clicked")  # Debugging statement
-    
     selected_nodes_list <- selected_nodes()
     print(selected_nodes_list)  # Debugging statement to print selected nodes
     
     if (!is.null(selected_nodes_list) && length(selected_nodes_list) > 0) {
       data <- updated_graph_data()
       data$nodes$color[data$nodes$id %in% selected_nodes_list] <- input$nodeColor
+      data$nodes$number <- 1
       updated_graph_data(data)
       
       visNetworkProxy("eventtree_network") %>%
@@ -625,8 +910,12 @@ server <- function(input, output, session) {
   
   observeEvent(input$AHCColoring, {
     data2 <- updated_graph_data()
+    print("data2")
+    print(data2)
     #data2 <- homicide_data()
     exampledata<-homicide_data()
+    exampledata3 <- exampledata
+    print(exampledata)
     #data2 <- graph_data
     nodes <- data2$nodes
     levels <- nodes$level
@@ -664,33 +953,52 @@ server <- function(input, output, session) {
     
     # Apply the conversion function to the 'label2_list' column
     
-    numbvariables<-ncol(exampledata)
+    # Ensure all columns are factors
+    exampledata[] <- lapply(exampledata, function(x) {
+      if (is.character(x)) as.factor(x) else x
+    })
+    print("exampledata")
+    print(class(exampledata))
+    
+
+    
+    # Calculate number of variables
+    numbvariables <- ncol(exampledata)
     print("numvars:")
     print(numbvariables)
-    numbcat<-c()
-    for(k in 1:numbvariables){
-      numbcat<-c(numbcat,nlevels(exampledata[,k])) 
-    }
+    
+    # Calculate number of categories for each column
+    numbcat <- sapply(exampledata, nlevels)
     print("numcat:")
-    print(numbcat)
-    equivsize<-max(numbcat)
-    equivsize
-    numb<-c(1)
-    for(i in 2:numbvariables){ 
-      numb<-c(numb,prod(numbcat[1:(i-1)]))
-    } 
+    print(as.vector(numbcat))
+    
+    # Determine the size of the largest category
+    equivsize <- max(numbcat)
+    print("equivsize:")
+    print(equivsize)
+    
+    # Calculate the number of combinations
+    numb <- numeric(numbvariables)
+    numb[1] <- 1  # The number of combinations for 1 variable is 1
+    
+    for (i in 2:numbvariables) {
+      numb[i] <- prod(numbcat[1:(i-1)])
+    }
+    
     print("numb")
     print(numb)
+    
     prior<-c()
     for(i in 1:numbvariables){
       for(j in 1:numb[i]){ 
         prior<-c(prior,list(rbind(rep(equivsize/(numbcat[i]*numb[i]),numbcat[i]))))
       } 
     }
-    prior
+    #prior
     #Datalist1: list of the number of individuals going from the stage along a particular edge in C_{0}
     data <- lapply(nodes_to_consider$label2_list, convert_to_matrix)
     # Print the resulting list of matrices
+    #print("data")
     print(data)
     
     #List of the stages that can be merged in the first step 
@@ -701,15 +1009,35 @@ server <- function(input, output, session) {
     
     # Print the resulting list of vectors
     print(comparisonset)
+    print("end of comparisonset")
+    # Initialize labelling as an empty matrix with 0 rows and columns
+  
+    
+    # Print the levels of the factor
+    #print(levels(column_vector))
+    # Extract and sort levels
+    #sorted_levels <- sort(levels(factor_levels))
+    
+    # Print sorted levels
+    #print(sorted_levels)
+    
+    #print(sorted_levels)
+    # Initialize labelling matrix
+    # Initialize labelling matrix
     labelling <-c()
+    # Initialize labelling matrix
+    labelling <- NULL
+    
     for (k in 1:(numbvariables - 1)) { 
       # Alphabetically sort the levels of the current variable
-      sorted_levels <- sort(levels(factor(exampledata[, k])))
+      sorted_levels <- sort(levels(factor(exampledata3[[k]])))
+      print("sorted levels")
+      print(sorted_levels)
       
       # Create the initial label with "NA" and appropriate repetitions
       label <- c("NA", rep("NA", sum(numb[1:k]) - 1)) 
       label <- c(label, rep(sorted_levels, numb[k]))
-      
+      print(label)
       
       # If not the last variable, continue adding labels for subsequent variables
       if (k < (numbvariables - 1)) {
@@ -718,9 +1046,17 @@ server <- function(input, output, session) {
         }
       }
       
-      # Combine the current label with the overall labeling matrix
       labelling <- cbind(labelling, label)
+
     }
+    
+    
+    
+    # Print the resulting labelling matrix
+    print(labelling)
+    
+    
+    
     row_numbers <- nodes_to_consider$id
     
     # Combine the sequence with the `labelling` matrix
@@ -736,6 +1072,7 @@ server <- function(input, output, session) {
     lik <-0
     for( i in 1: sum(numb)){ 
       alpha<-unlist(prior[i])
+      print("alpha")
       print(alpha)
       N<-unlist(data[i]) 
       print(N)
@@ -891,32 +1228,77 @@ server <- function(input, output, session) {
   # Observe the finishedColoring button click
   observeEvent(input$finishedColoring, {
     data <- updated_graph_data()
+    print(data$nodes)
     
-    # Check if the necessary columns exist in the data frame
-    required_columns <- c("id", "label", "color", "level", "outgoing_edges", "number")
+    # Get unique levels from the nodes
+    levels <- unique(data$nodes$level)
+    min_level <- min(levels)
+    max_level <- max(levels)
     
-    if (!all(required_columns %in% colnames(data$nodes))) {
-      showModal(modalDialog(
-        title = "Missing Node Colours",
-        paste("One or more nodes have not been coloured."),
-        easyClose = TRUE
-      ))
-    } else {
-        node_colors_levels_data <- data$nodes[, required_columns]
-        
-        # Group by color, level, and outgoing edges, and calculate the number of nodes
-        number_edges <- node_colors_levels_data %>%
-          group_by(color, level, outgoing_edges) %>%
-          summarize(number_nodes = sum(number))
-        
-        # Join the node colors and levels data with the number of nodes per color/level/outgoing_edges
-        node_colors_levels_data <- full_join(node_colors_levels_data, number_edges, by = c("color", "level", "outgoing_edges"))
-        
-        # Store the node colors and levels in the reactive value
-        node_colors_levels(node_colors_levels_data)
+    # Initialize vectors to store incorrect node IDs
+    incorrect_color_nodes <- c()
+    duplicate_color_nodes <- c()
+    
+    # Iterate over nodes to check the color and level conditions
+    for (i in 1:nrow(data$nodes)) {
+      node <- data$nodes[i, ]
+      
+      # Check if the node has color #ffffff and its level isn't min or max
+      if (node$color == "#ffffff" && !(node$level %in% c(min_level, max_level))) {
+        incorrect_color_nodes <- c(incorrect_color_nodes, node$id)
       }
     }
-  )
+    
+    # Check for duplicate colors in different levels (ignoring min and max levels)
+    non_min_max_nodes <- data$nodes %>% filter(!(level %in% c(min_level, max_level)))
+    duplicate_colors <- non_min_max_nodes %>% 
+      group_by(color) %>% 
+      filter(n_distinct(level) > 1) %>% 
+      pull(id)
+    
+    if (length(duplicate_colors) > 0) {
+      duplicate_color_nodes <- unique(duplicate_colors)
+    }
+    
+    # If there are any incorrect color nodes, display a modal with all node IDs
+    if (length(incorrect_color_nodes) > 0) {
+      showModal(modalDialog(
+        title = "Incorrect Node Colours",
+        paste("The following nodes have not been coloured correctly:", paste(incorrect_color_nodes, collapse = ", ")),
+        easyClose = TRUE
+      ))
+      return() # Exit the observer to stop further processing
+    }
+    
+    # If there are duplicate color nodes in different levels, show an error
+    if (length(duplicate_color_nodes) > 0) {
+      showModal(modalDialog(
+        title = "Duplicate Node Colours",
+        paste("The following nodes have the same colour but different levels:", 
+              paste(duplicate_color_nodes, collapse = ", ")),
+        easyClose = TRUE
+      ))
+      return() # Exit the observer to stop further processing
+    }
+    
+    # If no issues, proceed with processing the data
+    node_colors_levels_data <- data$nodes
+    
+    # Group by color, level, and outgoing edges, and calculate the number of nodes
+    number_edges <- node_colors_levels_data %>%
+      group_by(color, level, outgoing_edges) %>%
+      summarize(number_nodes = sum(number))
+    
+    # Join the node colors and levels data with the number of nodes per color/level/outgoing_edges
+    node_colors_levels_data <- full_join(node_colors_levels_data, number_edges, by = c("color", "level", "outgoing_edges"))
+    
+    # Store the node colors and levels in the reactive value
+    node_colors_levels(node_colors_levels_data)
+  })
+  
+  
+  
+  
   
   
   # Render the color and level table
@@ -1528,12 +1910,14 @@ server <- function(input, output, session) {
                          "Posterior Mean: ", posteriormean, "<br>",
                          "Posterior Variance:(", paste(variances, collapse = ", "), ")")
       )
+    print(df)
     })
   
   output$ceg_network <- renderVisNetwork({
     data <- contracted_data()
     edges <- data$edges
     nodes <- data$nodes
+    print(data$nodes)
     
     if (is.null(contracted_data())) {
       return(NULL)
@@ -1543,7 +1927,7 @@ server <- function(input, output, session) {
 
     # Prepare tooltips for nodes
     nodes <- nodes %>%
-      left_join(grouped_df3(), by = c("color" = "color")) # Assuming `posterior_variance` is in grouped_df2
+      full_join(grouped_df3(), by = c("color" = "color")) # Assuming `posterior_variance` is in grouped_df2
     print(nodes)
     # Prepare edges (without tooltips)
      # Ensure no tooltip is included for edges
