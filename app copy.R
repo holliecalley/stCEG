@@ -17,6 +17,7 @@ library(dirmult)
 library(hwep)
 library(RColorBrewer)
 library(randomcoloR)
+library(gtools)
 #setwd("/Users/holliecalley/Library/CloudStorage/OneDrive-UniversityofExeter/Documents/R/CEG")
 #homicides <- read_csv("Data/Homicides_London_03_23.csv")
 #homicides <- read_csv("Data/Homicides_London_03_23.csv", col_types = cols(Age_Group = col_factor(levels = c("Adult","Child", "Adolescent/Young Adult","Elderly")), Sex = col_factor(levels = c("Male","Female")), Domestic_Abuse = col_factor(levels = c("Not Domestic Abuse", "Domestic Abuse")), Solved_Status = col_factor(levels = c("Solved", "Unsolved")), Local_MP = col_factor(levels = c("Conservative", "Labour", "Liberal Democrat", "Other")), Same_as_UK_Party = col_factor(levels = c("No","Yes")), Method_of_Killing = col_factor(levels = c("Blunt Implement", "Knife or Sharp Implement", "Not Known/Not Recorded", "Other Methods of Killing", "Physical Assault, no weapon", "Shooting")), Ethnicity = col_factor(levels = c("Asian", "Black", "Not Reported/Not Known", "Other", "White"))))
@@ -1343,7 +1344,7 @@ server <- function(input, output, session) {
       output$colorLevelTable <- renderDT({
         
         table_df <- node_colors_levels2() %>%
-          arrange(stage) %>%  # Order by Stage
+          arrange(mixedorder(stage)) %>%  # Order by Stage
           select(
             `Stage Colour` = color,
             `Stage` = stage,  
