@@ -18,6 +18,7 @@ library(hwep)
 library(RColorBrewer)
 library(randomcoloR)
 library(gtools)
+library(zoo)
 #setwd("/Users/holliecalley/Library/CloudStorage/OneDrive-UniversityofExeter/Documents/R/CEG")
 #homicides <- read_csv("Data/Homicides_London_03_23.csv")
 #homicides <- read_csv("Data/Homicides_London_03_23.csv", col_types = cols(Age_Group = col_factor(levels = c("Adult","Child", "Adolescent/Young Adult","Elderly")), Sex = col_factor(levels = c("Male","Female")), Domestic_Abuse = col_factor(levels = c("Not Domestic Abuse", "Domestic Abuse")), Solved_Status = col_factor(levels = c("Solved", "Unsolved")), Local_MP = col_factor(levels = c("Conservative", "Labour", "Liberal Democrat", "Other")), Same_as_UK_Party = col_factor(levels = c("No","Yes")), Method_of_Killing = col_factor(levels = c("Blunt Implement", "Knife or Sharp Implement", "Not Known/Not Recorded", "Other Methods of Killing", "Physical Assault, no weapon", "Shooting")), Ethnicity = col_factor(levels = c("Asian", "Black", "Not Reported/Not Known", "Other", "White"))))
@@ -134,7 +135,10 @@ ui <- fluidPage(
                sidebarPanel(
                  
                  uiOutput("area_dropdown"),
-                 uiOutput("time_dropdown"),
+                 uiOutput("time_type_input"),
+                 uiOutput("date_format_input"),
+                 uiOutput("time_dropdown"), 
+
                  
                  uiOutput("picker1"),
                  uiOutput("picker2"),
@@ -289,96 +293,126 @@ server <- function(input, output, session) {
       homicides(original_data())
     })
     
-    output$time_dropdown <- renderUI({
-      req(original_data())
+    output$time_type_input <- renderUI({
+      req(homicides(), input$selected_time_columns)
+      selectInput(
+        "time_type",
+        "Select Time Type",
+        choices = c("Date", "Month-Year", "Year", ""),
+        selected = ""
+      )
+    })
+    
+    output$date_format_input <- renderUI({
+      req(input$selected_time_columns, input$time_type)  # Ensure both are available
       
-      if (!is.null(input$selected_time_columns) && length(input$selected_time_columns) > 0) {
-        time_select <- selectInput(
-          "TimeDivision",
-          "Choose Time Column",
-          choices = input$selected_time_columns
-        )
+      if (input$time_type == "Date") {
+        textInput("date_format", "Specify Date Format", value = "%Y-%m-%d")
+      } 
+      else if (input$time_type == "Month-Year") {
+        textInput("month_format", "Specify Date Format", value = "%Y-%m")
+      } else {
+        NULL  # You can return NULL or handle other cases as needed
+      }
+    })
+  
+    
+    
+    # Rendering the time dropdown slider based on the selected time division
+    # Check the selected time column and convert appropriately
+    output$time_dropdown <- renderUI({
+      req(input$selected_time_columns, input$time_type)
+      
+      df <- homicides()
+      time_col <- input$selected_time_columns
+      
+      print(paste("Selected time column:", time_col))
+      print("Column names in df:")
+      print(colnames(df))
+      
+      if (!time_col %in% colnames(df)) {
+        print("Error: Selected column does not exist in the data frame.")
+        return(NULL)
+      }
+      
+      print(paste("Column type:", class(df[[time_col]])))
+      
+      if (input$time_type == "Month-Year") {
+        req(input$month_format)
         
-        df <- original_data()
-        time_col <- input$TimeDivision
-        
-        if (!is.null(time_col) && time_col %in% names(df)) {
-          # Determine column type
-          is_date <- inherits(df[[time_col]], "Date")
-          is_datetime <- inherits(df[[time_col]], "POSIXct") || inherits(df[[time_col]], "POSIXlt")
+        # Convert the MonthYear column to yearmon format
+        print("Attempting to convert MonthYear to yearmon format")
+        tryCatch({
+          df[[time_col]] <- zoo::as.yearmon(df[[time_col]], format = input$month_format)
+          print("Converted MonthYear to yearmon format successfully.")
           
-          if (is_date || is_datetime) {
-            min_time <- min(df[[time_col]], na.rm = TRUE)
-            max_time <- max(df[[time_col]], na.rm = TRUE)
-            
-            slider <- sliderInput(
-              "Timeframe",
-              "Choose a timeframe:",
-              min = as.Date(min_time),
-              max = as.Date(max_time),
-              value = c(as.Date(min_time), as.Date(max_time)),
-              timeFormat = "%Y-%m-%d",
-              step = 1
-            )
-          } else {
-            # Handle year or year-month
-            min_year <- min(df[[time_col]], na.rm = TRUE)
-            max_year <- max(df[[time_col]], na.rm = TRUE)
-            
-            slider <- sliderInput(
-              "Timeframe",
-              "Choose a timeframe:",
-              min = min_year,
-              max = max_year,
-              value = c(min_year, max_year),
-              step = 1
-            )
+          start_date <- min(df[[time_col]], na.rm = TRUE)
+          end_date <- max(df[[time_col]], na.rm = TRUE)
+          
+          print(paste("Start date:", start_date))
+          print(paste("End date:", end_date))
+          
+          # Check if start_date or end_date is NA
+          if (is.na(start_date) || is.na(end_date)) {
+            print("Invalid start or end date for month-year slider.")
+            return(NULL)
           }
           
-          tagList(time_select, slider)
-        } else {
-          time_select
-        }
-      } else {
-        NULL
+          # Create sequence of months between start_date and end_date
+          month_year_seq <- seq(start_date, end_date, by = 1/12)  # 1/12 means monthly increments for yearmon
+          month_year_labels <- format(month_year_seq, "%b %Y")
+          
+          print("Rendering Month-Year slider")
+          
+          sliderTextInput(
+            inputId = "timeframe_slider",
+            label = "Select Month-Year Range",
+            choices = month_year_labels,
+            selected = c(month_year_labels[1], month_year_labels[length(month_year_labels)])
+          )
+          
+        }, error = function(e) {
+          print("Error generating Month-Year slider:")
+          print(e)
+          return(NULL)
+        })
+        
+      } else if (input$time_type == "Date") {
+        req(input$date_format)
+        df[[time_col]] <- as.Date(df[[time_col]], format = input$date_format)
+        
+        print("Rendering Date slider")
+        
+        sliderInput(
+          "timeframe_slider",
+          "Select Date Range",
+          min = min(df[[time_col]], na.rm = TRUE),
+          max = max(df[[time_col]], na.rm = TRUE),
+          value = c(min(df[[time_col]], na.rm = TRUE), max(df[[time_col]], na.rm = TRUE)),
+          timeFormat = "%Y-%m-%d"
+        )
+      }
+      else if (input$time_type == "Year") {
+        df[[time_col]] <- as.numeric(df[[time_col]])
+        
+        print("Rendering Year slider")
+        
+        sliderInput(
+          "timeframe_slider",
+          "Select Year Range",
+          min = min(df[[time_col]], na.rm = TRUE),
+          max = max(df[[time_col]], na.rm = TRUE),
+          value = c(min(df[[time_col]], na.rm = TRUE), max(df[[time_col]], na.rm = TRUE)),
+          step = 1,
+          sep = "",
+          ticks = TRUE
+        )
       }
     })
     
-    observe({
-      req(original_data())
-      df <- original_data()
-      
-      if (!is.null(input$TimeDivision) && input$TimeDivision %in% names(df)) {
-        time_col <- input$TimeDivision
-        is_date <- inherits(df[[time_col]], "Date")
-        is_datetime <- inherits(df[[time_col]], "POSIXct") || inherits(df[[time_col]], "POSIXlt")
-        
-        if (is_date || is_datetime) {
-          min_time <- min(df[[time_col]], na.rm = TRUE)
-          max_time <- max(df[[time_col]], na.rm = TRUE)
-          
-          updateSliderInput(session, "Timeframe",
-                            min = as.Date(min_time),
-                            max = as.Date(max_time),
-                            value = c(as.Date(min_time), as.Date(max_time)),
-                            timeFormat = "%Y-%m-%d")
-        } else {
-          min_year <- min(df[[time_col]], na.rm = TRUE)
-          max_year <- max(df[[time_col]], na.rm = TRUE)
-          
-          updateSliderInput(session, "Timeframe",
-                            min = min_year,
-                            max = max_year,
-                            value = c(min_year, max_year))
-        }
-      } else {
-        # Reset the slider if no time column is selected
-        updateSliderInput(session, "Timeframe", min = 2000, max = 2023, value = c(2000, 2023))
-        
-        # Reset homicides to the original data
-        homicides(original_data())
-      }
-    })
+    
+    
+    
     
     # Update the picker inputs based on available choices
     initial_choices <- reactive({
@@ -444,23 +478,53 @@ server <- function(input, output, session) {
     })
     
     homicide_data <- eventReactive(input$view, {
-      req(homicides())
-      df_homicides <- homicides()
-      
-      # Apply time filtering if a time column is selected
-      if (!is.null(input$TimeDivision) && input$TimeDivision != "") {
-        time_col <- input$TimeDivision
-        is_date <- inherits(df_homicides[[time_col]], "Date")
-        is_datetime <- inherits(df_homicides[[time_col]], "POSIXct") || inherits(df_homicides[[time_col]], "POSIXlt")
+        req(homicides())
+        df_homicides <- homicides()
+        time_col <- input$selected_time_columns
+        req(time_col)
         
-        if (is_date || is_datetime) {
+        print(paste("Time column selected:", time_col))
+        print(paste("Time column type:", class(df_homicides[[time_col]])))
+        print(paste("Timeframe input values:", input$timeframe_slider))
+        
+        if (input$time_type == "Date") {
+          df_homicides[[time_col]] <- as.Date(df_homicides[[time_col]], format = input$date_format)
+          start_time <- as.Date(input$timeframe_slider[1])
+          end_time <- as.Date(input$timeframe_slider[2])
           df_homicides <- df_homicides %>%
-            filter(df_homicides[[time_col]] >= as.Date(input$Timeframe[1]) & df_homicides[[time_col]] <= as.Date(input$Timeframe[2]))
-        } else {
+            filter(df_homicides[[time_col]] >= start_time & df_homicides[[time_col]] <= end_time)
+          
+        } else if (input$time_type == "Month-Year") {
+          df_homicides[[time_col]] <- zoo::as.yearmon(df_homicides[[time_col]], "%Y-%m")
+          start_index <- which(input$timeframe_slider[1] == format(df_homicides[[time_col]], "%b %Y"))
+          end_index <- which(input$timeframe_slider[2] == format(df_homicides[[time_col]], "%b %Y"))
+          
+          # Filter based on the converted yearmon values
           df_homicides <- df_homicides %>%
-            filter(between(df_homicides[[time_col]], input$Timeframe[1], input$Timeframe[2]))
+            filter(df_homicides[[time_col]] >= df_homicides[[time_col]][start_index] & 
+                     df_homicides[[time_col]] <= df_homicides[[time_col]][end_index])
+        
+        
+        } else if (input$time_type == "Year") {
+          # Ensure the timeframe slider values are present
+          req(input$timeframe_slider)
+          
+          if (inherits(df_homicides[[time_col]], "character")) {
+            df_homicides[[time_col]] <- as.numeric(df_homicides[[time_col]])
+          }
+          
+          start_year <- input$timeframe_slider[1]
+          end_year <- input$timeframe_slider[2]
+          
+          # Add a check for missing timeframe values
+          if (is.null(start_year) || is.null(end_year)) {
+            print("Invalid year range in the slider.")
+            return(NULL)
+          }
+          
+          df_homicides <- df_homicides %>%
+            filter(df_homicides[[time_col]] >= start_year & df_homicides[[time_col]] <= end_year)
         }
-      }
       
       # Apply area filtering if an area column is selected
       selected_area_columns <- input$selected_area_columns
@@ -481,10 +545,13 @@ server <- function(input, output, session) {
       return(df_homicides)
     })
     
+    
+    
     output$table <- renderDT({
       req(homicide_data())
       datatable(homicide_data())
     })
+    
   
   
   
