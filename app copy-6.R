@@ -17,8 +17,6 @@ library(dirmult)
 library(hwep)
 library(RColorBrewer)
 library(randomcoloR)
-library(gtools)
-library(zoo)
 #setwd("/Users/holliecalley/Library/CloudStorage/OneDrive-UniversityofExeter/Documents/R/CEG")
 #homicides <- read_csv("Data/Homicides_London_03_23.csv")
 #homicides <- read_csv("Data/Homicides_London_03_23.csv", col_types = cols(Age_Group = col_factor(levels = c("Adult","Child", "Adolescent/Young Adult","Elderly")), Sex = col_factor(levels = c("Male","Female")), Domestic_Abuse = col_factor(levels = c("Not Domestic Abuse", "Domestic Abuse")), Solved_Status = col_factor(levels = c("Solved", "Unsolved")), Local_MP = col_factor(levels = c("Conservative", "Labour", "Liberal Democrat", "Other")), Same_as_UK_Party = col_factor(levels = c("No","Yes")), Method_of_Killing = col_factor(levels = c("Blunt Implement", "Knife or Sharp Implement", "Not Known/Not Recorded", "Other Methods of Killing", "Physical Assault, no weapon", "Shooting")), Ethnicity = col_factor(levels = c("Asian", "Black", "Not Reported/Not Known", "Other", "White"))))
@@ -135,14 +133,11 @@ ui <- fluidPage(
                sidebarPanel(
                  
                  uiOutput("area_dropdown"),
-                 uiOutput("time_type_input"),
-                 uiOutput("date_format_input"),
-                 uiOutput("time_dropdown"), 
-
+                 uiOutput("time_dropdown"),
                  
-                 uiOutput("num_vars_ui"),
-                 # Dynamically generate pickers based on the number of variables
-                 uiOutput("pickers_ui"),
+                 uiOutput("picker1"),
+                 uiOutput("picker2"),
+                 uiOutput("picker3"),
                  uiOutput("timeframe_slider"),
                  actionButton(inputId = "defaultButton", label = "Set Default Selections"),
                  actionButton("view", "View Selection")),
@@ -293,174 +288,135 @@ server <- function(input, output, session) {
       homicides(original_data())
     })
     
-    output$time_type_input <- renderUI({
-      req(homicides(), input$selected_time_columns)
-      selectInput(
-        "time_type",
-        "Select Time Type",
-        choices = c("Date", "Month-Year", "Year", ""),
-        selected = ""
-      )
-    })
-    
-    output$date_format_input <- renderUI({
-      req(input$selected_time_columns, input$time_type)  # Ensure both are available
-      
-      if (input$time_type == "Date") {
-        textInput("date_format", "Specify Date Format", value = "%Y-%m-%d")
-      } 
-      else if (input$time_type == "Month-Year") {
-        textInput("month_format", "Specify Date Format", value = "%Y-%m")
-      } else {
-        NULL  # You can return NULL or handle other cases as needed
-      }
-    })
-  
-    
-    
-    # Rendering the time dropdown slider based on the selected time division
-    # Check the selected time column and convert appropriately
     output$time_dropdown <- renderUI({
-      req(input$selected_time_columns, input$time_type)
+      req(original_data())
       
-      df <- homicides()
-      time_col <- input$selected_time_columns
-      
-      print(paste("Selected time column:", time_col))
-      print("Column names in df:")
-      print(colnames(df))
-      
-      if (!time_col %in% colnames(df)) {
-        print("Error: Selected column does not exist in the data frame.")
-        return(NULL)
-      }
-      
-      print(paste("Column type:", class(df[[time_col]])))
-      
-      if (input$time_type == "Month-Year") {
-        req(input$month_format)
+      if (!is.null(input$selected_time_columns) && length(input$selected_time_columns) > 0) {
+        time_select <- selectInput(
+          "TimeDivision",
+          "Choose Time Column",
+          choices = input$selected_time_columns
+        )
         
-        # Convert the MonthYear column to yearmon format
-        print("Attempting to convert MonthYear to yearmon format")
-        tryCatch({
-          df[[time_col]] <- zoo::as.yearmon(df[[time_col]], format = input$month_format)
-          print("Converted MonthYear to yearmon format successfully.")
+        df <- original_data()
+        time_col <- input$TimeDivision
+        
+        if (!is.null(time_col) && time_col %in% names(df)) {
+          # Determine column type
+          is_date <- inherits(df[[time_col]], "Date")
+          is_datetime <- inherits(df[[time_col]], "POSIXct") || inherits(df[[time_col]], "POSIXlt")
           
-          start_date <- min(df[[time_col]], na.rm = TRUE)
-          end_date <- max(df[[time_col]], na.rm = TRUE)
-          
-          print(paste("Start date:", start_date))
-          print(paste("End date:", end_date))
-          
-          # Check if start_date or end_date is NA
-          if (is.na(start_date) || is.na(end_date)) {
-            print("Invalid start or end date for month-year slider.")
-            return(NULL)
+          if (is_date || is_datetime) {
+            min_time <- min(df[[time_col]], na.rm = TRUE)
+            max_time <- max(df[[time_col]], na.rm = TRUE)
+            
+            slider <- sliderInput(
+              "Timeframe",
+              "Choose a timeframe:",
+              min = as.Date(min_time),
+              max = as.Date(max_time),
+              value = c(as.Date(min_time), as.Date(max_time)),
+              timeFormat = "%Y-%m-%d",
+              step = 1
+            )
+          } else {
+            # Handle year or year-month
+            min_year <- min(df[[time_col]], na.rm = TRUE)
+            max_year <- max(df[[time_col]], na.rm = TRUE)
+            
+            slider <- sliderInput(
+              "Timeframe",
+              "Choose a timeframe:",
+              min = min_year,
+              max = max_year,
+              value = c(min_year, max_year),
+              step = 1
+            )
           }
           
-          # Create sequence of months between start_date and end_date
-          month_year_seq <- seq(start_date, end_date, by = 1/12)  # 1/12 means monthly increments for yearmon
-          month_year_labels <- format(month_year_seq, "%b %Y")
-          
-          print("Rendering Month-Year slider")
-          
-          sliderTextInput(
-            inputId = "timeframe_slider",
-            label = "Select Month-Year Range",
-            choices = month_year_labels,
-            selected = c(month_year_labels[1], month_year_labels[length(month_year_labels)])
-          )
-          
-        }, error = function(e) {
-          print("Error generating Month-Year slider:")
-          print(e)
-          return(NULL)
-        })
-        
-      } else if (input$time_type == "Date") {
-        req(input$date_format)
-        df[[time_col]] <- as.Date(df[[time_col]], format = input$date_format)
-        
-        print("Rendering Date slider")
-        
-        sliderInput(
-          "timeframe_slider",
-          "Select Date Range",
-          min = min(df[[time_col]], na.rm = TRUE),
-          max = max(df[[time_col]], na.rm = TRUE),
-          value = c(min(df[[time_col]], na.rm = TRUE), max(df[[time_col]], na.rm = TRUE)),
-          timeFormat = "%Y-%m-%d"
-        )
-      }
-      else if (input$time_type == "Year") {
-        df[[time_col]] <- as.numeric(df[[time_col]])
-        
-        print("Rendering Year slider")
-        
-        sliderInput(
-          "timeframe_slider",
-          "Select Year Range",
-          min = min(df[[time_col]], na.rm = TRUE),
-          max = max(df[[time_col]], na.rm = TRUE),
-          value = c(min(df[[time_col]], na.rm = TRUE), max(df[[time_col]], na.rm = TRUE)),
-          step = 1,
-          sep = "",
-          ticks = TRUE
-        )
+          tagList(time_select, slider)
+        } else {
+          time_select
+        }
+      } else {
+        NULL
       }
     })
     
-    
-    
-    
+    observe({
+      req(original_data())
+      df <- original_data()
+      
+      if (!is.null(input$TimeDivision) && input$TimeDivision %in% names(df)) {
+        time_col <- input$TimeDivision
+        is_date <- inherits(df[[time_col]], "Date")
+        is_datetime <- inherits(df[[time_col]], "POSIXct") || inherits(df[[time_col]], "POSIXlt")
+        
+        if (is_date || is_datetime) {
+          min_time <- min(df[[time_col]], na.rm = TRUE)
+          max_time <- max(df[[time_col]], na.rm = TRUE)
+          
+          updateSliderInput(session, "Timeframe",
+                            min = as.Date(min_time),
+                            max = as.Date(max_time),
+                            value = c(as.Date(min_time), as.Date(max_time)),
+                            timeFormat = "%Y-%m-%d")
+        } else {
+          min_year <- min(df[[time_col]], na.rm = TRUE)
+          max_year <- max(df[[time_col]], na.rm = TRUE)
+          
+          updateSliderInput(session, "Timeframe",
+                            min = min_year,
+                            max = max_year,
+                            value = c(min_year, max_year))
+        }
+      } else {
+        # Reset the slider if no time column is selected
+        updateSliderInput(session, "Timeframe", min = 2000, max = 2023, value = c(2000, 2023))
+        
+        # Reset homicides to the original data
+        homicides(original_data())
+      }
+    })
     
     # Update the picker inputs based on available choices
-    # Reactive function for initial column choices
     initial_choices <- reactive({
       df_homicides <- homicides()
       if (is.null(df_homicides)) return(NULL)
       
-      choices <- colnames(df_homicides)[!colnames(df_homicides) %in% c(input$predict_var)]
+      choices <- colnames(df_homicides)[!colnames(df_homicides) %in% c(input$predict_var, input$selected_area_columns, input$selected_time_columns)]
       setNames(choices, choices)
     })
     
-    # Render the numericInput for number of variables
-    output$num_vars_ui <- renderUI({
-      req(homicides())  # Ensure the data is uploaded
-      
-      df <- homicides()
-      
-      numericInput(
-        inputId = "num_vars", 
-        label = "Choose number of variables:", 
-        value = 3,  # Default starting value
-        min = 1, 
-        max = length(initial_choices())  # Set the max value dynamically
+    output$picker1 <- renderUI({
+      pickerInput(
+        inputId = 'pick1', 
+        label = 'Choose first variable:', 
+        choices = initial_choices(),
+        options = list(`actions-box` = TRUE),
+        multiple = FALSE
       )
     })
     
-    # Render the dynamic pickers based on the value of num_vars
-    output$pickers_ui <- renderUI({
-      req(homicides(), input$num_vars)  # Ensure dataset and num_vars are available
-      
-      # Number of variables selected by the user
-      num_vars <- input$num_vars
-      
-      # Create a list of picker inputs dynamically
-      picker_inputs <- lapply(1:num_vars, function(i) {
-        pickerInput(
-          inputId = paste0('pick', i), 
-          label = paste0('Choose variable ', i, ':'), 
-          choices = initial_choices(),
-          options = list(`actions-box` = TRUE),
-          multiple = FALSE
-        )
-      })
-      
-      # Return the picker inputs as a tagList to render them in the UI
-      do.call(tagList, picker_inputs)
+    output$picker2 <- renderUI({
+      pickerInput(
+        inputId = 'pick2', 
+        label = 'Choose second variable:', 
+        choices = initial_choices(), 
+        options = list(`actions-box` = TRUE),
+        multiple = FALSE
+      )
     })
     
+    output$picker3 <- renderUI({
+      pickerInput(
+        inputId = 'pick3', 
+        label = 'Choose third variable:', 
+        choices = initial_choices(), 
+        options = list(`actions-box` = TRUE),
+        multiple = FALSE
+      )
+    })
     
     observeEvent(input$Division, {
       req(homicides())
@@ -480,99 +436,54 @@ server <- function(input, output, session) {
         
         updateSelectInput(session, "Area", choices = available_areas, selected = random_areas)
         
-        # Update the pickers dynamically based on the number of variables chosen
-        num_vars <- input$num_vars
-        choices <- initial_choices()
-        
-        # Loop through and update each picker
-        lapply(1:num_vars, function(i) {
-          updatePickerInput(session, paste0("pick", i), choices = choices, selected = names(choices)[i])
-        })
+        updatePickerInput(session, "pick1", choices = initial_choices(), selected = names(initial_choices())[1])
+        updatePickerInput(session, "pick2", choices = initial_choices(), selected = names(initial_choices())[2])
+        updatePickerInput(session, "pick3", choices = initial_choices(), selected = names(initial_choices())[3])
       }
     })
     
-    
     homicide_data <- eventReactive(input$view, {
-  req(homicides())
-  df_homicides <- homicides()
-  
-  # Time Filtering
-  if (!is.null(input$selected_time_columns) && input$time_type != "") {
-    time_col <- input$selected_time_columns
-    req(time_col)
-    
-    print(paste("Time column selected:", time_col))
-    print(paste("Time column type:", class(df_homicides[[time_col]])))
-    print(paste("Timeframe input values:", input$timeframe_slider))
-    
-    if (input$time_type == "Date") {
-      df_homicides[[time_col]] <- as.Date(df_homicides[[time_col]], format = input$date_format)
-      start_time <- as.Date(input$timeframe_slider[1])
-      end_time <- as.Date(input$timeframe_slider[2])
+      req(homicides())
+      df_homicides <- homicides()
+      
+      # Apply time filtering if a time column is selected
+      if (!is.null(input$TimeDivision) && input$TimeDivision != "") {
+        time_col <- input$TimeDivision
+        is_date <- inherits(df_homicides[[time_col]], "Date")
+        is_datetime <- inherits(df_homicides[[time_col]], "POSIXct") || inherits(df_homicides[[time_col]], "POSIXlt")
+        
+        if (is_date || is_datetime) {
+          df_homicides <- df_homicides %>%
+            filter(df_homicides[[time_col]] >= as.Date(input$Timeframe[1]) & df_homicides[[time_col]] <= as.Date(input$Timeframe[2]))
+        } else {
+          df_homicides <- df_homicides %>%
+            filter(between(df_homicides[[time_col]], input$Timeframe[1], input$Timeframe[2]))
+        }
+      }
+      
+      # Apply area filtering if an area column is selected
+      selected_area_columns <- input$selected_area_columns
+      if (length(selected_area_columns) > 0 && !is.null(input$Area) && length(input$Area) > 0) {
+        df_homicides <- df_homicides %>%
+          filter(df_homicides[[selected_area_columns[1]]] %in% input$Area)
+      }
+      
+      # Select the columns based on picked variables
+      selected_columns <- c(input$pick1, input$pick2, input$pick3)
+      if (!is.null(input$predict_var) && input$predict_var != "") {
+        selected_columns <- c(selected_columns, input$predict_var)
+      }
+      
       df_homicides <- df_homicides %>%
-        filter(df_homicides[[time_col]] >= start_time & df_homicides[[time_col]] <= end_time)
+        select(all_of(selected_columns))
       
-    } else if (input$time_type == "Month-Year") {
-      df_homicides[[time_col]] <- zoo::as.yearmon(df_homicides[[time_col]], "%Y-%m")
-      start_index <- which(input$timeframe_slider[1] == format(df_homicides[[time_col]], "%b %Y"))
-      end_index <- which(input$timeframe_slider[2] == format(df_homicides[[time_col]], "%b %Y"))
-      
-      if (length(start_index) > 0 && length(end_index) > 0) {
-        df_homicides <- df_homicides %>%
-          filter(df_homicides[[time_col]] >= df_homicides[[time_col]][start_index] & 
-                   df_homicides[[time_col]] <= df_homicides[[time_col]][end_index])
-      }
-      
-    } else if (input$time_type == "Year") {
-      req(input$timeframe_slider)
-      
-      if (inherits(df_homicides[[time_col]], "character")) {
-        df_homicides[[time_col]] <- as.numeric(df_homicides[[time_col]])
-      }
-      
-      start_year <- input$timeframe_slider[1]
-      end_year <- input$timeframe_slider[2]
-      
-      if (!is.null(start_year) && !is.null(end_year)) {
-        df_homicides <- df_homicides %>%
-          filter(df_homicides[[time_col]] >= start_year & df_homicides[[time_col]] <= end_year)
-      } else {
-        print("Invalid year range in the slider.")
-      }
-    }
-  }
-  
-  # Area Filtering
-  selected_area_columns <- input$selected_area_columns
-  if (length(selected_area_columns) > 0 && !is.null(input$Area) && length(input$Area) > 0) {
-    df_homicides <- df_homicides %>%
-      filter(df_homicides[[selected_area_columns[1]]] %in% input$Area)
-  }
-  
-  # Dynamically gather the selected columns from the pickers
-  num_vars <- input$num_vars
-  selected_columns <- lapply(1:num_vars, function(i) input[[paste0("pick", i)]])
-
-  # Include the prediction variable if it's selected
-  if (!is.null(input$predict_var) && input$predict_var != "") {
-    selected_columns <- c(selected_columns, input$predict_var)
-  }
-
-  df_homicides <- df_homicides %>%
-    select(all_of(unlist(selected_columns)))
-  
-  return(df_homicides)
-})
-
-    
-    
-    
+      return(df_homicides)
+    })
     
     output$table <- renderDT({
       req(homicide_data())
       datatable(homicide_data())
     })
-    
   
   
   
@@ -589,216 +500,154 @@ server <- function(input, output, session) {
   #-------------------------------------------------------------------------------------------------- 
   #homicide.set <<- NA
   
-    homicide_set <<- eventReactive(input$vieweventtree, {
-      g <- make_empty_graph()
-      parent <- "s0"
-      homicide_data2 <- homicide_data()
+  homicide_set <<- eventReactive(input$vieweventtree,{
+    g <- make_empty_graph()
+    parent <- "s0"
+    homicide_data2 <- homicide_data()
+    #print(homicide_data2)
+    col1 <- sort(as.vector(unique(homicide_data2[[1]])))
+    print("col1")
+    print(col1)
+    col1s <- paste0("s", 1:length(col1))
+    col2 <- sort(as.vector(unique(homicide_data2[[2]])))
+    col2s <- paste0("s", (length(col1)+1):(length(col1) + length(col1)*length(col2)))
+    col3 <- sort(as.vector(unique(homicide_data2[[3]])))
+    col3s <- paste0("s", (length(col1) + length(col1)*length(col2)+1):(length(col1) + length(col1)*length(col2) + length(col1)*length(col2)*length(col3)))
+    col4 <- sort(as.vector(unique(homicide_data2[[4]])))
+    col4s <- paste0("s", (length(col1) + length(col1)*length(col2) + length(col1)*length(col2)*length(col3)+1):(length(col1) + length(col1)*length(col2) + length(col1)*length(col2)*length(col3) + length(col1)*length(col2)*length(col3)*length(col4)))
+    
+   
+    #print(c(col1, rep(col2, length(col1)), rep(col3, length(col1)*length(col2)), rep(col4, length(col1)*length(col2)*length(col3))))
+    g <- add_vertices(g, 1, name = paste0("s", 0))
+    g <- add_vertices(g, length(col1), name = paste0("s", 1:length(col1)))
+    g <- add_vertices(g, (length(col1)*length(col2)), name = paste0("s", (length(col1)+1):(length(col1) + length(col1)*length(col2))))
+    g <- add_vertices(g, (length(col1)*length(col2)*length(col3)), name = paste0("s", (length(col1) + length(col1)*length(col2)+1):(length(col1) + length(col1)*length(col2) + length(col1)*length(col2)*length(col3))))
+    g <- add_vertices(g, (length(col1)*length(col2)*length(col3)*length(col4)), name = paste0("s", (length(col1) + length(col1)*length(col2) + length(col1)*length(col2)*length(col3)+1):(length(col1) + length(col1)*length(col2) + length(col1)*length(col2)*length(col3) + length(col1)*length(col2)*length(col3)*length(col4))))
+    
+    generate_combinations <- function(df, cols) {
+      # Convert column indices to column names
+      col_names <- colnames(df)[cols]
       
-      num_vars <- input$num_vars + 1  # Number of variables chosen by the user
+      # Create a data frame with all possible combinations of values
+      all_combinations <- expand.grid(lapply(df[col_names], unique))
       
-      # Initialize lists to store unique values and state names
-      unique_values_list <- vector("list", num_vars)
-      state_names_list <- vector("list", num_vars)
+      # Calculate counts for actual data
+      counts <- df %>%
+        group_by(across(all_of(col_names))) %>%
+        summarise(count = n(), .groups = 'drop')
       
-      start_index <- 1
-      total_states <- 1
+      # Merge with all combinations
+      full_data <- full_join(all_combinations, counts, by = col_names)
       
-      # Generate state names and keep track of the indices
-      for (i in 1:num_vars) {
-        col_values <- sort(as.vector(unique(homicide_data2[[i]])))
-        unique_values_list[[i]] <- col_values
-        state_names_list[[i]] <- paste0("s", start_index:(start_index + length(col_values) * (total_states) -1 ))
-        total_states <- total_states * length(col_values)
-        start_index <- start_index + total_states
+      # Replace NA counts with 0
+      full_data$count[is.na(full_data$count)] <- 0
+      
+      # Sort the data frame alphabetically by the categorical columns
+      full_data <- full_data %>%
+        arrange(across(all_of(col_names)))
+      
+      return(full_data)
+    }
+    
+    # Apply to different column subsets (using column indices)
+    count1 <- generate_combinations(homicide_data2, 1)
+    print("count 1")
+    print(count1)
+    
+    count2 <- generate_combinations(homicide_data2, 1:2)
+    print("count 2")
+    print(count2)
+    
+    count3 <- generate_combinations(homicide_data2, 1:3)
+    print("count 3")
+    print(count3)
+    
+    count4 <- generate_combinations(homicide_data2, 1:4)
+    print("count 4")
+    print(count4)
+    
+    # Add edges between parent and child nodes alternately
+    edges <- c()
+    for (i in seq_along(col1s)) {
+      edges <- c(edges, "s0", col1s[i])
+    }
+    
+    for (i in seq_along(col1s)) {
+      # Calculate the starting and ending index of grandchild nodes for the current child node
+      start_index <- (i - 1) * length(col2) + 1
+      end_index <- i * length(col2)
+      # Connect the child node to the corresponding grandchild nodes
+      for (j in seq_along(col2)) {  # Loop only through the first 3 grandchild nodes
+        edges <- c(edges, col1s[i], col2s[start_index:end_index][j])
       }
-      print("unique values list")
-      print(unique_values_list)
-      print("state names list")
-      print(state_names_list)
-      
-      # Add vertices to the graph: starting with the root node "s0"
-      g <- add_vertices(g, 1, name = "s0")
-      
-      # Add vertices dynamically for each column based on the calculated states
-      for (i in 1:num_vars) {
-        g <- add_vertices(g, length(state_names_list[[i]]), name = state_names_list[[i]])
+    }
+    
+    for (j in seq_along(col2s)) {
+      # Calculate the starting and ending index of great-great-grandchild nodes for the current great-grandchild node
+      start_index_great <- (j - 1) * length(col3) + 1
+      end_index_great <- j * length(col3)
+      # Connect the great-grandchild node to the corresponding great-great-grandchild nodes
+      for (k in seq_along(col3)) {
+        edges <- c(edges, col2s[j], col3s[start_index_great:end_index_great][k])
       }
-      vertex_names <- V(g)$name
-      print("Vertex names of the graph:")
-      print(vertex_names)
-      
-      # Function to generate combinations and counts dynamically
-      generate_combinations <- function(df, cols) {
-        col_names <- colnames(df)[cols]
-        all_combinations <- expand.grid(lapply(df[col_names], unique))
-        counts <- df %>%
-          group_by(across(all_of(col_names))) %>%
-          summarise(count = n(), .groups = 'drop')
-        full_data <- full_join(all_combinations, counts, by = col_names)
-        full_data$count[is.na(full_data$count)] <- 0
-        full_data <- full_data %>%
-          arrange(across(all_of(col_names)))
-        return(full_data)
+    }
+    
+    for (j in seq_along(col3s)) {
+      # Calculate the starting and ending index of great-great-grandchild nodes for the current great-grandchild node
+      start_index_final <- (j - 1) * length(col4) + 1
+      end_index_final <- j * length(col4)
+      # Connect the great-grandchild node to the corresponding great-great-grandchild nodes
+      for (k in seq_along(col4)) {
+        edges <- c(edges, col3s[j], col4s[start_index_final:end_index_final][k])
       }
-      
-      # Calculate counts dynamically
-      counts_list <- lapply(1:num_vars, function(x) generate_combinations(homicide_data2, 1:x))
-      print(counts_list)
-      # Add edges between parent and child nodes dynamically
-      edges <- c()
-      state_indices <- rep(1, num_vars)
-      
-      edges <- c()
-      
-      # Loop through each column/variable to generate edges
-      for (i in 1:num_vars) {
-        num_states <- length(state_names_list[[i]])
-        
-        # Compute the total number of states in the previous columns
-        prev_total_states <- if (i > 1) length(state_names_list[[i - 1]]) else 1
-        
-        # Adjust start and end indices for the current variable's states
-        start_index <- 1
-        end_index <- num_states / prev_total_states
-        
-        # Add edges
-        if (i == 1) {
-          # First column: connect to "s0" (root node)
-          for (j in 1:num_states) {
-            edges <- c(edges, "s0", state_names_list[[i]][j])
-          }
-        } else {
-          # Subsequent columns: connect to the previous column's states
-          for (j in 1:prev_total_states) {
-            parent_state <- state_names_list[[i - 1]][j]
-            child_states <- state_names_list[[i]][start_index:end_index]
-            
-            # Create edges from the parent state to its corresponding child states
-            for (k in 1:length(child_states)) {
-              edges <- c(edges, parent_state, child_states[k])
-            }
-            
-            # Update start and end indices for the next parent node
-            start_index <- end_index + 1
-            end_index <- start_index + (num_states / prev_total_states) - 1
-          }
-        }
-      }
-      
-      # Print the final edge list in the desired format
-      print("edges")
-      print(edges)
-      
-      
-      
-      
-      g <- add_edges(g, edges)
-      print(g)
-      # Plot the graph
-      layout <- layout.reingold.tilford(g)
-      layout <- -layout[, 2:1]
-      
-      data <- toVisNetworkData(g)
-      #print(data)
-      # Check that state_names_list has the correct structure
-      #print(state_names_list)
-      
-      # Adjust the times argument in the rep function
-      # `1` is for the root node, and the rest corresponds to the number of states at each level
-      num_levels <- num_vars + 1  # Including the root node
-      print("state_names_list")
-      data$nodes$level <- rep(1:num_levels, times = c(1, sapply(1:num_vars, function(x) length(state_names_list[[x]]))))
-      print(data$edges)
-      data$nodes$shape <- 'dot'
-      data$nodes$size <- 100
-      data$nodes$color.background <- "#ffffff"
-      data$nodes$font <- "80px"
-      data$nodes$title <- data$nodes$id
-      # Check number of edges
-      #print(nrow(data$edges))  # Number of edges in the graph
-      
-      # Flatten the data and extract second-to-last column (label1) and count (label2)
-      # Ensure all data frames have the same number of columns by padding with NA
-      # Step 1: Find the union of all column names across the data frames in counts_list
-      # Step 1: Find the union of all column names across the data frames in counts_list
-      all_column_names <- unique(unlist(lapply(counts_list, colnames)))
-      
-      # Step 2: Function to add missing columns to each data frame and ensure "count" is last
-      align_columns <- function(df, all_column_names) {
-        missing_cols <- setdiff(all_column_names, colnames(df))  # Find columns that are missing
-        df[missing_cols] <- NA  # Add missing columns filled with NA
-        
-        # Reorder columns to match the union and ensure "count" is the last column
-        cols_ordered <- c(setdiff(all_column_names, "count"), "count")
-        return(df[cols_ordered])
-      }
-      
-      # Step 3: Apply the function to each data frame in counts_list
-      counts_list_aligned <- lapply(counts_list, align_columns, all_column_names)
-      
-      # Step 4: Flatten the list of aligned data frames into one using rbind
-      df_flat <- do.call(rbind, counts_list_aligned)
-      
-      print("df_flat")
-      print(df_flat)
-     
-      get_last_non_zero_na_rowwise <- function(df) {
-        # Exclude the 'count' column
-        non_count_cols <- colnames(df)[-which(colnames(df) == "count")]
-        
-        # Function to get the last non-zero (and non-NA) entry in a row
-        get_last_non_zero <- function(row) {
-          non_zero_entries <- row[non_count_cols][!is.na(row[non_count_cols]) & row[non_count_cols] != 0]
-          if (length(non_zero_entries) > 0) {
-            last_non_zero <- tail(non_zero_entries, 1)
-          } else {
-            last_non_zero <- NA
-          }
-          return(last_non_zero)
-        }
-        
-        # Apply the function to each row
-        last_non_zero_entries <- apply(df, 1, get_last_non_zero)
-        
-        return(last_non_zero_entries)
-      }
-      
-      last_entries <- get_last_non_zero_na_rowwise(df_flat)
-      
-      # Add this vector as a new column in the data$edges dataframe
-      data$edges$label1 <- last_entries
-      
-      # Print the updated data$edges dataframe to check the new column
-      print("Updated data$edges with new label1 column:")
-      print(data$edges)
-
-      
-      # Check the result
-      
-      # The last column is the count (label2)
-      #data$edges$label1 <- last_entries
-      data$edges$label2 <- df_flat$count  # Last column (count)
-      #print(data$edges)
-      data$edges$label3 <- paste(data$edges$label1, "\n", data$edges$label2)
-      
-      # Assign labels to edges in the graph
-      #data$edges$label1 <- label1
-      #data$edges$label2 <- label2
-      #data$edges$label3 <- label3
-
-      
-      
-      #data$edges$label1 <- unlist(lapply(1:num_vars, function(x) rep(unique_values_list[[x]], each = prod(sapply((x+1):num_vars, function(y) length(unique_values_list[[y]]))))))
-      #data$edges$label2 <- unlist(lapply(counts_list, function(x) x$count))
-      #data$edges$label3 <- paste(data$edges$label1, "\n", data$edges$label2)
-      data$edges$font.size <- 70
-      data$edges$color <- "#000000"
-      data$edges$arrows <- "to"
-      
-      return(data)
-    })
+    }
     
     
+    
+    
+    g <- add_edges(g, edges)
+    
+    # Plot the graph
+    layout <- layout.reingold.tilford(g)
+    layout <- -layout[, 2:1]
+    
+    # Plot the graph
+    #plot(g, layout = layout, vertex.size=18, vertex.color="white", edge.arrow.size=0.05, vertex.label.cex=0.3, asp = 5.5)
+    
+    data <- toVisNetworkData(g)
+    data$nodes$level <- c(1,rep(2,length(col1)), rep(3, (length(col1)*length(col2))), rep(4,length(col1)*length(col2)*length(col3)), rep(5,length(col1)*length(col2)*length(col3)*length(col4)))
+    #data$nodes$label = data$nodes$id
+    data$nodes$shape <- 'dot'
+    data$nodes$size = 100
+    data$nodes$color.background <- "#ffffff"
+    #data$nodes$color <- "#ffffff"
+    data$nodes$font <- "80px"
+    data$nodes$title = data$nodes$id
+    data$edges$label1 <- c(col1, rep(col2, length(col1)), rep(col3, length(col1)*length(col2)), rep(col4, length(col1)*length(col2)*length(col3)))
+    print(c(count1$count, count2$count, count3$count, count4$count))
+    print(data)
+    data$edges$label2 <- c(count1$count, count2$count, count3$count, count4$count)
+    #data$nodes$color <- "white"
+    print(paste("Length of col1:", length(col1)))
+    print(paste("Length of col2:", length(col2)))
+    print(paste("Length of col3:", length(col3)))
+    print(paste("Length of col4:", length(col4)))
+    
+    # Check the length of label1 and ensure it matches the edges
+    print(paste("Expected edges:", length(data$edges$id)))
+    
+
+    
+    # Create label3 by combining label1 and label2
+    data$edges$label3 <- paste(data$edges$label1, "\n", data$edges$label2)
+    
+    #data$edges$label <- paste(data$edges$label1, "\n", data$edges$label2)
+    data$edges$font.size <- 70
+    data$edges$color <- "#000000"
+    data$edges$arrows <- "to"
+    print(data)
+    return(data)
+  })
   
   #graph_data <- reactiveValues(data = homicide_set())
   updated_graph_data <- reactiveVal(list(
@@ -1062,23 +911,16 @@ server <- function(input, output, session) {
   observeEvent(input$AHCColoring, {
     data2 <- updated_graph_data()
     print("data2")
-    
-    exampledata <- homicide_data()
+    print(data2)
+    #data2 <- homicide_data()
+    exampledata<-homicide_data()
     exampledata3 <- exampledata
-    
+    print(exampledata)
+    #data2 <- graph_data
     nodes <- data2$nodes
-    
-    # Get unique levels from nodes
-    unique_levels <- unique(nodes$level)
-    print(unique_levels)
-    
-    # Define levels to filter out (level 1 and the maximum level)
-    levels_to_exclude <- max(unique_levels)
-    
+    levels <- nodes$level
     # Filter out nodes at level 1 or max level
-    nodes_to_consider <- nodes[!(nodes$level %in% levels_to_exclude), ]
-    print(nodes_to_consider)
-    
+    nodes_to_consider <- nodes[!(levels %in% c(5)), ]
     nodes_to_consider$id2 <- 1:nrow(nodes_to_consider)
     nodes_to_consider
     nodes_to_consider2 <- nodes_to_consider$id
@@ -1366,7 +1208,7 @@ server <- function(input, output, session) {
       nodes[nodes$id %in% group, "color"] <- color
     }
     nodes$color[nodes$level == 1] <- "#ffffff"
-    nodes$color[nodes$level == levels_to_exclude] <- "#ffffff"
+    nodes$color[nodes$level == 5] <- "#ffffff"
     nodes$number <- 1
     
     print(nodes)
@@ -1467,7 +1309,7 @@ server <- function(input, output, session) {
     node_colors_levels_data <- node_colors_levels()
     
     if (!is.null(node_colors_levels_data)) {
-      unique_colors_levels_data <- unique(node_colors_levels_data[node_colors_levels_data$level != max(node_colors_levels_data$level), c("color", "level", "outgoing_edges", "number_nodes")])
+      unique_colors_levels_data <- unique(node_colors_levels_data[node_colors_levels_data$level != 5, c("color", "level", "outgoing_edges", "number_nodes")])
       unique_colors_levels_data$stage <- paste0("u", seq_len(nrow(unique_colors_levels_data)))
       
       if (!"prior" %in% colnames(unique_colors_levels_data)) {
@@ -1501,7 +1343,7 @@ server <- function(input, output, session) {
       output$colorLevelTable <- renderDT({
         
         table_df <- node_colors_levels2() %>%
-          arrange(mixedorder(stage)) %>%  # Order by Stage
+          arrange(stage) %>%  # Order by Stage
           select(
             `Stage Colour` = color,
             `Stage` = stage,  
@@ -1850,10 +1692,10 @@ server <- function(input, output, session) {
     update_contract_ids <- function(nodes, edges) {
       # Contract nodes at levels 1 and 5 separately
       nodes$contract_id[nodes$level == 1] <- "1-#ffffff"
-      nodes$contract_id[nodes$level == max(nodes$level)] <- paste0(max(nodes$level),"-#ffffff")
+      nodes$contract_id[nodes$level == 5] <- "5-#ffffff"
       
       for (level in sort(unique(nodes$level), decreasing = TRUE)) {
-        if (level == 1 || level == max(nodes$level)) next
+        if (level == 1 || level == 5) next
         
         current_level_nodes <- nodes[nodes$level == level, ]
         
@@ -2212,8 +2054,7 @@ server <- function(input, output, session) {
     
     # Reorder the columns in the dataframe and sort by `Stage`
     reordered_df <- grouped_df2() %>%
-      mutate(stage_num = as.numeric(gsub("\\D", "", stage))) %>%  # Extract the numeric part
-      arrange(stage_num) %>%  # Order by the numeric part of Stage
+      arrange(stage) %>%  # Order by Stage
       select(
         `Stage Colour` = color,
         `Stage` = stage,  
