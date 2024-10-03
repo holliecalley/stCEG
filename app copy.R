@@ -60,7 +60,7 @@ homicides <- read_csv("homicides.csv")
 #homicides$BCU <- as.factor(homicides$BCU)
 
 ui <- fluidPage(
-  titlePanel("Chain Event Graphs"),
+  titlePanel("stCEG - Modelling Over Spatial Areas Using Chain Event Graphs"),
   tabsetPanel(
     tabPanel("Upload Data", 
              sidebarLayout(
@@ -124,7 +124,7 @@ ui <- fluidPage(
              ), 
              uiOutput("prediction_var"),
              #actionButton("finish", "Finished"),
-             ),
+             ,width = 3),
              mainPanel(DTOutput("rawdata")))),
     
     
@@ -145,7 +145,8 @@ ui <- fluidPage(
                  uiOutput("pickers_ui"),
                  uiOutput("timeframe_slider"),
                  actionButton(inputId = "defaultButton", label = "Set Default Selections"),
-                 actionButton("view", "View Selection")),
+                 actionButton("view", "View Selection"),
+                 width = 3),
                
                mainPanel(
                  
@@ -153,47 +154,71 @@ ui <- fluidPage(
                  DTOutput("table")
                ))),
     tabPanel("Plots", fluid = TRUE,
+             tags$head(
+               tags$style(HTML("
+      /* Fix sidebar panel width and alignment */
+      #sidebar {
+        width: 23%;
+        position: fixed;
+        top: 104;
+        left: 1%;
+        height: 25%;
+        z-index: 1000;
+      }
+      /* Adjust main panel to have a margin-left equal to the sidebar width */
+      #main {
+        margin-left: 25%; /* Adjust this value to match sidebar's width plus spacing */
+        
+      }
+    "))
+             ),
+             
              sidebarLayout(
-               
+               # Sidebar panel
                sidebarPanel(
+                 id = "sidebar",  # Assign ID for custom styling
                  actionButton("vieweventtree", "View Event Tree"),
                  actionButton("updateColor", "Update Color"),
                  colourpicker::colourInput("nodeColor", "Choose color", value = "#FFFFFF"),
                  actionButton("AHCColoring", "Colour using AHC"),
                  actionButton("viewstagedtree", "View Staged Tree"),
                  actionButton("viewceg", "View Chain Event Graph"),
+                 width = 3
                ),
                
+               # Main panel
                mainPanel(
-                 
-                 h2('Event
-                  Tree'),
+                 id = "main",  # Assign ID for custom styling
+                 h2('Event Tree'),
                  checkboxInput("toggleLabels", "Hide data values", value = TRUE),
                  actionButton("deleteNode", "Delete Selected Node"),
                  actionButton("finishedColoring", "Finished Colouring"),
-                 visNetworkOutput("eventtree_network",height = "800px"),
-                 h2('Staged
-                  Tree'),
-
-                
+                 visNetworkOutput("eventtree_network", height = "800px"),
+                 
+                 h2('Staged Tree'),
                  selectInput(
                    inputId = "priorChoice",
                    label = "Choose Prior Type:",
                    choices = c("Specify Prior", "Uniform 1,1 Prior (Type 1)", "Uniform 1,1 Prior (Type 2)", "Phantom Individuals Prior"),
                  ),
-                 #actionButton("chosenPriortype", "Prior Type Selected"),
-                 DTOutput("colorLevelTable", width = "600px"),
+                 DTOutput("colorLevelTable", width = "95%"),
                  actionButton("finishedPrior", "Finished Prior Specification"),
                  checkboxInput("usePriorLabels", "Show Prior Mean", value = TRUE),
-                 visNetworkOutput("stagedtree",height = "800px"),
+                 visNetworkOutput("stagedtree", height = "800px"),
+                 
                  h2('Chain Event Graph'),
                  checkboxInput("viewUpdateTable", "View Prior-Posterior Update Table", value = TRUE),
                  sliderInput("levelSeparation", "Level Separation", min = 500, max = 3000, value = 1000, sep = ""),
                  visNetworkOutput("ceg_network", height = "700px"),
+                 
                  conditionalPanel(
                    condition = "input.viewUpdateTable == true",
-                   DTOutput("UpdateTable", width = "800px"))
-               ))),
+                   DTOutput("UpdateTable", width = "95%")
+                 )
+               )
+             )
+    )
+    ,
     
   ))
 
@@ -242,9 +267,9 @@ server <- function(input, output, session) {
       req(homicides())
       df <- homicides()
       area_columns <- colnames(df)
-      checkboxGroupInput(
+      selectInput(
         "selected_area_columns",
-        "Select Area Divisions",
+        "Select Area Division",
         choices = area_columns,
         selected = NULL
       )
@@ -254,9 +279,9 @@ server <- function(input, output, session) {
       req(homicides())
       df <- homicides()
       time_columns <- colnames(df)
-      checkboxGroupInput(
+      selectInput(
         "selected_time_columns",
-        "Select Time Divisions",
+        "Select Time Division",
         choices = time_columns,
         selected = NULL
       )
@@ -1465,10 +1490,11 @@ server <- function(input, output, session) {
   observe({
     prior_type <- input$priorChoice
     node_colors_levels_data <- node_colors_levels()
-    
+
     if (!is.null(node_colors_levels_data)) {
       unique_colors_levels_data <- unique(node_colors_levels_data[node_colors_levels_data$level != max(node_colors_levels_data$level), c("color", "level", "outgoing_edges", "number_nodes")])
       unique_colors_levels_data$stage <- paste0("u", seq_len(nrow(unique_colors_levels_data)))
+      max_edges <- max(unique_colors_levels_data$outgoing_edges)
       
       if (!"prior" %in% colnames(unique_colors_levels_data)) {
         unique_colors_levels_data$prior <- ""
@@ -1489,11 +1515,45 @@ server <- function(input, output, session) {
           unique_colors_levels_data$prior[i] <- ifelse(unique_colors_levels_data$prior[i] == "", paste(rep(1, edges), collapse = ","), unique_colors_levels_data$prior[i])
         }
       } else if (prior_type == "Phantom Individuals Prior") {
-        for (i in seq_len(nrow(unique_colors_levels_data))) {
-          edges <- unique_colors_levels_data$outgoing_edges[i]
-          unique_colors_levels_data$prior[i] <- ifelse(unique_colors_levels_data$prior[i] == "", paste(rep(9, edges), collapse = ","), unique_colors_levels_data$prior[i])
+        unique_levels <- unique(unique_colors_levels_data$level)
+        
+        # Initialize prior_value for the first level
+        prior_value <- max_edges / unique_colors_levels_data$outgoing_edges[unique_colors_levels_data$level == unique_levels[1]][1]
+        
+        # Loop through each unique level to calculate priors
+        for (i in seq_along(unique_levels)) {
+          current_level <- unique_levels[i]
+          
+          # Get all rows corresponding to the current level
+          level_data <- unique_colors_levels_data[unique_colors_levels_data$level == current_level, ]
+          
+          # Get the number of outgoing edges for this level
+          edges <- level_data$outgoing_edges[1]
+          
+          # Check if the number of edges is valid
+          if (edges <= 0) {
+            warning(paste("Invalid number of outgoing edges for level:", current_level))
+            next  # Skip this level
+          }
+          
+          # For subsequent levels, divide the prior value by the current level's outgoing edges
+          if (i > 1) {
+            prior_value <- prior_value / edges
+          }
+          
+          # Multiply the prior value by the number of nodes for each stage in the current level
+          for (j in unique(level_data$stage)) {
+            stage_data <- level_data[level_data$stage == j, ]
+            num_nodes <- sum(stage_data$number_nodes)
+            stage_prior <- prior_value * num_nodes
+            
+            # Assign the calculated prior to the prior distribution for this stage
+            unique_colors_levels_data$prior[unique_colors_levels_data$stage == j] <- 
+              paste(rep(round(stage_prior, 3), edges), collapse = ",")
+          }
         }
       }
+      
       
       # Store the modified data in node_colors_levels2 instead of node_colors_levels
       node_colors_levels2(unique_colors_levels_data)
@@ -1963,8 +2023,8 @@ server <- function(input, output, session) {
       group_by(color_to, level, label1) %>%
       summarise(
         data_table = sum(sumlabel2),
-        prior_table = round(sum(sumlabel3), 1),
-        posterior_table = round((prior_table + data_table), 0),
+        prior_table = round(sum(sumlabel3), 3),
+        posterior_table = round((prior_table + data_table), 3),
         .groups = 'drop' # Ungroup after summarise
       )
     
@@ -2230,11 +2290,9 @@ server <- function(input, output, session) {
       escape = FALSE,  # Ensure we don't escape HTML if not necessary
       editable = TRUE,
       options = list(
-        dom = 't', 
-        pageLength = 50,
-        autoWidth = TRUE,  # Enable automatic column width calculation
+        dom = 't', pageLength = 50,# Enable automatic column width calculation
         columnDefs = list(
-          list(width = '100px', targets = '_all')  # Set width for all columns
+          list(width = '14%', targets = '_all')  # Set width for all columns
         )
       ),
       rownames = FALSE
