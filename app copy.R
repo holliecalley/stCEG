@@ -145,13 +145,11 @@ ui <- fluidPage(
                  uiOutput("pickers_ui"),
                  uiOutput("timeframe_slider"),
                  actionButton(inputId = "defaultButton", label = "Set Default Selections"),
-                 actionButton("view", "View Selection"),
-                 width = 3),
+                 actionButton("view", "View Selection"), width = 3 ),
                
                mainPanel(
-                 
                  h2('Data Frame'),
-                 DTOutput("table")
+                 DTOutput("table", width = "95%")
                ))),
     tabPanel("Plots", fluid = TRUE,
              tags$head(
@@ -199,7 +197,7 @@ ui <- fluidPage(
                  selectInput(
                    inputId = "priorChoice",
                    label = "Choose Prior Type:",
-                   choices = c("Specify Prior", "Uniform 1,1 Prior (Type 1)", "Uniform 1,1 Prior (Type 2)", "Phantom Individuals Prior"),
+                   choices = c("Specify Prior", "Uniform 1,1 Prior", "Phantom Individuals Prior"), #"Uniform 1,1 Prior (Type 2)"
                  ),
                  DTOutput("colorLevelTable", width = "95%"),
                  actionButton("finishedPrior", "Finished Prior Specification"),
@@ -1177,12 +1175,14 @@ server <- function(input, output, session) {
         prior<-c(prior,list(rbind(rep(equivsize/(numbcat[i]*numb[i]),numbcat[i]))))
       } 
     }
+    print("prior")
+    print(prior)
     #prior
     #Datalist1: list of the number of individuals going from the stage along a particular edge in C_{0}
     data <- lapply(nodes_to_consider$label2_list, convert_to_matrix)
     # Print the resulting list of matrices
     #print("data")
-    print(data)
+    #print(data)
     
     #List of the stages that can be merged in the first step 
     comparisonset <- nodes_to_consider %>%
@@ -1255,13 +1255,17 @@ server <- function(input, output, session) {
     lik <-0
     for( i in 1: sum(numb)){ 
       alpha<-unlist(prior[i])
-      print("alpha")
-      print(alpha)
+      #print("alpha")
+      #print(alpha)
       N<-unlist(data[i]) 
       print(N)
       lik<-lik+sum(lgamma(alpha+N)-lgamma(alpha))+sum(lgamma(sum(alpha))-lgamma(sum(alpha+N)))
+      print("lik")
+      print(lik)
     } 
     score<-c(lik)
+    print("score")
+    print(score)
     #At each step we calculate the difference between the current CEG and the CEG in which two stages in the current comparison set have been merged.
     #We go through every possible combination of stages that can be merged. k is an index for the comparisonset we are in,
     #and i and j the position of the stages within the comparison set.
@@ -1275,7 +1279,9 @@ server <- function(input, output, session) {
             for (j in (i+1):length(comparisonset[[k]])){
               #to compare 
               compare1<-comparisonset[[k]][i]
+              #print(compare1)
               compare2<-comparisonset[[k]][j]
+              #print(compare2)
               #we calculate the difference between 
               #the CEG where two stages are merged
               result<-lgamma(sum(prior[[compare1]]+prior[[compare2]]))-lgamma(sum(prior[[ compare1]]+data[[compare1]]+prior[[compare2]]+data[[compare2]]))+
@@ -1284,6 +1290,8 @@ server <- function(input, output, session) {
                 (lgamma(sum(prior[[compare1]]))-lgamma(sum(prior[[compare1]]+data[[compare1 ]]))+sum(lgamma(prior[[compare1]]+data[[compare1]]))-
                    sum(lgamma(prior[[compare1]]))+lgamma(sum(prior[[compare2]]))-lgamma(sum( prior[[compare2]]+data[[compare2]]))+
                    sum(lgamma(prior[[compare2]]+data[[compare2]]))-sum(lgamma(prior[[compare2]])))
+              #print("result")
+              #print(result)
               #if the resulting difference is greater than the current difference then we replace it
               if (result > difference){ 
                 difference<-result
@@ -1305,6 +1313,7 @@ server <- function(input, output, session) {
         mergedlist[[merged[2]]]<-cbind(NA,NA)
         lik<-lik+diff.end 
         score<-c(score,lik) 
+        print(score)
         merged1<-cbind(merged1,merged)
       } 
     }
@@ -1362,8 +1371,8 @@ server <- function(input, output, session) {
     # Flatten the nested lists into simple vectors and print them
     flattened_list <- lapply(row_numbers_list, function(x) unlist(x))
     included_ids <- unlist(flattened_list)
-    print(flattened_list)
-    print(included_ids)
+    #print(flattened_list)
+    #print(included_ids)
     #print("rownumbers")
     #print(row_numbers)
     # Step 2: Identify missing IDs
@@ -1376,7 +1385,7 @@ server <- function(input, output, session) {
     }
     
     # Print the updated flattened_list
-    print(flattened_list)
+    #print(flattened_list)
     
     num_colors <- length(flattened_list) # Number of groups
     colors <- distinctColorPalette(num_colors)
@@ -1394,8 +1403,8 @@ server <- function(input, output, session) {
     nodes$color[nodes$level == levels_to_exclude] <- "#ffffff"
     nodes$number <- 1
     
-    print(nodes)
-    print(edges)
+    #print(nodes)
+    #print(edges)
     
     updated_graph_data(list(nodes = nodes, edges = edges))
     
@@ -1503,18 +1512,20 @@ server <- function(input, output, session) {
       # Set the `prior` based on the selected `prior_type`
       if (prior_type == "Specify Prior") {
         unique_colors_levels_data$prior[unique_colors_levels_data$prior == ""] <- "Enter Prior"
-      } else if (prior_type == "Uniform 1,1 Prior (Type 1)") {
+      } else if (prior_type == "Uniform 1,1 Prior") {
         for (i in seq_len(nrow(unique_colors_levels_data))) {
           edges <- unique_colors_levels_data$outgoing_edges[i]
           num_repeats <- unique_colors_levels_data$number_nodes[i]
           unique_colors_levels_data$prior[i] <- ifelse(unique_colors_levels_data$prior[i] == "", paste(rep(num_repeats, edges), collapse = ","), unique_colors_levels_data$prior[i])
         }
-      } else if (prior_type == "Uniform 1,1 Prior (Type 2)") {
-        for (i in seq_len(nrow(unique_colors_levels_data))) {
-          edges <- unique_colors_levels_data$outgoing_edges[i]
-          unique_colors_levels_data$prior[i] <- ifelse(unique_colors_levels_data$prior[i] == "", paste(rep(1, edges), collapse = ","), unique_colors_levels_data$prior[i])
-        }
-      } else if (prior_type == "Phantom Individuals Prior") {
+      } 
+      #else if (prior_type == "Uniform 1,1 Prior (Type 2)") {
+      #  for (i in seq_len(nrow(unique_colors_levels_data))) {
+      #    edges <- unique_colors_levels_data$outgoing_edges[i]
+      #    unique_colors_levels_data$prior[i] <- ifelse(unique_colors_levels_data$prior[i] == "", paste(rep(1, edges), collapse = ","), unique_colors_levels_data$prior[i])
+      #  }
+      #} 
+      else if (prior_type == "Phantom Individuals Prior") {
         unique_levels <- unique(unique_colors_levels_data$level)
         
         # Initialize prior_value for the first level
@@ -1592,31 +1603,44 @@ server <- function(input, output, session) {
   observeEvent(input$colorLevelTable_cell_edit, {
     info <- input$colorLevelTable_cell_edit
     node_colors_levels_data <- node_colors_levels2()  # Get the latest edited data
-    
-    col_name <- names(node_colors_levels_data)[info$col + 1]  # Adjust for 0-based index from DataTable
-    
+    print(node_colors_levels_data)
+    print(paste("info$col value:", info$col))
+    print("Column names of node_colors_levels_data:")
+    print(names(node_colors_levels_data))
+    col_name <- names(node_colors_levels_data)[info$col + 1]
+    print(paste("Selected column name:", col_name))
+    print(paste("info$value:", info$value))
     # Update the corresponding cell in node_colors_levels_data
     node_colors_levels_data[info$row, col_name] <- info$value
     
     # Store the updated data back into node_colors_levels2
     node_colors_levels2(node_colors_levels_data)
-    
+    table_df <- node_colors_levels2() %>%
+      arrange(mixedorder(stage)) %>%  # Order by Stage
+      select(
+        `Stage Colour` = color,
+        `Stage` = stage,  
+        `Level` = level,
+        `Outgoing Edges` = outgoing_edges,
+        `Number of Nodes` = number_nodes,
+        `Prior Distribution` = prior
+      )
     # Render the updated table using node_colors_levels2
     output$colorLevelTable <- renderDT({
       datatable(
-        node_colors_levels2(),
+        table_df,
         escape = FALSE,
         editable = TRUE,
         options = list(dom = 't', pageLength = 50),
         rownames = FALSE
       ) %>%
         formatStyle(
-          columns = "color",
-          valueColumns = "color",
-          backgroundColor = styleEqual(node_colors_levels2()$color, node_colors_levels2()$color),
-          color = styleEqual(node_colors_levels2()$color, node_colors_levels2()$color)
+          columns = "Stage Colour",
+          valueColumns = "Stage Colour",
+          backgroundColor = styleEqual(table_df$`Stage Colour`, table_df$`Stage Colour`),
+          color = styleEqual(table_df$`Stage Colour`, table_df$`Stage Colour`)
         ) %>%
-        formatStyle(columns = "level", textAlign = "left")
+        formatStyle(columns = "Level", textAlign = "left")
     })
   })
   
