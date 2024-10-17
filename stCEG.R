@@ -22,7 +22,7 @@ library(zoo)
 #setwd("/Users/holliecalley/Library/CloudStorage/OneDrive-UniversityofExeter/Documents/R/CEG")
 #homicides <- read_csv("Data/Homicides_London_03_23.csv")
 #homicides <- read_csv("Data/Homicides_London_03_23.csv", col_types = cols(Age_Group = col_factor(levels = c("Adult","Child", "Adolescent/Young Adult","Elderly")), Sex = col_factor(levels = c("Male","Female")), Domestic_Abuse = col_factor(levels = c("Not Domestic Abuse", "Domestic Abuse")), Solved_Status = col_factor(levels = c("Solved", "Unsolved")), Local_MP = col_factor(levels = c("Conservative", "Labour", "Liberal Democrat", "Other")), Same_as_UK_Party = col_factor(levels = c("No","Yes")), Method_of_Killing = col_factor(levels = c("Blunt Implement", "Knife or Sharp Implement", "Not Known/Not Recorded", "Other Methods of Killing", "Physical Assault, no weapon", "Shooting")), Ethnicity = col_factor(levels = c("Asian", "Black", "Not Reported/Not Known", "Other", "White"))))
-homicides <- read_csv("homicides.csv")
+#homicides <- read_csv("homicides.csv")
 #plot(st_geometry(lnd))
 
 #Area_Level <- list(
@@ -199,7 +199,7 @@ ui <- fluidPage(
                  selectInput(
                    inputId = "priorChoice",
                    label = "Choose Prior Type:",
-                   choices = c("Specify Prior", "Uniform 1,1 Prior (Type 1)", "Uniform 1,1 Prior (Type 2)", "Phantom Individuals Prior"),
+                   choices = c("Specify Prior", "Uniform 1,1 Prior", "Phantom Individuals Prior"),
                  ),
                  DTOutput("colorLevelTable", width = "95%"),
                  actionButton("finishedPrior", "Finished Prior Specification"),
@@ -1503,7 +1503,7 @@ server <- function(input, output, session) {
       # Set the `prior` based on the selected `prior_type`
       if (prior_type == "Specify Prior") {
         unique_colors_levels_data$prior[unique_colors_levels_data$prior == ""] <- "Enter Prior"
-      } else if (prior_type == "Uniform 1,1 Prior (Type 1)") {
+      } else if (prior_type == "Uniform 1,1 Prior") {
         for (i in seq_len(nrow(unique_colors_levels_data))) {
           edges <- unique_colors_levels_data$outgoing_edges[i]
           num_repeats <- unique_colors_levels_data$number_nodes[i]
