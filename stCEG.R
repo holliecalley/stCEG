@@ -78,9 +78,11 @@ ui <- fluidPage(
              uiOutput("area_division_checkboxes"),
              uiOutput("time_division_checkboxes"),
              
-             
+            
              # Horizontal line ----
              tags$hr(),
+             
+             #textInput("na_values", "Specify NA values", value = ""),
              
              # Input: Checkbox if file has header ----
              checkboxInput("header", "Header", TRUE),
@@ -237,6 +239,7 @@ server <- function(input, output, session) {
         quote = input$quote
       )
       
+      
       # Ensure the Date columns are correctly formatted
       if ("DateColumn" %in% names(df)) {
         df$DateColumn <- as.Date(df$DateColumn, format = "%Y-%m-%d")  # Adjust format as needed
@@ -270,8 +273,8 @@ server <- function(input, output, session) {
       selectInput(
         "selected_area_columns",
         "Select Area Division",
-        choices = area_columns,
-        selected = NULL
+        choices = c("",area_columns),
+        selected = NULL,
       )
     })
     
@@ -282,8 +285,8 @@ server <- function(input, output, session) {
       selectInput(
         "selected_time_columns",
         "Select Time Division",
-        choices = time_columns,
-        selected = NULL
+        choices = c("",time_columns),
+        selected = NULL,
       )
     })
     
@@ -291,7 +294,7 @@ server <- function(input, output, session) {
       df_homicides <- homicides()
       
       # Check if selected_area_columns is not NULL and has at least one column selected
-      if (!is.null(input$selected_area_columns) && length(input$selected_area_columns) > 0) {
+      if (input$selected_area_columns != "" && length(input$selected_area_columns) > 0) {
         
         # Dynamically select the columns from the dataframe (df_homicides assumed here)
         selected_columns2 <- df_homicides[, input$selected_area_columns, drop = FALSE]
@@ -319,7 +322,7 @@ server <- function(input, output, session) {
     })
     
     output$time_type_input <- renderUI({
-      req(homicides(), input$selected_time_columns)
+      req(homicides(), input$selected_time_columns != "")
       selectInput(
         "time_type",
         "Select Time Type",
@@ -329,7 +332,7 @@ server <- function(input, output, session) {
     })
     
     output$date_format_input <- renderUI({
-      req(input$selected_time_columns, input$time_type)  # Ensure both are available
+      req(input$selected_time_columns != "", input$time_type)  # Ensure both are available
       
       if (input$time_type == "Date") {
         textInput("date_format", "Specify Date Format", value = "%Y-%m-%d")
@@ -346,7 +349,7 @@ server <- function(input, output, session) {
     # Rendering the time dropdown slider based on the selected time division
     # Check the selected time column and convert appropriately
     output$time_dropdown <- renderUI({
-      req(input$selected_time_columns, input$time_type)
+      req(input$selected_time_columns != "", input$time_type)
       
       df <- homicides()
       time_col <- input$selected_time_columns
@@ -522,7 +525,7 @@ server <- function(input, output, session) {
   df_homicides <- homicides()
   
   # Time Filtering
-  if (!is.null(input$selected_time_columns) && input$time_type != "") {
+  if (input$selected_time_columns != "" && input$time_type != "") {
     time_col <- input$selected_time_columns
     req(time_col)
     
@@ -630,9 +633,17 @@ server <- function(input, output, session) {
       
       # Generate state names and keep track of the indices
       for (i in 1:num_vars) {
+        # Get unique values from column, ignoring user-specified NA values
         col_values <- sort(as.vector(unique(homicide_data2[[i]])))
+        
+        # Remove any NA values from col_values
+        col_values <- col_values[!is.na(col_values)]
+        
         unique_values_list[[i]] <- col_values
-        state_names_list[[i]] <- paste0("s", start_index:(start_index + length(col_values) * (total_states) -1 ))
+        
+        # Generate state names based on unique values
+        state_names_list[[i]] <- paste0("s", start_index:(start_index + length(col_values) * (total_states) - 1))
+        
         total_states <- total_states * length(col_values)
         start_index <- start_index + total_states
       }
@@ -983,79 +994,64 @@ server <- function(input, output, session) {
       # Access current graph data
       data <- updated_graph_data()
       
-      # Identify end nodes (nodes with no outgoing edges)
-      end_nodes <- setdiff(data$nodes$id, data$edges$from)
-      
-      # Filter out end nodes from the selected nodes list
-      non_end_nodes <- setdiff(selected_nodes_list, end_nodes)
-      
-      if (length(non_end_nodes) > 0) {
-        for (node in non_end_nodes) {
-          # Find the outgoing edges of the node to be deleted
-          outgoing_edges <- data$edges[data$edges$from == node, ]
-          
-          # Find the incoming edges to the node to be deleted
-          incoming_edges <- data$edges[data$edges$to == node, ]
-          
-          if (nrow(outgoing_edges) > 0 && nrow(incoming_edges) > 0) {
-            # Redirect the outgoing edges to connect to the source of the incoming edges
-            for (i in 1:nrow(outgoing_edges)) {
-              for (j in 1:nrow(incoming_edges)) {
-                # Ensure the new edge has the same structure as the existing edges
-                new_edge <- data.frame(
-                  from = incoming_edges$from[j],
-                  to = outgoing_edges$to[i],
-                  label = outgoing_edges$label[i],
-                  label1 = outgoing_edges$label1[i],
-                  label2 = outgoing_edges$label2[i],
-                  label3 = outgoing_edges$label3[i],
-                  arrows = outgoing_edges$arrows[i],
-                  font.size = outgoing_edges$font.size[i],
-                  # Retain the edge label
-                  color = "#000000",  # Set color to black
-                  stringsAsFactors = FALSE
-                )
-                
-                # Add any other required columns to the new edge to match the structure of data$edges
-                missing_cols <- setdiff(names(data$edges), names(new_edge))
-                new_edge[missing_cols] <- NA  # Assign NA to missing columns if necessary
-                
-                # Append the new edge to the edges data frame
-                data$edges <- rbind(data$edges, new_edge)
-              }
+      # Loop through selected nodes to delete them
+      for (node in selected_nodes_list) {
+        # Find the outgoing edges of the node to be deleted
+        outgoing_edges <- data$edges[data$edges$from == node, ]
+        
+        # Find the incoming edges to the node to be deleted
+        incoming_edges <- data$edges[data$edges$to == node, ]
+        
+        if (nrow(outgoing_edges) > 0 && nrow(incoming_edges) > 0) {
+          # Redirect the outgoing edges to connect to the source of the incoming edges
+          for (i in 1:nrow(outgoing_edges)) {
+            for (j in 1:nrow(incoming_edges)) {
+              # Ensure the new edge has the same structure as the existing edges
+              new_edge <- data.frame(
+                from = incoming_edges$from[j],
+                to = outgoing_edges$to[i],
+                label = outgoing_edges$label[i],
+                label1 = outgoing_edges$label1[i],
+                label2 = outgoing_edges$label2[i],
+                label3 = outgoing_edges$label3[i],
+                arrows = outgoing_edges$arrows[i],
+                font.size = outgoing_edges$font.size[i],
+                color = "#000000",  # Set color to black
+                stringsAsFactors = FALSE
+              )
+              
+              # Add any other required columns to the new edge to match the structure of data$edges
+              missing_cols <- setdiff(names(data$edges), names(new_edge))
+              new_edge[missing_cols] <- NA  # Assign NA to missing columns if necessary
+              
+              # Append the new edge to the edges data frame
+              data$edges <- rbind(data$edges, new_edge)
             }
           }
-          
-          # Remove the node and its edges
-          data$nodes <- data$nodes[data$nodes$id != node, ]
-          data$edges <- data$edges[data$edges$from != node & data$edges$to != node, ]
         }
         
-        # Update the reactive graph data
-        updated_graph_data(data)
-        
-        # Reflect changes in the visNetwork proxy
-        visNetworkProxy("eventtree_network") %>%
-          visUpdateNodes(nodes = data$nodes) %>%
-          visUpdateEdges(edges = data$edges)
-        
-        # Print deletion success message
-        print("Edges and nodes updated:")
-        print(data$edges)  # Debugging statement to print updated edges
-        
-      } else {
-        # Show a modal dialog if only end nodes are selected
-        showModal(modalDialog(
-          title = "Cannot Delete End Nodes",
-          "You cannot delete nodes that are at the end of the graph.",
-          easyClose = TRUE
-        ))
+        # Remove the node and its edges (including end nodes)
+        data$nodes <- data$nodes[data$nodes$id != node, ]
+        data$edges <- data$edges[data$edges$from != node & data$edges$to != node, ]
       }
+      
+      # Update the reactive graph data
+      updated_graph_data(data)
+      
+      # Reflect changes in the visNetwork proxy
+      visNetworkProxy("eventtree_network") %>%
+        visUpdateNodes(nodes = data$nodes) %>%
+        visUpdateEdges(edges = data$edges)
+      
+      # Print deletion success message
+      print("Edges and nodes updated:")
+      print(data$edges)  # Debugging statement to print updated edges
+      
     } else {
       # Show a modal dialog if no nodes are selected
       showModal(modalDialog(
         title = "No Nodes Selected",
-        "Please select at least one non-end node to delete.",
+        "Please select at least one node to delete.",
         easyClose = TRUE
       ))
     }
@@ -1063,6 +1059,7 @@ server <- function(input, output, session) {
     # Reset selected nodes after the operation
     selected_nodes(NULL)
   })
+  
   
   
   
