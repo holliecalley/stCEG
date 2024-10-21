@@ -8,7 +8,6 @@ library(spData)
 library(shinyjqui)
 library(DT)
 library(sortable)
-library(ceg)
 library(stagedtrees)
 library(colorspace)
 library(igraph)
@@ -19,45 +18,7 @@ library(RColorBrewer)
 library(randomcoloR)
 library(gtools)
 library(zoo)
-#setwd("/Users/holliecalley/Library/CloudStorage/OneDrive-UniversityofExeter/Documents/R/CEG")
-#homicides <- read_csv("Data/Homicides_London_03_23.csv")
-#homicides <- read_csv("Data/Homicides_London_03_23.csv", col_types = cols(Age_Group = col_factor(levels = c("Adult","Child", "Adolescent/Young Adult","Elderly")), Sex = col_factor(levels = c("Male","Female")), Domestic_Abuse = col_factor(levels = c("Not Domestic Abuse", "Domestic Abuse")), Solved_Status = col_factor(levels = c("Solved", "Unsolved")), Local_MP = col_factor(levels = c("Conservative", "Labour", "Liberal Democrat", "Other")), Same_as_UK_Party = col_factor(levels = c("No","Yes")), Method_of_Killing = col_factor(levels = c("Blunt Implement", "Knife or Sharp Implement", "Not Known/Not Recorded", "Other Methods of Killing", "Physical Assault, no weapon", "Shooting")), Ethnicity = col_factor(levels = c("Asian", "Black", "Not Reported/Not Known", "Other", "White"))))
-#homicides <- read_csv("homicides.csv")
-#plot(st_geometry(lnd))
 
-#Area_Level <- list(
-#  Borough = list("Barking & Dagenham","Barnet","Bexley",
-#                 "Brent","Bromley","Camden","Croydon", 
-#                 "Ealing","Enfield","Greenwich","Hackney",
-#                 "Hammersmith & Fulham","Haringey","Harrow",
-#                 "Havering", "Hillingdon","Hounslow","Islington",
-#                 "Kensington & Chelsea","Kingston Upon Thames",
-#                 "Lambeth","Lewisham","Merton","Newham","Redbridge",
-#                 "Richmond Upon Thames","Southwark","Sutton", 
-#                 "Tower Hamlets","Waltham Forest","Wandsworth","Westminster"),
-#  BCU = list("Central West","South West","South","South East","East", 
-#             "West","Central South","North","Central East", 
-#             "Central North","North West","North East"))
-
-#homicides$Year <- format(as.Date(homicides$Recorded_Date, format="%Y/%m/%d"),"%Y")
-#transform(homicides, Year = as.numeric(Year))
-#homicides[, c(11)] <- sapply(homicides[, c(11)], as.numeric)
-
-#homicides <- homicides %>% mutate(BCU = ifelse(Borough %in% c("Hammersmith & Fulham", "Kensington & Chelsea", "Westminster"), "Central West",
-#                                               ifelse(Borough %in% c("Kingston Upon Thames", "Merton", "Richmond Upon Thames", "Wandsworth"), "South West",
-#                                                      ifelse(Borough %in% c("Bromley", "Croydon", "Sutton"), "South",
-#                                                             ifelse(Borough %in% c("Bexley", "Greenwich", "Lewisham"), "South East",
-#                                                                    ifelse(Borough %in% c("Barking & Dagenham", "Havering", "Redbridge"), "East",
-#                                                                           ifelse(Borough %in% c("Ealing", "Hillingdon", "Hounslow"), "West",
-#                                                                                  ifelse(Borough %in% c("Lambeth", "Southwark"), "Central South",
-#                                                                                         ifelse(Borough %in% c("Enfield", "Haringey"), "North",
-#                                                                                                ifelse(Borough %in% c("Hackney", "Tower Hamlets"), "Central East",
-#                                                                                                       ifelse(Borough %in% c("Camden", "Islington"), "Central North",
-#                                                                                                              ifelse(Borough %in% c("Barnet", "Brent", "Harrow"), "North West",
-#                                                                                                                     ifelse(Borough %in% c("Newham", "Waltham Forest"), "North East","Hollie messed up")))))))))))))
-#homicides <- homicides[(c(1:4,6:8,11:12))]
-#homicides$Borough <- as.factor(homicides$Borough)
-#homicides$BCU <- as.factor(homicides$BCU)
 
 ui <- fluidPage(
   titlePanel("stCEG - Modelling Over Spatial Areas Using Chain Event Graphs"),
@@ -83,7 +44,7 @@ ui <- fluidPage(
              tags$hr(),
              
              #textInput("na_values", "Specify NA values", value = ""),
-             
+             checkboxInput("exclude_row_numbers", "Exclude First Column as Row Numbers", FALSE),
              # Input: Checkbox if file has header ----
              checkboxInput("header", "Header", TRUE),
              
@@ -239,10 +200,13 @@ server <- function(input, output, session) {
         quote = input$quote
       )
       
-      
       # Ensure the Date columns are correctly formatted
       if ("DateColumn" %in% names(df)) {
         df$DateColumn <- as.Date(df$DateColumn, format = "%Y-%m-%d")  # Adjust format as needed
+      }
+      
+      if (input$exclude_row_numbers) {
+        df <- df[, -1]
       }
       
       original_data(df)  # Save the original data
@@ -1083,7 +1047,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$AHCColoring, {
     data2 <- updated_graph_data()
-    print("data2")
+    #print("data2")
     
     exampledata <- homicide_data()
     exampledata3 <- exampledata
@@ -1135,7 +1099,7 @@ server <- function(input, output, session) {
     
     # Ensure all columns are factors
     exampledata[] <- lapply(exampledata, function(x) {
-      if (is.character(x)) as.factor(x) else x
+      if (!is.factor(x)) as.factor(x) else x
     })
     print("exampledata")
     print(class(exampledata))
