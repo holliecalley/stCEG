@@ -36,6 +36,14 @@ ui <- fluidPage(
                  )
                ),
                
+             #  fileInput(
+            #     "shapefile1",
+            #     "Upload Shapefile (ZIP)",
+            #     multiple = FALSE,
+            #     accept = ".zip"
+            #     ),
+               
+               
                uiOutput("area_division_checkboxes"),
                uiOutput("time_division_checkboxes"),
                
@@ -171,6 +179,7 @@ ui <- fluidPage(
                  
                  h2('Chain Event Graph'),
                  checkboxInput("viewUpdateTable", "View Prior-Posterior Update Table", value = TRUE),
+                 checkboxInput("showposteriormean", "Show Posterior Mean", value = TRUE),
                  sliderInput("levelSeparation", "Level Separation", min = 500, max = 3000, value = 1000, sep = ""),
                  visNetworkOutput("ceg_network", height = "700px"),
                  
@@ -1068,6 +1077,17 @@ server <- function(input, output, session) {
           data$nodes$outgoing_edges[data$nodes$id == node] + added_from_counts[node]
       }
       
+      # Reassign node IDs sequentially
+      old_ids <- data$nodes$label
+      new_ids <- paste0("s", seq(0, nrow(data$nodes) - 1))
+      id_mapping <- setNames(new_ids, old_ids)
+      
+      # Update node IDs in the nodes dataframe
+      data$nodes$id <- new_ids
+      data$nodes$label <- new_ids
+      
+      data$edges$from <- id_mapping[as.character(data$edges$from)]
+      data$edges$to <- id_mapping[as.character(data$edges$to)]
       # Update reactive graph data
       updated_graph_data(data)
       
@@ -1092,6 +1112,7 @@ server <- function(input, output, session) {
     # Reset selected nodes after the operation
     selected_nodes(NULL)
   })
+  
   
   
   
@@ -2187,7 +2208,7 @@ server <- function(input, output, session) {
       left_join(edges2, by = c("color_to", "level", "label1"))
     #print(edges)
     edges <- edges %>% select(from, to, label1, font.size, color_to, smooth, level, prior_table, priormean, data_table, posterior_table, posteriormean)
-    edges$label <- paste(edges$label1, "\n", edges$posteriormean)
+    
     edges$color <- "#000000"
     print(edges)
     contracted_data(list(nodes = contracted_nodes, edges = edges))
@@ -2217,6 +2238,18 @@ server <- function(input, output, session) {
     print(grouped_df)
     grouped_df2(grouped_df)
     #print(grouped_df2())
+  })
+  
+  observe({
+    data <- contracted_data()
+    if (input$showposteriormean) {
+      data$edges$label <- paste(data$edges$label1, "\n", data$edges$posteriormean)
+    } else {
+      data$edges$label <- paste(data$edges$label1)
+    }
+    
+    contracted_data(data)
+   
   })
   
   extract_alpha <- function(dirichlet_str) {
