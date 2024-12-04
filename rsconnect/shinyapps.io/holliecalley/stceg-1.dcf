@@ -1,10 +1,10 @@
-name: stceg
+name: stceg-1
 title:
 username: holliecalley
 account: holliecalley
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
-appId: 13274825
-bundleId: 9333630
-url: https://holliecalley.shinyapps.io/stceg/
+appId: 13491250
+bundleId: 9444017
+url: https://holliecalley.shinyapps.io/stceg-1/
 version: 1
