@@ -19,6 +19,7 @@ library(randomcoloR)
 library(gtools)
 library(zoo)
 library(leaflet)
+library(shinyjs)
 
 
 ui <- fluidPage(
@@ -126,7 +127,6 @@ ui <- fluidPage(
         position: fixed;
         top: 104;
         left: 1%;
-        height: 25%;
         z-index: 1000;
       }
       /* Adjust main panel to have a margin-left equal to the sidebar width */
@@ -140,7 +140,19 @@ ui <- fluidPage(
              sidebarLayout(
                # Sidebar panel
                sidebarPanel(
+                 useShinyjs(),
                  id = "sidebar",  # Assign ID for custom styling
+                 conditionalPanel(
+                   condition = "input.viewOption == 'Map'",
+                   fileInput(
+                     "shapefile",
+                     "Upload Shapefile (ZIP)",
+                     accept = ".zip"
+                   ),
+                   textInput("crs", "Specify CRS (if missing):", value = NA),
+                   sliderInput("mapOpacity", "Layer Opacity", min = 0, max = 1, value = 0.5, sep = ""),
+                   actionButton("process_shapefile", "Process Shapefile")
+                 ),
                  actionButton("vieweventtree", "View Event Tree"),
                  actionButton("updateColor", "Update Color"),
                  colourpicker::colourInput("nodeColor", "Choose color", value = "#FFFFFF"),
@@ -153,11 +165,27 @@ ui <- fluidPage(
                # Main panel
                mainPanel(
                  id = "main",  # Assign ID for custom styling
-                 h2('Event Tree'),
+                 selectInput(
+                   "viewOption",
+                   "Choose Colouring Method:",
+                   choices = c("Event Tree", "Map"),
+                   selected = "Map"
+                 ),
+                 
+                 h2(textOutput("mainPanelTitle")),
                  checkboxInput("toggleLabels", "Hide data values", value = TRUE),
+                 fluidRow(
+                   column(6, leafletOutput("map", height = "600px")),
+                   column(6, visNetworkOutput("eventtree_network", height = "1000px"))
+                 ),
+                 #leafletOutput("map", height = "600px"),
+                 #visNetworkOutput("eventtree_network", height = "1000px"),  # Shared ID
+                 
+                 #h2('Event Tree'),
+                 #checkboxInput("toggleLabels", "Hide data values", value = TRUE),
                  actionButton("deleteNode", "Delete Selected Node"),
                  actionButton("finishedColoring", "Finished Colouring"),
-                 visNetworkOutput("eventtree_network", height = "1000px"),
+                 #visNetworkOutput("eventtree_network", height = "1000px"),
                  
                  h2('Staged Tree'),
                  selectInput(
@@ -183,26 +211,27 @@ ui <- fluidPage(
                )
              )
     ),
-    tabPanel("Plot Map", fluid = TRUE,
-             sidebarLayout(
-               
-               sidebarPanel(
-                 fileInput(
-                   "shapefile",
-                   "Upload Shapefile (ZIP)",
-                   accept = ".zip"
-                 ),
-                 textInput("crs", "Specify CRS (if missing):", value = NA),
-                 sliderInput("mapOpacity", "Layer Opacity", min = 0, max = 1, value = 0.5, sep = ""),
-                 actionButton("process_shapefile", "Process Shapefile")
-               ),
-               mainPanel(
-                 leafletOutput("map", height = "600px")
-               ))),
+#    tabPanel("Plot Map", fluid = TRUE,
+#             sidebarLayout(
+#               
+#               sidebarPanel(
+#                 fileInput(
+#                   "shapefile",
+#                   "Upload Shapefile (ZIP)",
+#                   accept = ".zip"
+#                 ),
+#                 textInput("crs", "Specify CRS (if missing):", value = NA),
+#                 sliderInput("mapOpacity", "Layer Opacity", min = 0, max = 1, value = 0.5, sep = ""),
+#                 actionButton("process_shapefile", "Process Shapefile")
+#               ),
+#               mainPanel(
+#                 leafletOutput("map", height = "600px")
+#               ))),
   ))
 
 
 server <- function(input, output, session) {
+  options(shiny.maxRequestSize=30*1024^2)
   original_data <- reactiveVal()  # To store the original, unfiltered dataframe
   homicides <- reactiveVal()      # To store the filtered dataframe
   
@@ -926,6 +955,29 @@ server <- function(input, output, session) {
   #    }
   #    data
   #  })
+  
+  observe({
+    if (input$viewOption == "Map") {
+      # Show the map and adjust event tree height
+      shinyjs::show("map")
+      shinyjs::show("eventtree_network")
+      shinyjs::runjs('$("#eventtree_network").css("height", "600px")')  # Set event tree height to 600px
+    } else {
+      # Hide the map and adjust event tree height
+      shinyjs::hide("map")
+      shinyjs::show("eventtree_network")
+      shinyjs::runjs('$("#eventtree_network").css("height", "1000px")')  # Set event tree height to 1000px
+    }
+  })
+  
+  output$mainPanelTitle <- renderText({
+    if (input$viewOption == "Map") {
+      "Colouring on Map"
+    } else {
+      "Colouring on Event Tree"
+    }
+  })
+  
   
   
   output$eventtree_network <- renderVisNetwork({
@@ -2560,10 +2612,17 @@ server <- function(input, output, session) {
           fillColor = random_colors, # Assign colorblind-friendly colors
           color = "black",
           weight = 1,
+          highlightOptions = highlightOptions(
+            weight = 2,
+            color = "blue",
+            fillOpacity = 0.7,
+            bringToFront = TRUE
+          ),
           opacity = 1,
           fillOpacity = input$mapOpacity,
-          popup = NULL
-        )
+          popup = NULL,
+          label = ~as.character(shape_data[[1]])
+        ) 
     })
   })
   
@@ -2637,8 +2696,10 @@ server <- function(input, output, session) {
   }
   
 
+  floret2 <- reactiveVal(NULL)
   
-  
+  selected_polygons <- reactiveVal(character())
+
   observeEvent(input$map_shape_click, {
     # Access the ID of the clicked polygon
     clicked_id <- input$map_shape_click$id
@@ -2646,9 +2707,11 @@ server <- function(input, output, session) {
     if (!is.null(clicked_id)) {
       # Get the relevant node based on the clicked ID
       shape_data <- shapefileData()  # Ensure you're working with the reactive data
-      visoutputdata <- contracted_data()
+      #visoutputdata <- contracted_data()
+      visoutputdata <- updated_graph_data()
       print(visoutputdata)
       clicked_data <- shape_data[shape_data[[1]] == clicked_id, ]
+      
       #print(clicked_data)
       # Assuming the node label corresponds to the polygon ID or use another mapping
       start_label1 <- clicked_data[[1, 1]]  # Or derive it from the clicked data
@@ -2656,12 +2719,15 @@ server <- function(input, output, session) {
       print(start_label1)
       # Use extract_floret function to get the subgraph (floret) starting from the clicked node
       # Try to extract the floret
-      floret <- tryCatch({
+      floret3 <- tryCatch({
         extract_floret(visoutputdata$nodes, visoutputdata$edges, start_label1)
       }, error = function(e) NULL)
       
+      floret2(floret3)
+    
+      
       # Check if the floret exists
-      if (is.null(floret) || (nrow(floret$nodes) == 0 && nrow(floret$edges) == 0)) {
+      if (is.null(floret3) || (nrow(floret3$nodes) == 0 && nrow(floret3$edges) == 0)) {
         # Show a modal dialog with an error message
         showModal(modalDialog(
           title = "Error",
@@ -2670,98 +2736,49 @@ server <- function(input, output, session) {
           footer = modalButton("Close")
         ))
       } else {
+        floret <- floret2()
       output$dynamic_vis <- renderVisNetwork({
+        floret$nodes$title <- NULL
         visNetwork(floret$nodes, floret$edges) %>%
-          visHierarchicalLayout(direction = "LR", levelSeparation = 500) %>%
-          visNodes(scaling = list(min = 900, max = 900)) %>%
-          visEdges(smooth = TRUE, arrows = list(to = list(enabled = TRUE, scaleFactor = 5))) %>%
+          visHierarchicalLayout(direction = "LR", levelSeparation = 1000) %>%
+          visNodes(
+            scaling = list(min = 300, max = 300)  # Ensure tooltips are set
+          ) %>%
+          visEdges(arrows = list(to = list(enabled = TRUE, scaleFactor = 5))) %>%
           visOptions(
-            manipulation = list(
-              enabled = FALSE,
-              addEdgeCols = FALSE,
-              addNodeCols = FALSE,
-              editEdgeCols = FALSE,
-              editNodeCols = c("color"),
-              multiselect = TRUE
-            ),
-            nodesIdSelection = FALSE
+            manipulation = list(enabled = FALSE, addEdgeCols = FALSE, addNodeCols = FALSE, editNodeCols = FALSE)
+            
           ) %>%
           visInteraction(
-            dragNodes = TRUE,
-            multiselect = TRUE, 
+            dragNodes = FALSE,
+            multiselect = TRUE,
             navigationButtons = TRUE
           ) %>%
-          visPhysics(hierarchicalRepulsion = list(nodeDistance = 990), stabilization = TRUE) %>%
-          
+          visPhysics(
+            solver = "forceAtlas2Based",
+            forceAtlas2Based = list(gravitationalConstant = -50),
+            hierarchicalRepulsion = list(nodeDistance = 300)
+          ) %>%
           visEvents(
             selectNode = "function(params) {
-        var selectedNodeIds = params.nodes; // Array of selected node IDs
-
-        // Store the original colors of the edges
-        var edges = this.body.data.edges.get();
-        edges.forEach(function(edge) {
-          if (edge.originalColor === undefined) {
-            edge.originalColor = edge.color; // Store the original edge color
-          }
-          if (edge.originalFontColor === undefined) {
-            edge.originalFontColor = (edge.font && edge.font.color) || '#000000'; // Store the original label color
-          }
-        });
-
-        // Reset all edges to their original colors
-        this.body.data.edges.update(edges.map(function(edge) {
-          edge.color = edge.originalColor || '#000000'; // Reset to original or default black
-          edge.font = { color: edge.originalFontColor || '#000000' }; // Reset to original or default black
-          return edge;
-        }));
-
-        // Highlight edges based on selected nodes
-        selectedNodeIds.forEach(function(selectedNodeId) {
-          // Highlight edges going into the selected node (blue)
-          var incomingEdges = this.body.data.edges.get({
-            filter: function(edge) {
-              return edge.to === selectedNodeId;
-            }
-          });
-          incomingEdges.forEach(function(edge) {
-            edge.color = '#0000FF'; // Set color to blue
-            edge.font = { color: '#0000FF' }; // Set label color to blue
-          });
-          this.body.data.edges.update(incomingEdges);
-
-          // Highlight edges going out from the selected node (red)
-          var outgoingEdges = this.body.data.edges.get({
-            filter: function(edge) {
-              return edge.from === selectedNodeId;
-            }
-          });
-          outgoingEdges.forEach(function(edge) {
-            edge.color = '#FF0000'; // Set color to red
-            edge.font = { color: '#FF0000' }; // Set label color to red
-          });
-          this.body.data.edges.update(outgoingEdges);
-        }, this); // Bind `this` to the function to access visNetwork context
-
-        // Redraw network to apply changes
-        this.redraw();
-      }",
-            deselectNode = "function(params) {
-        // When deselecting, reset all edges to their original colors
-        var edges = this.body.data.edges.get();
-        this.body.data.edges.update(edges.map(function(edge) {
-          edge.color = edge.originalColor || '#000000'; // Reset to original or default black
-          edge.font = { color: edge.originalFontColor || '#000000' }; // Reset to original or default black
-          return edge;
-        }));
-        this.redraw();
+        Shiny.onInputChange('dynamic_vis_selectedNodes', params.nodes);
       }"
-          )%>%
+           )%>%
           visEvents(stabilizationIterationsDone = "function() { this.physics.options.enabled = false; }")
       })}
       
       # Display modal dialog with visNetwork graph
       showModal(modalDialog(
         title = paste("Floret starting from:", clicked_id),
+        pickerInput("existing_colors", "Choose Existing Color:", 
+                    choices = c("", stored_colors$all_colors), 
+                    choicesOpt = list(
+                        style = paste0("background:", c("#ffffff",stored_colors$all_colors),";")
+                      )
+                    ),
+        #selectInput("existing_colors", "Choose Existing Color:", choices = c("",stored_colors$all_colors)),
+        colourpicker::colourInput("modal_nodeColor", "Choose Node Color", value = "#FFFFFF"),
+        actionButton("colorSelectedModalNodes", "Color Selected Nodes"),
         visNetworkOutput("dynamic_vis"),
         easyClose = TRUE,
         footer = modalButton("Close")
@@ -2769,7 +2786,64 @@ server <- function(input, output, session) {
     }
   })
   
+  stored_colors <- reactiveValues(all_colors = character(0))
   
+  observe({
+    # Ensure graph_data is available before accessing its color
+    graph_data <- updated_graph_data()
+    
+    # Check if graph_data$nodes$color exists and has data
+    if (!is.null(graph_data$nodes) && "color" %in% colnames(graph_data$nodes)) {
+      # Extract unique colors from graph_data$nodes$color and update stored_colors
+      stored_colors$all_colors <- unique(graph_data$nodes$color)
+    }
+  })
+
+  
+  observeEvent(input$colorSelectedModalNodes, {
+    # Get selected nodes from the visNetwork
+    selected_nodes <- input$dynamic_vis_selectedNodes
+    print(paste("Selected nodes:", toString(selected_nodes)))  # Debugging statement
+    
+    selected_color <- if (input$existing_colors != "") {
+      input$existing_colors  # Use the selected colour from the dropdown
+    } else {
+      input$modal_nodeColor  # Use the new colour from the colour picker
+    }
+    
+    # Check if nodes are selected
+    if (!is.null(selected_nodes) && length(selected_nodes) > 0) {
+      # Get the floret graph data
+      data <- floret2()
+      
+      if (!is.null(data)) {
+        # Update the node colours for selected nodes
+        data$nodes$color[data$nodes$id %in% selected_nodes] <- selected_color
+        
+        # Update the reactive value for the floret
+        floret2(data)
+        # Reflect the change in the visNetwork
+        visNetworkProxy("dynamic_vis") %>%
+          visUpdateNodes(nodes = data$nodes)
+        
+        graph_data <- updated_graph_data()
+        graph_data$nodes$color[graph_data$nodes$id %in% selected_nodes] <- selected_color
+        updated_graph_data(graph_data) 
+        
+        # Extract all unique color values from both the floret and graph_data
+        all_colors <- unique(c(stored_colors$all_colors, selected_color, graph_data$nodes$color))
+        print(all_colors)
+        print("all_colors")
+        # Update stored_colors to include all unique colors
+        stored_colors$all_colors <- all_colors
+        
+        # Update the dropdown to include the new and existing colors
+        updateSelectInput(session, "existing_colors", choices = c("",stored_colors$all_colors))
+        
+    } else {
+      showNotification("No nodes selected to color.", type = "error")
+    }
+  }})
   
   
   
