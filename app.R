@@ -178,13 +178,18 @@ ui <- fluidPage(
                    column(6, leafletOutput("map", height = "600px")),
                    column(6, visNetworkOutput("eventtree_network", height = "1000px"))
                  ),
+                 fluidRow(column(4, uiOutput("ExchangeabilityHideView")),
+                          column(4, actionButton("deleteNode", "Delete Selected Node")),
+                          column(4, actionButton("finishedColoring", "Finished Colouring"))
+                 ),
+                
                  #leafletOutput("map", height = "600px"),
                  #visNetworkOutput("eventtree_network", height = "1000px"),  # Shared ID
                  
                  #h2('Event Tree'),
                  #checkboxInput("toggleLabels", "Hide data values", value = TRUE),
-                 actionButton("deleteNode", "Delete Selected Node"),
-                 actionButton("finishedColoring", "Finished Colouring"),
+                 #actionButton("deleteNode", "Delete Selected Node"),
+                 #actionButton("finishedColoring", "Finished Colouring"),
                  #visNetworkOutput("eventtree_network", height = "1000px"),
                  
                  h2('Staged Tree'),
@@ -967,6 +972,14 @@ server <- function(input, output, session) {
       shinyjs::hide("map")
       shinyjs::show("eventtree_network")
       shinyjs::runjs('$("#eventtree_network").css("height", "1000px")')  # Set event tree height to 1000px
+    }
+  })
+  
+  output$ExchangeabilityHideView <- renderUI({
+    if (input$viewOption == "Map") {
+      actionButton("showFloretModal", "Show Floret")
+    } else {
+      NULL  # No button if the view is not "Map"
     }
   })
   
@@ -2601,20 +2614,26 @@ server <- function(input, output, session) {
     output$map <- renderLeaflet({
       req(shape_data)
       
-      # Generate colorblind-friendly colors using a Brewer palette
-      num_colors <- nrow(shape_data) # Number of groups
-      random_colors <- distinctColorPalette(num_colors)
+      selected_ids <- selected_polygon()
+      print(paste("Selected polygons:", toString(selected_ids)))  # Debugging
+      
+      # Assign colors: Red for selected polygons, or a default color
+      shape_data$fillColor <- ifelse(
+        shape_data[[1]] %in% selected_ids,  # Check if the polygon is selected
+        "red",                              # Color for selected polygons
+        "darkgreen"                         # Default color for unselected polygons
+      )
       
       leaflet(data = shape_data) %>%
         addTiles() %>%
         addPolygons(
           layerId = ~shape_data[[1]], # Use the BCU column as unique polygon IDs
-          fillColor = random_colors, # Assign colorblind-friendly colors
+          fillColor = ~fillColor, # Assign colorblind-friendly colors
           color = "black",
           weight = 1,
           highlightOptions = highlightOptions(
-            weight = 2,
-            color = "blue",
+            weight = 1,
+            color = "black",
             fillOpacity = 0.7,
             bringToFront = TRUE
           ),
@@ -2698,37 +2717,106 @@ server <- function(input, output, session) {
 
   floret2 <- reactiveVal(NULL)
   
-  selected_polygons <- reactiveVal(character())
+  #selected_polygons <- reactiveVal(character())
 
+  # Reactive value to store the currently selected polygon ID
+  selected_polygon <- reactiveVal(NULL)
+
+  # Observe click event on the map
+  # Observe click event on the map
+  # Observe click event on the map
   observeEvent(input$map_shape_click, {
-    # Access the ID of the clicked polygon
     clicked_id <- input$map_shape_click$id
     
     if (!is.null(clicked_id)) {
-      # Get the relevant node based on the clicked ID
-      shape_data <- shapefileData()  # Ensure you're working with the reactive data
-      #visoutputdata <- contracted_data()
-      visoutputdata <- updated_graph_data()
-      print(visoutputdata)
-      clicked_data <- shape_data[shape_data[[1]] == clicked_id, ]
+      # Get the current selection state (list of selected polygons)
+      current_selection <- selected_polygon()
       
-      #print(clicked_data)
-      # Assuming the node label corresponds to the polygon ID or use another mapping
-      start_label1 <- clicked_data[[1, 1]]  # Or derive it from the clicked data
-      print("start_label1") 
-      print(start_label1)
-      # Use extract_floret function to get the subgraph (floret) starting from the clicked node
-      # Try to extract the floret
+      # Print the current selection to debug
+      print(paste("Current selected polygon(s):", toString(current_selection)))
+      
+      # Check if the clicked polygon is already selected
+      if (clicked_id %in% current_selection) {
+        # Deselect the polygon if it is already selected (remove from selection)
+        updated_selection <- setdiff(current_selection, clicked_id)
+        selected_polygon(updated_selection)
+        
+        # Remove the highlight by clearing the "highlighted" group
+        leafletProxy("map") %>%
+          clearGroup("highlighted")
+        
+        print(paste("Deselected polygon:", clicked_id))  # Debugging print
+      } else {
+        # Select the polygon if it is not already selected (add to selection)
+        updated_selection <- c(current_selection, clicked_id)
+        selected_polygon(updated_selection)
+        
+        # Highlight the selected polygon with an outline and fill color
+        leafletProxy("map") %>%
+          clearGroup("highlighted") %>%  # Clear any existing highlights
+          addPolygons(
+            data = shapefileData()[shapefileData()[[1]] == clicked_id, ],
+            color = "black",              # Outline color
+            weight = 3,                   # Line weight
+            opacity = 0.7,                # Outline opacity
+            fillColor = NA,         # Fill color (change this as needed)
+            fillOpacity = 0,            # Fill opacity (adjust transparency)
+            group = "highlighted"         # Add to the "highlighted" group
+          )
+        
+        print(paste("Selected polygon:", clicked_id))  # Debugging print
+      }
+      
+      # Print the updated list of selected polygons
+      print(paste("Updated selected polygon(s):", toString(selected_polygon())))
+    }
+  })
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  # Show the modal when the button is clicked
+  observeEvent(input$showFloretModal, {
+    clicked_id <- selected_polygon()
+    
+    if (!is.null(clicked_id)) {
+      shape_data <- shapefileData()
+      visoutputdata <- updated_graph_data()
+      
+      leafletProxy("map") %>%
+        clearGroup("highlighted") %>%  # Clear any previous highlighting
+        addPolygons(
+          data = shape_data,
+          layerId = ~shape_data[[1]],  # Use the first column as unique IDs
+          fillColor = ~ifelse(
+            shape_data[[1]] %in% clicked_id, 
+            "darkgreen",  # Default color for selected polygons
+            "darkgreen"   # Default color for unselected polygons
+          ),
+          color = "black",    # Outline color
+          weight = 1,         # Line weight
+          fillOpacity = 0.7,  # Transparency
+          group = "highlighted"
+        )
+      
+      clicked_data <- shape_data[shape_data[[1]] == clicked_id, ]
+      start_label1 <- clicked_data[[1, 1]]
+      
       floret3 <- tryCatch({
         extract_floret(visoutputdata$nodes, visoutputdata$edges, start_label1)
       }, error = function(e) NULL)
       
       floret2(floret3)
-    
       
-      # Check if the floret exists
       if (is.null(floret3) || (nrow(floret3$nodes) == 0 && nrow(floret3$edges) == 0)) {
-        # Show a modal dialog with an error message
+        # Show error modal if no floret exists
         showModal(modalDialog(
           title = "Error",
           paste("No floret exists for the selected node:", clicked_id),
@@ -2737,54 +2825,50 @@ server <- function(input, output, session) {
         ))
       } else {
         floret <- floret2()
-      output$dynamic_vis <- renderVisNetwork({
-        floret$nodes$title <- NULL
-        visNetwork(floret$nodes, floret$edges) %>%
-          visHierarchicalLayout(direction = "LR", levelSeparation = 1000) %>%
-          visNodes(
-            scaling = list(min = 300, max = 300)  # Ensure tooltips are set
-          ) %>%
-          visEdges(arrows = list(to = list(enabled = TRUE, scaleFactor = 5))) %>%
-          visOptions(
-            manipulation = list(enabled = FALSE, addEdgeCols = FALSE, addNodeCols = FALSE, editNodeCols = FALSE)
-            
-          ) %>%
-          visInteraction(
-            dragNodes = FALSE,
-            multiselect = TRUE,
-            navigationButtons = TRUE
-          ) %>%
-          visPhysics(
-            solver = "forceAtlas2Based",
-            forceAtlas2Based = list(gravitationalConstant = -50),
-            hierarchicalRepulsion = list(nodeDistance = 300)
-          ) %>%
-          visEvents(
-            selectNode = "function(params) {
-        Shiny.onInputChange('dynamic_vis_selectedNodes', params.nodes);
-      }"
-           )%>%
-          visEvents(stabilizationIterationsDone = "function() { this.physics.options.enabled = false; }")
-      })}
-      
-      # Display modal dialog with visNetwork graph
-      showModal(modalDialog(
-        title = paste("Floret starting from:", clicked_id),
-        pickerInput("existing_colors", "Choose Existing Color:", 
-                    choices = c("", stored_colors$all_colors), 
-                    choicesOpt = list(
-                        style = paste0("background:", c("#ffffff",stored_colors$all_colors),";")
+        output$dynamic_vis <- renderVisNetwork({
+          floret$nodes$title <- NULL
+          visNetwork(floret$nodes, floret$edges) %>%
+            visHierarchicalLayout(direction = "LR", levelSeparation = 1000) %>%
+            visNodes(scaling = list(min = 300, max = 300)) %>%
+            visEdges(arrows = list(to = list(enabled = TRUE, scaleFactor = 5))) %>%
+            visOptions(
+              manipulation = list(enabled = FALSE, addEdgeCols = FALSE, addNodeCols = FALSE, editNodeCols = FALSE)
+            ) %>%
+            visInteraction(dragNodes = FALSE, multiselect = TRUE, navigationButtons = TRUE) %>%
+            visPhysics(
+              solver = "forceAtlas2Based",
+              forceAtlas2Based = list(gravitationalConstant = -50),
+              hierarchicalRepulsion = list(nodeDistance = 300)
+            ) %>%
+            visEvents(
+              selectNode = "function(params) {
+              Shiny.onInputChange('dynamic_vis_selectedNodes', params.nodes);
+            }"
+            ) %>%
+            visEvents(stabilizationIterationsDone = "function() { this.physics.options.enabled = false; }")
+        })
+        
+        # Show modal dialog with floret visualization
+        showModal(modalDialog(
+          title = paste("Floret starting from:", clicked_id),
+          pickerInput("existing_colors", "Choose Existing Color:",
+                      choices = c("", stored_colors$all_colors),
+                      choicesOpt = list(
+                        style = paste0("background:", c("#ffffff", stored_colors$all_colors), ";")
                       )
-                    ),
-        #selectInput("existing_colors", "Choose Existing Color:", choices = c("",stored_colors$all_colors)),
-        colourpicker::colourInput("modal_nodeColor", "Choose Node Color", value = "#FFFFFF"),
-        actionButton("colorSelectedModalNodes", "Color Selected Nodes"),
-        visNetworkOutput("dynamic_vis"),
-        easyClose = TRUE,
-        footer = modalButton("Close")
-      ))
+          ),
+          colourpicker::colourInput("modal_nodeColor", "Choose Node Color", value = "#FFFFFF"),
+          actionButton("colorSelectedModalNodes", "Color Selected Nodes"),
+          visNetworkOutput("dynamic_vis"),
+          easyClose = TRUE,
+          footer = modalButton("Close")
+        ))
+        
+        selected_polygon(NULL) 
+      }
     }
   })
+  
   
   stored_colors <- reactiveValues(all_colors = character(0))
   
