@@ -2779,7 +2779,8 @@ server <- function(input, output, session) {
   
   
   
-  
+  first_floret <- reactiveVal(NULL)
+  all_florets <- reactiveVal(NULL)
   
   
   # Show the modal when the button is clicked
@@ -2789,6 +2790,8 @@ server <- function(input, output, session) {
     if (!is.null(clicked_id)) {
       shape_data <- shapefileData()
       visoutputdata <- updated_graph_data()
+      
+      primary_id <- clicked_id[1]
       
       leafletProxy("map") %>%
         clearGroup("highlighted") %>%  # Clear any previous highlighting
@@ -2806,25 +2809,60 @@ server <- function(input, output, session) {
           group = "highlighted"
         )
       
-      clicked_data <- shape_data[shape_data[[1]] == clicked_id, ]
-      start_label1 <- clicked_data[[1, 1]]
+      # Initialize reactive values to store the first floret and all combined florets
       
-      floret3 <- tryCatch({
-        extract_floret(visoutputdata$nodes, visoutputdata$edges, start_label1)
-      }, error = function(e) NULL)
       
-      floret2(floret3)
+      # Initialize an empty list to store all florets
+      florets_list <- list()
+      
+      # Iterate through clicked IDs to extract florets
+      for (id in clicked_id) {
+        clicked_data <- shape_data[shape_data[[1]] == id, ]  # Use the current ID
+        start_label1 <- clicked_data[[1, 1]]
+        
+        floret3 <- tryCatch({
+          extract_floret(visoutputdata$nodes, visoutputdata$edges, start_label1)
+        }, error = function(e) NULL)
+        
+        # Store the first valid floret in 'first_floret'
+        if (is.null(first_floret()) && !is.null(floret3)) {
+          first_floret(floret3)
+        }
+        
+        # Store the floret3 in the list if it is not NULL
+        if (!is.null(floret3)) {
+          florets_list[[id]] <- floret3
+        }
+      }
+      
+      # Combine all florets into a single structure
+      if (length(florets_list) > 0) {
+        combined_nodes <- do.call(rbind, lapply(florets_list, function(f) f$nodes))
+        combined_edges <- do.call(rbind, lapply(florets_list, function(f) f$edges))
+        
+        # Remove duplicate rows (if any) to ensure clean combined florets
+        combined_nodes <- combined_nodes[!duplicated(combined_nodes), ]
+        combined_edges <- combined_edges[!duplicated(combined_edges), ]
+        
+        # Store combined florets in 'all_florets'
+        all_florets(list(nodes = combined_nodes, edges = combined_edges))
+      } else {
+        all_florets(NULL)  # Set all_florets to NULL if no valid florets were found
+      }
+      print("all_florets")
+      print(all_florets)
+      
       
       if (is.null(floret3) || (nrow(floret3$nodes) == 0 && nrow(floret3$edges) == 0)) {
         # Show error modal if no floret exists
         showModal(modalDialog(
           title = "Error",
-          paste("No floret exists for the selected node:", clicked_id),
+          paste("No floret exists for the selected node(s):", toString(clicked_id)),
           easyClose = TRUE,
           footer = modalButton("Close")
         ))
       } else {
-        floret <- floret2()
+        floret <- first_floret()
         output$dynamic_vis <- renderVisNetwork({
           floret$nodes$title <- NULL
           visNetwork(floret$nodes, floret$edges) %>%
@@ -2850,7 +2888,7 @@ server <- function(input, output, session) {
         
         # Show modal dialog with floret visualization
         showModal(modalDialog(
-          title = paste("Floret starting from:", clicked_id),
+          title = paste("Floret(s) starting from:", toString(clicked_id)),
           pickerInput("existing_colors", "Choose Existing Color:",
                       choices = c("", stored_colors$all_colors),
                       choicesOpt = list(
@@ -2889,6 +2927,28 @@ server <- function(input, output, session) {
     selected_nodes <- input$dynamic_vis_selectedNodes
     print(paste("Selected nodes:", toString(selected_nodes)))  # Debugging statement
     
+    if (!is.null(all_florets())) {
+      # Get the combined edges from all_florets()
+      combined_edges <- all_florets()$edges
+      
+      # Extract the edge labels corresponding to the selected nodes' florets
+      floret_edges <- subset(combined_edges, to %in% selected_nodes)
+      matching_labels <- unique(floret_edges$label)  # Get unique labels of these edges
+      
+      # Find all nodes (from and to) that have the same edge labels across all florets
+      matching_nodes <- subset(combined_edges, label %in% matching_labels)
+      matching_node_ids <- unique(c(matching_nodes$to))
+      
+      # Combine with the initially selected nodes
+      all_selected_nodes <- unique(c(selected_nodes, matching_node_ids))
+      
+      # Output or use `all_selected_nodes` as needed
+      print("all_selected_nodes")
+      print(all_selected_nodes)  # Debugging output
+    } else {
+      showNotification("No florets are available to match edge labels.", type = "error")
+    }
+    
     selected_color <- if (input$existing_colors != "") {
       input$existing_colors  # Use the selected colour from the dropdown
     } else {
@@ -2898,20 +2958,22 @@ server <- function(input, output, session) {
     # Check if nodes are selected
     if (!is.null(selected_nodes) && length(selected_nodes) > 0) {
       # Get the floret graph data
-      data <- floret2()
+      data <- first_floret()
+      data_all <- all_florets()
       
       if (!is.null(data)) {
         # Update the node colours for selected nodes
         data$nodes$color[data$nodes$id %in% selected_nodes] <- selected_color
-        
+        data_all$nodes$color[data_all$nodes$id %in% all_selected_nodes] <- selected_color
         # Update the reactive value for the floret
-        floret2(data)
+       first_floret(data)
+       all_florets(data_all)
         # Reflect the change in the visNetwork
         visNetworkProxy("dynamic_vis") %>%
           visUpdateNodes(nodes = data$nodes)
         
         graph_data <- updated_graph_data()
-        graph_data$nodes$color[graph_data$nodes$id %in% selected_nodes] <- selected_color
+        graph_data$nodes$color[graph_data$nodes$id %in% all_selected_nodes] <- selected_color
         updated_graph_data(graph_data) 
         
         # Extract all unique color values from both the floret and graph_data
@@ -2927,6 +2989,8 @@ server <- function(input, output, session) {
     } else {
       showNotification("No nodes selected to color.", type = "error")
     }
+      first_floret(NULL)
+      all_florets(NULL)
   }})
   
   
