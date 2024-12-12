@@ -142,20 +142,23 @@ ui <- fluidPage(
                sidebarPanel(
                  useShinyjs(),
                  id = "sidebar",  # Assign ID for custom styling
+                 style = "padding-top: 20px; padding-bottom: 20px;",
+                 actionButton("vieweventtree", "View Event Tree"),
+                 tags$hr(),
                  conditionalPanel(
                    condition = "input.viewOption == 'Map'",
+                   style = "margin-top: 20px; margin-bottom: 20px;",
                    fileInput(
                      "shapefile",
                      "Upload Shapefile (ZIP)",
                      accept = ".zip"
                    ),
                    textInput("crs", "Specify CRS (if missing):", value = NA),
-                   sliderInput("mapOpacity", "Layer Opacity", min = 0, max = 1, value = 0.5, sep = ""),
+                   sliderInput("mapOpacity", "Layer Opacity", min = 0, max = 1, value = 0.7, sep = ""),
                    actionButton("process_shapefile", "Process Shapefile")
                  ),
-                 actionButton("vieweventtree", "View Event Tree"),
-                 actionButton("updateColor", "Update Color"),
-                 colourpicker::colourInput("nodeColor", "Choose color", value = "#FFFFFF"),
+                 colourpicker::colourInput("nodeColor", "Choose colour", value = "#FFFFFF"),
+                 actionButton("updateColor", "Update Colour"),
                  actionButton("AHCColoring", "Colour using AHC"),
                  actionButton("viewstagedtree", "View Staged Tree"),
                  actionButton("viewceg", "View Chain Event Graph"),
@@ -178,9 +181,9 @@ ui <- fluidPage(
                    column(6, leafletOutput("map", height = "600px")),
                    column(6, visNetworkOutput("eventtree_network", height = "1000px"))
                  ),
-                 fluidRow(column(4, uiOutput("ExchangeabilityHideView")),
-                          column(4, actionButton("deleteNode", "Delete Selected Node")),
-                          column(4, actionButton("finishedColoring", "Finished Colouring"))
+                 fluidRow(column(6, uiOutput("ExchangeabilityHideView")),
+                          column(2, actionButton("deleteNode", "Delete Selected Node")),
+                          column(2, actionButton("finishedColoring", "Finished Colouring"))
                  ),
                 
                  #leafletOutput("map", height = "600px"),
@@ -632,8 +635,10 @@ server <- function(input, output, session) {
   
   #-------------------------------------------------------------------------------------------------- 
   #homicide.set <<- NA
+  eventtree_pressed <- reactiveVal(FALSE)
   
   homicide_set <<- eventReactive(input$vieweventtree, {
+    eventtree_pressed(TRUE)
     g <- make_empty_graph()
     parent <- "s0"
     homicide_data2 <- homicide_data()
@@ -781,7 +786,7 @@ server <- function(input, output, session) {
     print(data$edges)
     data$nodes$shape <- 'dot'
     data$nodes$size <- 100
-    data$nodes$color.background <- "#ffffff"
+    data$nodes$color.background <- "#FFFFFF"
     data$nodes$font <- "80px"
     data$nodes$title <- data$nodes$id
     # Check number of edges
@@ -942,9 +947,8 @@ server <- function(input, output, session) {
     } else {
       data$edges$label <- data$edges$label3
     }
-    updated_graph_data(data)
   })
-  # Render the network
+  
   # Render the network
   
   
@@ -1557,8 +1561,8 @@ server <- function(input, output, session) {
       #nodes$color <- "#ffffff"
       nodes[nodes$id %in% group, "color"] <- color
     }
-    nodes$color[nodes$level == 1] <- "#ffffff"
-    nodes$color[nodes$level == levels_to_exclude] <- "#ffffff"
+    nodes$color[nodes$level == 1] <- "#FFFFFF"
+    nodes$color[nodes$level == levels_to_exclude] <- "#FFFFFF"
     nodes$number <- 1
     
     print(nodes)
@@ -1589,12 +1593,13 @@ server <- function(input, output, session) {
     incorrect_color_nodes <- c()
     duplicate_color_nodes <- c()
     
+    
     # Iterate over nodes to check the color and level conditions
     for (i in 1:nrow(data$nodes)) {
       node <- data$nodes[i, ]
       
       # Check if the node has color #ffffff and its level isn't min or max
-      if (node$color == "#ffffff" && !(node$level2 %in% c(min_level, max_level))) {
+      if (node$color == "#FFFFFF" && !(node$level2 %in% c(min_level, max_level))) {
         incorrect_color_nodes <- c(incorrect_color_nodes, node$id)
       }
     }
@@ -2131,8 +2136,8 @@ server <- function(input, output, session) {
     # Function to update contract IDs by appending connected nodes' contract IDs
     update_contract_ids <- function(nodes, edges) {
       # Contract nodes at levels 1 and 5 separately
-      nodes$contract_id[nodes$level2 == 1] <- "1-#ffffff"
-      nodes$contract_id[nodes$level2 == max(nodes$level2)] <- paste0(max(nodes$level2),"-#ffffff")
+      nodes$contract_id[nodes$level2 == 1] <- "1-#FFFFFF"
+      nodes$contract_id[nodes$level2 == max(nodes$level2)] <- paste0(max(nodes$level2),"-#FFFFFF")
       
       for (level2 in sort(unique(nodes$level2), decreasing = TRUE)) {
         if (level2 == 1 || level2 == max(nodes$level2)) next
@@ -2503,6 +2508,74 @@ server <- function(input, output, session) {
   #                  forceAtlas2Based = list(gravitationalConstant = -50), hierarchicalRepulsion = list(nodeDistance = 300))
   #   })
   
+  extract_floret <- function(nodes, edges, start_label1) {
+    # Find the 'from' node associated with the start_label1
+    start_edge <- edges[edges$label1 == start_label1, ]
+    if (nrow(start_edge) == 0) {
+      showModal(
+        modalDialog(
+          title = "Error",
+          paste("'", start_label1, "' not found in data.", sep = ""),
+          easyClose = TRUE,
+          footer = modalButton("Close")
+        )
+      )
+      return(NULL)
+    }
+    
+    
+    start_node <- start_edge$to[1]
+    
+    # Initialize sets for floret nodes and edges
+    floret_nodes <- setNames(list(start_node), start_node)
+    floret_edges <- data.frame()
+    
+    # Track visited nodes to prevent revisiting them
+    visited_nodes <- c(start_node)
+    
+    # Recursive function to traverse and collect connected nodes and edges
+    collect_floret <- function(current_node) {
+      # Find edges starting from the current node
+      outgoing_edges <- edges[edges$from == current_node, ]
+      
+      # Eliminate edges leading into the start node and before the start node
+      outgoing_edges <- outgoing_edges[outgoing_edges$to != start_node, ]
+      
+      # Filter outgoing edges to remove any that have already been added (if needed)
+      new_edges <- outgoing_edges#[!outgoing_edges$to %in% visited_nodes, ]
+      
+      # Add the new edges to the floret set
+      if (nrow(new_edges) > 0) {
+        floret_edges <<- rbind(floret_edges, new_edges)
+      }
+      
+      # Get the 'to' nodes from these edges
+      to_nodes <- new_edges$to
+      
+      # Add the nodes to the floret set if not already added
+      new_nodes <- to_nodes[!to_nodes %in% visited_nodes]
+      
+      # Update visited nodes
+      visited_nodes <<- c(visited_nodes, new_nodes)
+      
+      # Add new nodes to the floret set
+      floret_nodes <<- c(floret_nodes, setNames(as.list(new_nodes), new_nodes))
+      
+      # Recursively process each new node
+      for (node in new_nodes) {
+        collect_floret(node)
+      }
+    }
+    
+    # Start traversal from the start_node
+    collect_floret(start_node)
+    
+    # Filter the nodes dataframe to include only nodes in the floret
+    floret_nodes_df <- nodes[nodes$id %in% names(floret_nodes), ]
+    
+    list(nodes = floret_nodes_df, edges = floret_edges)
+  }
+  
   output$UpdateTable <- renderDT({
     req(grouped_df2())  # Ensure data is available
     
@@ -2602,26 +2675,97 @@ server <- function(input, output, session) {
     return(shape_data)
   })
   
+  dynamic_fill <- reactiveVal(NULL)
   observeEvent(input$process_shapefile, {
+    
+    if (!eventtree_pressed()) {
+      # Show popup if button1 was not pressed
+      showModal(modalDialog(
+        title = "Action Required",
+        "Please create Event Tree first.",
+        easyClose = TRUE,
+        footer = NULL
+      ))
+    } else {
+      
     shape_data <- shapefileData()
     req(shape_data)  
-    print("shape_data")
-    print(shape_data)
     
     # Render the Leaflet map
     library(RColorBrewer)
     
     output$map <- renderLeaflet({
       req(shape_data)
-      
+      print("shape_data[[1]]")
+      visoutputdata <- updated_graph_data()
+      print("visoutputdata")
+      print(visoutputdata)
       selected_ids <- selected_polygon()
       print(paste("Selected polygons:", toString(selected_ids)))  # Debugging
+      
+      
+      
+     
+      for (i in seq_along(shape_data[[1]])) {  # Loop over indices of shape_data[[1]]
+        
+        # Skip if the current value is NA
+        if (is.na(shape_data[[1]][i])) {
+          fillColor <- "#FFFFFF"
+          next  # Move to the next iteration
+        }
+        
+        # Extract floret data and handle any errors
+        floret3 <- tryCatch({
+          extract_floret(visoutputdata$nodes, visoutputdata$edges, shape_data[[1]][i])
+        }, error = function(e) NULL)
+        print(shape_data[[1]][i])
+        print(floret3)
+        
+        # Initialize the fillColor for the current shape
+        fillColor <- "white"  # Default color
+        
+        # Check if floret3 is not NULL
+        if (!is.null(floret3)) {
+          # Extract nodes from floret3
+          nodes <- floret3$nodes
+          
+          # Identify the maximum level
+          max_level <- max(nodes$level, na.rm = TRUE)
+          
+          # Filter for nodes that are not at the max level
+          non_max_level_nodes <- nodes[nodes$level != max_level, ]
+          
+          # Check conditions for color assignment
+          if (nrow(non_max_level_nodes) > 0) {
+            if (all(non_max_level_nodes$color == "#FFFFFF")) {
+              fillColor <- "orangered"  # All non-max-level nodes are white
+            } 
+            else if (all(non_max_level_nodes$color != "#FFFFFF")) {
+              fillColor <- "darkgreen"  # All non-max-level nodes are white
+            }
+            else {
+              fillColor <- "orange"  # At least one non-max-level node is colored
+            }
+          }
+        }
+        
+        # Update the color for the specific polygon in the shape data
+        shape_data$fillColor[shape_data[[1]] == shape_data[[1]][i]] <- fillColor
+      }
+      
+      
+      
+      #there needs to be a search over florets here, which changes based on colouring 
+      
+      #shape_data$fillColor <- "darkgreen"
+      
+      shape_data$previous_fillColor <- shape_data$fillColor
       
       # Assign colors: Red for selected polygons, or a default color
       shape_data$fillColor <- ifelse(
         shape_data[[1]] %in% selected_ids,  # Check if the polygon is selected
-        "red",                              # Color for selected polygons
-        "darkgreen"                         # Default color for unselected polygons
+        "blue",                              # Color for selected polygons
+        shape_data$previous_fillColor                         # Default color for unselected polygons
       )
       
       leaflet(data = shape_data) %>%
@@ -2643,76 +2787,10 @@ server <- function(input, output, session) {
           label = ~as.character(shape_data[[1]])
         ) 
     })
-  })
+  }})
   
   
-  extract_floret <- function(nodes, edges, start_label1) {
-    # Find the 'from' node associated with the start_label1
-    start_edge <- edges[edges$label1 == start_label1, ]
-    if (nrow(start_edge) == 0) {
-      showModal(
-        modalDialog(
-          title = "Error",
-          paste("'", start_label1, "' not found in data.", sep = ""),
-          easyClose = TRUE,
-          footer = modalButton("Close")
-        )
-      )
-      return(NULL)
-    }
-    
-    
-    start_node <- start_edge$to[1]
-    
-    # Initialize sets for floret nodes and edges
-    floret_nodes <- setNames(list(start_node), start_node)
-    floret_edges <- data.frame()
-    
-    # Track visited nodes to prevent revisiting them
-    visited_nodes <- c(start_node)
-    
-    # Recursive function to traverse and collect connected nodes and edges
-    collect_floret <- function(current_node) {
-      # Find edges starting from the current node
-      outgoing_edges <- edges[edges$from == current_node, ]
-      
-      # Eliminate edges leading into the start node and before the start node
-      outgoing_edges <- outgoing_edges[outgoing_edges$to != start_node, ]
-      
-      # Filter outgoing edges to remove any that have already been added (if needed)
-      new_edges <- outgoing_edges#[!outgoing_edges$to %in% visited_nodes, ]
-      
-      # Add the new edges to the floret set
-      if (nrow(new_edges) > 0) {
-        floret_edges <<- rbind(floret_edges, new_edges)
-      }
-      
-      # Get the 'to' nodes from these edges
-      to_nodes <- new_edges$to
-      
-      # Add the nodes to the floret set if not already added
-      new_nodes <- to_nodes[!to_nodes %in% visited_nodes]
-      
-      # Update visited nodes
-      visited_nodes <<- c(visited_nodes, new_nodes)
-      
-      # Add new nodes to the floret set
-      floret_nodes <<- c(floret_nodes, setNames(as.list(new_nodes), new_nodes))
-      
-      # Recursively process each new node
-      for (node in new_nodes) {
-        collect_floret(node)
-      }
-    }
-    
-    # Start traversal from the start_node
-    collect_floret(start_node)
-    
-    # Filter the nodes dataframe to include only nodes in the floret
-    floret_nodes_df <- nodes[nodes$id %in% names(floret_nodes), ]
-    
-    list(nodes = floret_nodes_df, edges = floret_edges)
-  }
+
   
 
   floret2 <- reactiveVal(NULL)
@@ -2722,8 +2800,6 @@ server <- function(input, output, session) {
   # Reactive value to store the currently selected polygon ID
   selected_polygon <- reactiveVal(NULL)
 
-  # Observe click event on the map
-  # Observe click event on the map
   # Observe click event on the map
   observeEvent(input$map_shape_click, {
     clicked_id <- input$map_shape_click$id
@@ -2751,18 +2827,7 @@ server <- function(input, output, session) {
         updated_selection <- c(current_selection, clicked_id)
         selected_polygon(updated_selection)
         
-        # Highlight the selected polygon with an outline and fill color
-        leafletProxy("map") %>%
-          clearGroup("highlighted") %>%  # Clear any existing highlights
-          addPolygons(
-            data = shapefileData()[shapefileData()[[1]] == clicked_id, ],
-            color = "black",              # Outline color
-            weight = 3,                   # Line weight
-            opacity = 0.7,                # Outline opacity
-            fillColor = NA,         # Fill color (change this as needed)
-            fillOpacity = 0,            # Fill opacity (adjust transparency)
-            group = "highlighted"         # Add to the "highlighted" group
-          )
+
         
         print(paste("Selected polygon:", clicked_id))  # Debugging print
       }
@@ -2782,6 +2847,8 @@ server <- function(input, output, session) {
   first_floret <- reactiveVal(NULL)
   all_florets <- reactiveVal(NULL)
   
+
+
   
   # Show the modal when the button is clicked
   observeEvent(input$showFloretModal, {
@@ -2791,29 +2858,16 @@ server <- function(input, output, session) {
       shape_data <- shapefileData()
       visoutputdata <- updated_graph_data()
       
+      
       primary_id <- clicked_id[1]
       
       leafletProxy("map") %>%
-        clearGroup("highlighted") %>%  # Clear any previous highlighting
-        addPolygons(
-          data = shape_data,
-          layerId = ~shape_data[[1]],  # Use the first column as unique IDs
-          fillColor = ~ifelse(
-            shape_data[[1]] %in% clicked_id, 
-            "darkgreen",  # Default color for selected polygons
-            "darkgreen"   # Default color for unselected polygons
-          ),
-          color = "black",    # Outline color
-          weight = 1,         # Line weight
-          fillOpacity = 0.7,  # Transparency
-          group = "highlighted"
-        )
+        clearGroup("highlighted") 
       
-      # Initialize reactive values to store the first floret and all combined florets
-      
-      
+    
       # Initialize an empty list to store all florets
       florets_list <- list()
+      floret_colors_list <- list()
       
       # Iterate through clicked IDs to extract florets
       for (id in clicked_id) {
@@ -2832,9 +2886,31 @@ server <- function(input, output, session) {
         # Store the floret3 in the list if it is not NULL
         if (!is.null(floret3)) {
           florets_list[[id]] <- floret3
+          floret_colors_list[[id]] <- floret3$nodes$color  # Store all node colors
         }
       }
       
+      # Print each floret and its corresponding nodes and edges
+      
+      # Check for coloring consistency
+      if (length(florets_list) > 1) {
+        # Compare all colors for each floret
+        all_colors_match <- all(
+          sapply(floret_colors_list, function(x) identical(x, floret_colors_list[[1]]))
+        )
+        
+        if (!all_colors_match) {
+          showModal(modalDialog(
+            title = "Inconsistent Floret Colouring",
+            "The selected polygons have inconsistent floret colouring. Please ensure all selected polygons have the same floret colouring.",
+            easyClose = TRUE,
+            footer = modalButton("Close")
+          ))
+          first_floret(NULL)
+          all_florets(NULL)
+          selected_polygon(NULL)
+          return() }
+      }
       # Combine all florets into a single structure
       if (length(florets_list) > 0) {
         combined_nodes <- do.call(rbind, lapply(florets_list, function(f) f$nodes))
@@ -2863,6 +2939,8 @@ server <- function(input, output, session) {
         ))
       } else {
         floret <- first_floret()
+        print("floret")
+        print(floret)
         output$dynamic_vis <- renderVisNetwork({
           floret$nodes$title <- NULL
           visNetwork(floret$nodes, floret$edges) %>%
@@ -2884,7 +2962,8 @@ server <- function(input, output, session) {
             }"
             ) %>%
             visEvents(stabilizationIterationsDone = "function() { this.physics.options.enabled = false; }")
-        })
+        }
+        )
         
         # Show modal dialog with floret visualization
         showModal(modalDialog(
@@ -2892,19 +2971,31 @@ server <- function(input, output, session) {
           pickerInput("existing_colors", "Choose Existing Color:",
                       choices = c("", stored_colors$all_colors),
                       choicesOpt = list(
-                        style = paste0("background:", c("#ffffff", stored_colors$all_colors), ";")
+                        style = paste0("background:", c("#FFFFFF", stored_colors$all_colors), ";")
                       )
           ),
           colourpicker::colourInput("modal_nodeColor", "Choose Node Color", value = "#FFFFFF"),
-          actionButton("colorSelectedModalNodes", "Color Selected Nodes"),
+          actionButton("colorSelectedModalNodes", "Colour Selected Nodes"),
           visNetworkOutput("dynamic_vis"),
-          easyClose = TRUE,
-          footer = modalButton("Close")
+          easyClose = FALSE,
+          footer = tagList(
+            actionButton("close_floret_modal", "Close")  # Custom close button
+          ),
         ))
         
-        selected_polygon(NULL) 
+        #first_floret(NULL)
       }
     }
+  })
+  
+  observeEvent(input$close_floret_modal, {
+
+    
+    # Reset variables and close the modal
+    first_floret(NULL)
+    all_florets(NULL)
+    selected_polygon(NULL)
+    removeModal()
   })
   
   
@@ -2926,28 +3017,79 @@ server <- function(input, output, session) {
     # Get selected nodes from the visNetwork
     selected_nodes <- input$dynamic_vis_selectedNodes
     print(paste("Selected nodes:", toString(selected_nodes)))  # Debugging statement
-    
+
     if (!is.null(all_florets())) {
-      # Get the combined edges from all_florets()
+      # Get the combined edges and nodes from all_florets()
       combined_edges <- all_florets()$edges
+      combined_nodes <- all_florets()$nodes
       
-      # Extract the edge labels corresponding to the selected nodes' florets
-      floret_edges <- subset(combined_edges, to %in% selected_nodes)
-      matching_labels <- unique(floret_edges$label)  # Get unique labels of these edges
+      # Function to get the full path from origin to a node (recursive search)
+      get_path_to_origin <- function(node, edges) {
+        path <- c()
+        current_node <- node
+        
+        while (!is.null(current_node)) {
+          # Find the incoming edge to the current node
+          incoming_edge <- subset(edges, to == current_node)
+          if (nrow(incoming_edge) == 0) break  # No more incoming edges
+          
+          # Prepend the label to the path
+          path <- c(incoming_edge$label1, path)
+          
+          # Move to the 'from' node of the current edge
+          current_node <- incoming_edge$from
+        }
+        
+        # Return the full path as a concatenated string
+        return(paste(path, collapse = " -> "))
+      }
       
-      # Find all nodes (from and to) that have the same edge labels across all florets
-      matching_nodes <- subset(combined_edges, label %in% matching_labels)
-      matching_node_ids <- unique(c(matching_nodes$to))
+      # Process selected nodes based on their levels
+      selected_node_levels <- combined_nodes$level[combined_nodes$id %in% selected_nodes]
       
-      # Combine with the initially selected nodes
-      all_selected_nodes <- unique(c(selected_nodes, matching_node_ids))
+      if (all(selected_node_levels == 2)) {
+        # Use `from` for level 2 nodes
+        floret_edges <- subset(combined_edges, from %in% selected_nodes)
+        matching_labels <- unique(floret_edges$label1)  # Get unique labels of these edges
+        
+        # Find all nodes that share the same edge labels
+        matching_nodes <- subset(combined_edges, label1 %in% matching_labels)
+        matching_node_ids <- unique(matching_nodes$from)
+        
+        # Combine with the initially selected nodes
+        all_selected_nodes <- unique(c(selected_nodes, matching_node_ids))
+        
+        print("Nodes selected using level 2 logic:")
+      } else {
+        # Perform recursive search for nodes not at level 2
+        selected_paths <- sapply(selected_nodes, function(node) {
+          get_path_to_origin(node, combined_edges)
+        })
+        print("Selected node paths:")
+        print(selected_paths)
+        
+        # Get paths for all nodes
+        all_paths <- sapply(combined_nodes$id, function(node) {
+          get_path_to_origin(node, combined_edges)
+        })
+        
+        # Match nodes with the same path
+        matching_nodes <- combined_nodes$id[all_paths %in% selected_paths]
+        
+        # Combine with the initially selected nodes
+        all_selected_nodes <- unique(c(selected_nodes, matching_nodes))
+        
+        print("Nodes selected using full path logic:")
+      }
       
       # Output or use `all_selected_nodes` as needed
-      print("all_selected_nodes")
       print(all_selected_nodes)  # Debugging output
     } else {
       showNotification("No florets are available to match edge labels.", type = "error")
     }
+
+    
+    
     
     selected_color <- if (input$existing_colors != "") {
       input$existing_colors  # Use the selected colour from the dropdown
@@ -2984,13 +3126,15 @@ server <- function(input, output, session) {
         stored_colors$all_colors <- all_colors
         
         # Update the dropdown to include the new and existing colors
-        updateSelectInput(session, "existing_colors", choices = c("",stored_colors$all_colors))
+        updateSelectInput(session, "existing_colors", choices = c("",stored_colors$all_colors), selected = "")
         
     } else {
       showNotification("No nodes selected to color.", type = "error")
     }
-      first_floret(NULL)
-      all_florets(NULL)
+      
+      visNetworkProxy("dynamic_vis") %>%
+        visUnselectAll()
+      
   }})
   
   
