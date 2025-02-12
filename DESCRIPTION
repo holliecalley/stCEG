@@ -1,0 +1,11 @@
+Package: stCEG
+Title: Fully Customisable Chain Event Graphs over Spatial Areas
+Version: 0.0.0.9000
+Authors@R: 
+    person("Hollie", "Calley", , "hc629@exeter.ac.uk", role = c("aut", "cre"))
+Description: stCEG is an R-package along with a Shiny interface designed to simplify the process of creating CEGs over spatial areas. The user can fully customise both the structure and underlying model of the CEG, unlike other competing software packages.
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
