@@ -15,6 +15,7 @@
 #' For the "Uniform" and "Phantom" priors, the function calculates the priors for each node based on their outgoing edges and propagates them through connected nodes. The user can edit these priors if desired.
 #' The "Specify" option allows the user to manually input prior values for each row. If incorrect values are provided, an error will be raised.
 #'
+#' @import cli
 #' @examples
 #' staged_tree_obj <- list(
 #'   stagedtree = list(
@@ -73,6 +74,20 @@ specify_priors <- function(staged_tree_obj, prior_type = "Uniform") {
 
   nodes_df <- arrange(nodes_df, level2)
   nodes_df$stage <- paste0("u", seq_len(nrow(nodes_df)))
+
+  nodes_df <- nodes_df %>%
+    mutate(ColorPreview = sapply(color, function(col) {
+      style <- make_ansi_style(col, bg = TRUE)  # Create ANSI style with background color
+      style("    ")  # Apply ANSI style to a block of space
+    }))
+
+  for (i in 1:nrow(nodes_df)) {
+    cat(paste(nodes_df$color[i], " | " ,
+              nodes_df$ColorPreview[i], "\n"))
+  }
+
+  nodes_df <- nodes_df %>%
+    select(-ColorPreview)
 
   if (prior_type == "Specify") {
     print(nodes_df)
@@ -166,8 +181,14 @@ specify_priors <- function(staged_tree_obj, prior_type = "Uniform") {
 
 
 
+
     }
 
+    # Directly assigning a new column without dplyr
+   # nodes_df$color_preview <- sapply(nodes_df$color, function(col) {
+   #   style <- cli::make_ansi_style(col, bg = TRUE)  # Create ANSI style with background color
+  #    style("    ")  # Apply ANSI style to a block of space
+  #  })
 
     cat("Calculated priors:\n")
     print(nodes_df)
@@ -197,7 +218,12 @@ specify_priors <- function(staged_tree_obj, prior_type = "Uniform") {
           }
         }
       }
+    } else {
+      # If the choice is "no", return without making any edits
+      cat("No edits made \n") # Exit the function or stop further execution
     }
+
+
   }
 
 
@@ -214,13 +240,24 @@ specify_priors <- function(staged_tree_obj, prior_type = "Uniform") {
     mutate(prior_mean = sapply(prior, compute_prior_mean))
 
 
-  nodes_df_table <- nodes_df %>%
-    select(Stage = stage, Colour = color, Level = level2,
-           "Outgoing Edges" = outgoing_edges2, "Number of Nodes" = number_nodes,
-           Prior = prior, "Prior Mean" = prior_mean )
-  #assign("prior_table", nodes_df_table, envir = .GlobalEnv)
-  return(nodes_df_table)
+nodes_df_table <- nodes_df %>%
+  select(
+    Stage = stage,
+    Colour = color,
+    #ColorPreview,  # The new color preview column
+    Level = level2,
+    "Outgoing Edges" = outgoing_edges2,
+    "Number of Nodes" = number_nodes,
+    Prior = prior,
+    "Prior Mean" = prior_mean
+  )
+  # Print out the ColorPreview with color blocks rendered
+  # To print out the table and view color blocks:
 
 
+# Return the table with color previews as blocks
+nodes_df_table %>% print()
+  #select(-ColorPreview) %>%
+  #print()
 
 }
