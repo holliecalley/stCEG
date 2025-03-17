@@ -75,19 +75,19 @@ specify_priors <- function(staged_tree_obj, prior_type = "Uniform") {
   nodes_df <- arrange(nodes_df, level2)
   nodes_df$stage <- paste0("u", seq_len(nrow(nodes_df)))
 
-  nodes_df <- nodes_df %>%
-    mutate(ColorPreview = sapply(color, function(col) {
-      style <- make_ansi_style(col, bg = TRUE)  # Create ANSI style with background color
-      style("    ")  # Apply ANSI style to a block of space
-    }))
+  #nodes_df <- nodes_df %>%
+  #  mutate(ColorPreview = sapply(color, function(col) {
+  #    style <- make_ansi_style(col, bg = TRUE)  # Create ANSI style with background color
+  #    style("    ")  # Apply ANSI style to a block of space
+  #  }))
 
-  for (i in 1:nrow(nodes_df)) {
-    cat(paste(nodes_df$color[i], " | " ,
-              nodes_df$ColorPreview[i], "\n"))
-  }
+  #for (i in 1:nrow(nodes_df)) {
+  #  cat(paste(nodes_df$color[i], " | " ,
+  #            nodes_df$ColorPreview[i], "\n"))
+  #}
 
-  nodes_df <- nodes_df %>%
-    select(-ColorPreview)
+  #nodes_df <- nodes_df %>%
+   # select(-ColorPreview)
 
   if (prior_type == "Specify") {
     print(nodes_df)
@@ -116,9 +116,8 @@ specify_priors <- function(staged_tree_obj, prior_type = "Uniform") {
                                       nodes_df$outgoing_edges2, nodes_df$number_nodes),
                                nodes_df$prior)
     }else if (prior_type == "Phantom") {# Extract nodes and edges data
-      nodes_df2 <- staged_tree_obj$x$nodes
-      edges_df <- staged_tree_obj$x$edges
-
+      nodes_df2 <- staged_tree_obj$stagedtree$x$nodes
+      edges_df <- staged_tree_obj$stagedtree$x$edges
       # Find the maximum level (to exclude the max level from prior calculation)
       max_level <- max(nodes_df2$level2, na.rm = TRUE)
 
