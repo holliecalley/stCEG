@@ -1,6 +1,6 @@
 #' Update Node Colours in an Event Tree
 #'
-#' This function updates the colours of nodes in an event tree based on user-defined 
+#' This function updates the colours of nodes in an event tree based on user-defined
 #' groups while ensuring that nodes with the same colour have consistent outgoing edge labels.
 #'
 #' @param event_tree_obj A list containing the event tree object (possibly with node deletion). It should include:
@@ -29,17 +29,17 @@
 #' \dontrun{
 #'   # Example event tree object
 #'   event_tree <- create_event_tree(my_data)
-#'   
+#'
 #'   # Delete nodes and update colours
 #'   updated_tree <- delete_nodes(event_tree, nodes_to_delete = c("s3", "s5"))
-#'   
+#'
 #'   # Define node groups and colours
 #'   node_groups <- list(c("s1", "s2"), c("s6", "s7"))
 #'   colours <- c("#FF0000", "#00FF00")
-#'   
+#'
 #'   # Apply colours to the event tree
 #'   coloured_tree <- update_node_colours(updated_tree, node_groups, colours)
-#'   
+#'
 #'   # Display the updated tree
 #'   coloured_tree$stagedtree
 #' }
@@ -47,7 +47,7 @@
 #' @import visNetwork dplyr
 #' @export
 update_node_colours <- function(event_tree_obj, node_groups, colours, level_separation = 1000, node_distance = 300) {
-  
+
   if (!is.null(event_tree_obj$eventtree)) {
     tree <- event_tree_obj$eventtree
   } else if (!is.null(event_tree_obj$stagedtree)) {
@@ -55,55 +55,55 @@ update_node_colours <- function(event_tree_obj, node_groups, colours, level_sepa
   } else {
     stop("Neither eventtree nor stagedtree exists in delete_nodes_obj")
   }
-  
+
   # Extract nodes and edges
   nodes2 <- tree$x$nodes
   edges2 <- tree$x$edges
   nodes2$number <- 1
-  
+
   filtereddf <- event_tree_obj$filtereddf
-  
+
   # Check that node_groups and colours are the same length
   if (length(node_groups) != length(colours)) {
     stop("Length of node_groups must match length of colours")
   }
-  
+
   # Flatten the node_groups to a single vector and check for duplicates
   all_node_ids <- unlist(node_groups)
   duplicate_nodes <- all_node_ids[duplicated(all_node_ids)]
-  
+
   # Raise an error if there are duplicate node IDs across groups
   if (length(duplicate_nodes) > 0) {
-    stop(paste("Error: The following node IDs appear in multiple node_groups:", 
+    stop(paste("Error: The following node IDs appear in multiple node_groups:",
                paste(duplicate_nodes, collapse = ", ")))
   }
-  
+
   # Apply each colour to its corresponding group
   for (i in seq_along(node_groups)) {
     nodes2$color[nodes2$id %in% node_groups[[i]]] <- colours[i]
   }
-  
+
   # Create a dataframe of outgoing edge labels for each node
   outgoing_edges_labels <- edges2 %>%
     group_by(from) %>%
     summarize(outgoing_labels = paste(sort(unique(label1)), collapse = ","), outgoing_edges2 = n(), .groups = "drop")
-  
+
   # Merge outgoing edge labels with nodes data
   nodes2 <- left_join(nodes2, outgoing_edges_labels, by = c("id" = "from"))
-  
+
   # Check if the columns exist before mutating
   if ("outgoing_labels.x" %in% colnames(nodes2) & "outgoing_labels.y" %in% colnames(nodes2)) {
     nodes2 <- nodes2 %>%
       mutate(outgoing_labels = coalesce(outgoing_labels.x, outgoing_labels.y)) %>%
       select(-outgoing_labels.x, -outgoing_labels.y)
   }
-  
+
   if ("outgoing_edges2.x" %in% colnames(nodes2) & "outgoing_edges2.y" %in% colnames(nodes2)) {
     nodes2 <- nodes2 %>%
       mutate(outgoing_edges2 = coalesce(outgoing_edges2.x, outgoing_edges2.y)) %>%
       select(-outgoing_edges2.x, -outgoing_edges2.y)
   }
-  
+
 
   print("nodes2")
   print(nodes2)
@@ -114,21 +114,21 @@ update_node_colours <- function(event_tree_obj, node_groups, colours, level_sepa
     filter(n_distinct(outgoing_labels) > 1) %>%
     pull(id) %>%
     unique()
-  
+
   # Raise an error if any conflicts exist
   if (length(conflicting_nodes) > 0) {
-    stop(paste("Error: The following nodes have the same colour but different outgoing edge labels:", 
+    stop(paste("Error: The following nodes have the same colour but different outgoing edge labels:",
                paste(conflicting_nodes, collapse = ", ")))
   }
-  
+
   # Save updated nodes & edges to environment
   #stagedtreedf <- list(nodes = nodes2, edges = edges2)
   #assign("stagedtreedf", stagedtreedf, envir = .GlobalEnv)
-  
+
   # Ensure nodes are movable in Y direction but fixed in X
   nodes2 <- nodes2 %>%
     mutate(fixed = list(list(x = TRUE, y = FALSE)))
-  
+
   # Return the updated visNetwork plot
   network_plot <- visNetwork(nodes = nodes2, edges = edges2) %>%
     visHierarchicalLayout(direction = "LR", levelSeparation = level_separation) %>%
@@ -147,7 +147,7 @@ update_node_colours <- function(event_tree_obj, node_groups, colours, level_sepa
     ) %>%
     visInteraction(
       dragNodes = TRUE,
-      multiselect = TRUE, 
+      multiselect = TRUE,
       navigationButtons = TRUE
     ) %>%
     visPhysics(hierarchicalRepulsion = list(nodeDistance = node_distance), stabilization = TRUE) %>%
@@ -156,13 +156,17 @@ update_node_colours <- function(event_tree_obj, node_groups, colours, level_sepa
       deselectNode = "function(params) { /* Deselect code */ }"
     ) %>%
     visEvents(stabilizationIterationsDone = "function() { this.physics.options.enabled = false; }")
-  
+
   # Create the result list (with invisible filtereddf)
   result <- invisible(filtereddf)
-  
-  
+
+
   # Return both the network plot and the result
-  return(list(stagedtree = network_plot, filtereddf = result))
-  
-  
+  output <- list(stagedtree = network_plot, filtereddf = result)
+
+  class(output) <- "staged_tree"
+  return(output)
+
+
+
 }

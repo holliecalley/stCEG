@@ -1,19 +1,19 @@
 #' Specify Priors for a Staged Tree Object
 #'
-#' This function assigns priors to the nodes of a staged tree object. The user can choose from different types of priors, including "Uniform", "Phantom", and "Specify".
+#' This function assigns priors to the nodes of a staged tree object. The user can choose from different types of priors, including "Uniform", "Phantom", and "Custom".
 #'
 #' @param staged_tree_obj A staged tree object containing the nodes and edges data for the tree.
 #' @param prior_type A character string indicating the prior type. Options are:
 #'   - "Uniform": Assigns a Uniform (1,1) prior based on the outgoing edges.
 #'   - "Phantom": Calculates a Phantom Individuals prior by initialising an alpha based on the maximum number of outgoing edges in the tree and dividing that evenly throughout the tree.
-#'   - "Specify": Allows the user to manually specify the prior values for each node.
+#'   - "Custom": Allows the user to manually specify the prior values for each node.
 #'
 #' @return A data frame containing the updated nodes data with the specified priors and their means.
 #'
 #' @details
 #' The function checks if the necessary columns and structure are present in the input staged tree object. It performs validation on the nodes' levels and ensures that no nodes with non-minimum or non-maximum levels have the colour `#FFFFFF`.
 #' For the "Uniform" and "Phantom" priors, the function calculates the priors for each node based on their outgoing edges and propagates them through connected nodes. The user can edit these priors if desired.
-#' The "Specify" option allows the user to manually input prior values for each row. If incorrect values are provided, an error will be raised.
+#' The "Custom" option allows the user to manually input prior values for each row. If incorrect values are provided, an error will be raised.
 #'
 #' @import cli
 #' @examples
@@ -36,7 +36,7 @@
 #'
 #' specify_priors(staged_tree_obj, prior_type = "Uniform")
 #' specify_priors(staged_tree_obj, prior_type = "Phantom")
-#' specify_priors(staged_tree_obj, prior_type = "Specify")
+#' specify_priors(staged_tree_obj, prior_type = "Custom")
 #' @export
 specify_priors <- function(staged_tree_obj, prior_type = "Uniform") {
   # Ensure necessary columns exist
@@ -89,7 +89,7 @@ specify_priors <- function(staged_tree_obj, prior_type = "Uniform") {
   #nodes_df <- nodes_df %>%
    # select(-ColorPreview)
 
-  if (prior_type == "Specify") {
+  if (prior_type == "Custom") {
     print(nodes_df)
 
     # Loop through each row and prompt the user for the prior

@@ -13,19 +13,19 @@ specify_priors(staged_tree_obj, prior_type = "Uniform")
 \itemize{
 \item "Uniform": Assigns a Uniform (1,1) prior based on the outgoing edges.
 \item "Phantom": Calculates a Phantom Individuals prior by initialising an alpha based on the maximum number of outgoing edges in the tree and dividing that evenly throughout the tree.
-\item "Specify": Allows the user to manually specify the prior values for each node.
+\item "Custom": Allows the user to manually specify the prior values for each node.
 }}
 }
 \value{
 A data frame containing the updated nodes data with the specified priors and their means.
 }
 \description{
-This function assigns priors to the nodes of a staged tree object. The user can choose from different types of priors, including "Uniform", "Phantom", and "Specify".
+This function assigns priors to the nodes of a staged tree object. The user can choose from different types of priors, including "Uniform", "Phantom", and "Custom".
 }
 \details{
 The function checks if the necessary columns and structure are present in the input staged tree object. It performs validation on the nodes' levels and ensures that no nodes with non-minimum or non-maximum levels have the colour \verb{#FFFFFF}.
 For the "Uniform" and "Phantom" priors, the function calculates the priors for each node based on their outgoing edges and propagates them through connected nodes. The user can edit these priors if desired.
-The "Specify" option allows the user to manually input prior values for each row. If incorrect values are provided, an error will be raised.
+The "Custom" option allows the user to manually input prior values for each row. If incorrect values are provided, an error will be raised.
 }
 \examples{
 staged_tree_obj <- list(
@@ -47,5 +47,5 @@ staged_tree_obj <- list(
 
 specify_priors(staged_tree_obj, prior_type = "Uniform")
 specify_priors(staged_tree_obj, prior_type = "Phantom")
-specify_priors(staged_tree_obj, prior_type = "Specify")
+specify_priors(staged_tree_obj, prior_type = "Custom")
 }

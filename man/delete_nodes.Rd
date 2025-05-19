@@ -53,10 +53,10 @@ The function performs the following steps:
 \dontrun{
   # Example event tree object
   event_tree <- create_event_tree(my_data)
-  
+
   # Delete nodes s3 and s5
   updated_tree <- delete_nodes(event_tree, nodes_to_delete = c("s3", "s5"))
-  
+
   # Display the updated tree
   updated_tree$eventtree
 }

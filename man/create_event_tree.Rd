@@ -6,7 +6,7 @@
 \usage{
 create_event_tree(
   dataset,
-  columns,
+  columns = seq_along(dataset),
   label_type = "both",
   level_separation = 1000,
   node_distance = 300

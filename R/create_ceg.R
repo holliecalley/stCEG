@@ -29,6 +29,7 @@
 #'
 #' @import purrr
 #' @import stringr
+#' @import DT
 #'
 #' @examples
 #' # Example usage of the create_ceg function:
@@ -40,9 +41,9 @@
 #'
 #' @export
 #'
-create_ceg <- function(staged_tree_obj, prior_table, level_separation = 1200, node_distance = 400, label = "posterior", view_table = FALSE) {
-  nodes <- staged_tree_obj$stagedtree$x$nodes
-  edges <- staged_tree_obj$stagedtree$x$edges
+create_ceg <- function(staged_tree_obj, level_separation = 1200, node_distance = 400, label = "posterior", view_table = FALSE) {
+  nodes <- staged_tree_obj$stagedtreewithpriors$x$nodes
+  edges <- staged_tree_obj$stagedtreewithpriors$x$edges
   nodes$size = 400
 
 
@@ -90,7 +91,7 @@ create_ceg <- function(staged_tree_obj, prior_table, level_separation = 1200, no
       label = first(label),
       level = first(level2),
       color = first(color),
-      prior_variance = first(priorvariance),
+      #prior_variance = first(priorvariance),
       .groups = 'drop'
     )
 
@@ -119,8 +120,8 @@ create_ceg <- function(staged_tree_obj, prior_table, level_separation = 1200, no
   # Flatten the list into a single vector
   id_mapping <- unlist(id_mapping, use.names = TRUE)
 
-  print("contracted_nodes")
-  print(contracted_nodes)
+  #print("contracted_nodes")
+  #print(contracted_nodes)
 
   # Copy edges and replace IDs with contracted IDs
   updated_edges <- edges
@@ -128,15 +129,15 @@ create_ceg <- function(staged_tree_obj, prior_table, level_separation = 1200, no
   updated_edges$to <- id_mapping[as.character(updated_edges$to)]
 
   # Print the updated edges
-  print("Updated Edges with Contracted Node Labels:")
-  print(updated_edges)
+  #print("Updated Edges with Contracted Node Labels:")
+  #print(updated_edges)
 
   updated_edges <- updated_edges %>%
     select(-color) %>%
     left_join(contracted_nodes %>% select(id, color), by = c("from" = "id")) %>%  # Drop the existing 'colour' column from edges
     rename(colour_from = color)
   # Check the column names of updated_edges to ensure 'colour' is the correct name
-  print(colnames(updated_edges))
+  #print(colnames(updated_edges))
 
 
 
@@ -182,7 +183,7 @@ create_ceg <- function(staged_tree_obj, prior_table, level_separation = 1200, no
   curvature_values <- merged_edges %>%
     group_by(from, to) %>%
     mutate(
-      curvature = seq(-0.4, 0.4, length.out = n()) # Ensure curvature is evenly spaced
+      curvature = seq(-0.3, 0.3, length.out = n()) # Ensure curvature is evenly spaced
     ) %>%
     ungroup()
 
@@ -197,9 +198,9 @@ create_ceg <- function(staged_tree_obj, prior_table, level_separation = 1200, no
   #assign("ceg_data", list(nodes = contracted_nodes, edges = merged_edges), envir = .GlobalEnv)
   # Return the contracted nodes and edges
 
-  print("testing")
+  #print("testing")
   # print(contracted_nodes)
-  print(merged_edges)
+  #print(merged_edges)
 
   if (label == "posterior") {
     merged_edges$label <- merged_edges$label_individuals  # Assign "names" (label1)
@@ -239,7 +240,7 @@ create_ceg <- function(staged_tree_obj, prior_table, level_separation = 1200, no
     mutate(fixed = list(list(x = TRUE, y = FALSE)))
 
   # Rename the columns in prior_table to match aggregated_df
-  prior_table <- prior_table %>%
+  prior_table <- staged_tree_obj$priortable %>%
     rename(colour_from = Colour)
 
   prior_table <- prior_table %>%
@@ -250,15 +251,14 @@ create_ceg <- function(staged_tree_obj, prior_table, level_separation = 1200, no
     left_join(aggregated_df, by = c("colour_from", "level")) %>%
     select(Stage, colour_from, level, data, prior, prior_mean, posterior, posterior_mean) %>%
     mutate(
-      prior = map_chr(prior, ~ {
-        values <- as.numeric(unlist(strsplit(.x, ",")))  # Correct function
+      across(c(prior, posterior), ~ map_chr(.x, ~ {
+        values <- as.numeric(unlist(strsplit(.x, ",")))  # Convert string to numeric vector
         if (any(abs(values %% 1 - 0.999) < 1e-6 | abs(values %% 1 - 0.001) < 1e-6)) {
           values <- round(values)  # Round if any number ends in .999 or .001
         }
         paste(values, collapse = ",")  # Rejoin into a string
-      })
-    ) %>%
-    rename(
+      }))
+    ) %>% rename(
       Stage = Stage,
       Colour = colour_from,
       Level = level,
@@ -269,8 +269,8 @@ create_ceg <- function(staged_tree_obj, prior_table, level_separation = 1200, no
       `Posterior Mean` = posterior_mean
     )
 
-  print("mergedtable")
-  print(merged_table)
+  #print("mergedtable")
+  #print(merged_table)
 
   #  for (col in merged_table$Colour) {
   #    styled_text <- make_style(col, bg = TRUE)
@@ -378,15 +378,169 @@ create_ceg <- function(staged_tree_obj, prior_table, level_separation = 1200, no
                 backgroundColor = styleEqual(merged_table$Stage, merged_table$Colour))  # Apply background colours based on Colour values
 
 
+  # Create the result list (with invisible filtereddf)
+  result <- merged_table
+
+
+  # Return both the network plot and the result
+  #
+
+
 
   if (view_table) {
     print(ChainEventGraph)  # Display the first object
     readline(prompt = "Press Enter to see the update table:")  # Wait for user to press Enter
     print(UpdateTable)  # Display the second object
     invisible(NULL)  # Ensure no output is returned in the console
+    #return(list(ceg = ChainEventGraph, update_table = result))
+
+    output <- list(ceg = ChainEventGraph, update_table = result)
+    class(output) <- "chain_event_graph"
+    return(output)
+
   } else {
     print(ChainEventGraph)  # Display only the first object if view_table is FALSE
     invisible(NULL)  # Ensure no output is returned in the console
+    output <- list(ceg = ChainEventGraph, update_table = result)
+    class(output) <- "chain_event_graph"
+    return(output)
   }
 
 }
+
+
+summary.chain_event_graph <- function(object, ...) {
+  if (is.null(object$update_table)) {
+    stop("The chain_event_graph object does not contain an update_table.")
+  }
+
+  update_table <- object$update_table
+  total_score <- 0
+  stage_scores <- numeric(nrow(update_table))
+
+  for (i in 1:nrow(update_table)) {
+    prior <- as.numeric(unlist(strsplit(update_table$Prior[i], ",")))
+    data <- as.numeric(unlist(strsplit(update_table$Data[i], ",")))
+
+    alpha_sum <- sum(prior)
+    x_sum <- sum(data)
+    posterior_sum <- alpha_sum + x_sum
+
+    term1 <- lgamma(alpha_sum) - lgamma(posterior_sum)
+    term2 <- sum(lgamma(prior + data) - lgamma(prior))
+
+    stage_score <- term1 + term2
+    stage_scores[i] <- stage_score
+    total_score <- total_score + stage_score
+  }
+
+  result <- list(
+    total_log_marginal_likelihood = total_score,
+    per_stage_log_scores = data.frame(
+      Stage = update_table$Stage,
+      LogScore = round(stage_scores, 3)
+    )
+  )
+
+  cat("Chain Event Graph Summary\n")
+  cat("--------------------------\n")
+  cat("Total Log Marginal Likelihood: ", round(total_score, 3), "\n\n")
+  cat("Per-Stage Log Scores:\n")
+  print(data.frame(Stage = update_table$Stage, LogScore = round(stage_scores, 3)))
+
+  class(result) <- "summary.chain_event_graph"
+  return(invisible(result))
+}
+
+
+compare_ceg_models <- function(summary1, summary2) {
+  if (!inherits(summary1, "summary.chain_event_graph") ||
+      !inherits(summary2, "summary.chain_event_graph")) {
+    stop("Both inputs must be of class 'summary.chain_event_graph'.")
+  }
+
+  log_marginal_1 <- summary1$total_log_marginal_likelihood
+  log_marginal_2 <- summary2$total_log_marginal_likelihood
+
+  log_BF <- log_marginal_1 - log_marginal_2
+  BF <- exp(log_BF)
+  preferred_model = ifelse(log_BF > 0, "Model 1", "Model 2")
+
+  result <- list(
+    log_marginal_1 = log_marginal_1,
+    log_marginal_2 = log_marginal_2,
+    log_Bayes_factor = log_BF,
+    Bayes_factor = BF,
+    preferred_model = ifelse(log_BF > 0, "Model 1", "Model 2")
+  )
+
+  # Print the requested values
+  cat("Log marginal of model 1: ", round(log_marginal_1, 3), "\n")
+  cat("Log marginal of model 2: ", round(log_marginal_2, 3), "\n")
+  cat("Log Bayes factor of Model 1 vs Model 2: ", round(log_BF, 3), "\n")
+  cat("Bayes factor of Model 1 vs Model 2: ", round(BF, 3), "\n")
+
+  cat("Preferred Model:", preferred_model, "\n")
+
+  jeffreys_scale <- function(BF) {
+    # Handle positive Bayes factors
+    if (BF < 1) {
+      return("Evidence against the alternative model")
+    } else if (BF >= 1 & BF < 3) {
+      return("Weak evidence for the alternative model")
+    } else if (BF >= 3 & BF < 10) {
+      return("Moderate evidence for the alternative model")
+    } else if (BF >= 10 & BF < 30) {
+      return("Strong evidence for the alternative model")
+    } else if (BF >= 30 & BF < 100) {
+      return("Very strong evidence for the alternative model")
+    } else {
+      return("Decisive evidence for the alternative model")
+    }
+  }
+
+  # Extend to handle the negative reciprocal
+  #jeffreys_scale_negative <- function(BF) {
+  #  # Reciprocal represents evidence for Model 2, interpreting negative Bayes factor
+  #  if (BF < 1) {
+  #    return("Weak evidence for Model 2 (moderate evidence against Model 1)")
+#    } else if (BF >= 1 & BF < 3) {
+#      return("Moderate evidence for Model 2 (weak evidence against Model 1)")
+#    } else if (BF >= 3 & BF < 10) {
+#      return("Strong evidence for Model 2")
+ #   } else if (BF >= 10 & BF < 30) {
+#      return("Very strong evidence for Model 2")
+#    } else if (BF >= 30 & BF < 100) {
+ #     return("Decisive evidence for Model 2")
+#    } else {
+#      return("Extreme evidence for Model 2")
+#    }
+#  }
+#
+#  # Jeffreys scale interpretation for Model 1 (positive Bayes factor)
+#  jeffreys_model1 <- jeffreys_scale(BF)
+ #
+#  # Jeffreys scale interpretation for Model 2 (negative reciprocal of Bayes factor)
+
+##  jeffreys_model2 <- jeffreys_scale_negative(1 / BF)
+ #
+  # Prepare the table comparing Bayes factors with Jeffreys scale
+#  comparison_table <- data.frame(
+ #   Model = c("Model 1", "Model 2"),
+  #  LogBayesFactor = c(log_BF, -log_BF),
+  #  BayesFactor = c(BF, 1 / BF),  # For Model 2, it's the inverse of Model 1
+  #  Interpretation = c(jeffreys_model1, jeffreys_model2)
+  #)
+#
+#  # Print the comparison table
+ # cat("Log Bayes Factors Comparison and Jeffreys Scale of Evidence:\n")
+ # print(comparison_table)
+
+  # Add statement about the negative reciprocal favoring Model 2
+  #cat("\nNote: The negative reciprocal of the Bayes factor favors Model 2, as it would represent evidence against Model 1 in this case.\n")
+
+
+  class(result) <- "ceg_model_comparison"
+  invisible(result)
+}
+

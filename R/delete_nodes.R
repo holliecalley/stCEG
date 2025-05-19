@@ -245,9 +245,11 @@ delete_nodes <- function(event_tree_obj, nodes_to_delete, level_separation = 100
     # Create the result list (with invisible filtereddf)
     result <- invisible(filtereddf)
 
-
     # Return both the network plot and the result
-    return(list(eventtree = network_plot, filtereddf = result))
+    output <- list(eventtree = network_plot, filtereddf = result)
+
+    class(output) <- "event_tree"
+    return(output)
 
 
   } else {

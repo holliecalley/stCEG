@@ -6,10 +6,9 @@
 \usage{
 create_ceg(
   staged_tree_obj,
-  prior_table,
   level_separation = 1200,
   node_distance = 400,
-  label = "posterior_mean",
+  label = "posterior",
   view_table = FALSE
 )
 }
@@ -19,8 +18,6 @@ create_ceg(
 \item \code{staged_tree_obj$x$nodes} : A data frame of node attributes with columns such as \code{id}, \code{level}, \code{colour}, \code{label}, etc.
 \item \code{staged_tree_obj$x$edges} : A data frame of edge attributes with columns such as \code{from}, \code{to}, \code{label1}, \code{label2}, \code{label3}, etc.
 }}
-
-\item{prior_table}{A data frame containing prior information for each stage, including \code{Colour}, \code{Level}, \code{Stage}, and other relevant columns.}
 
 \item{level_separation}{Numeric. The level separation value for hierarchical layout in the visualised graph. Default is 1200.}
 
@@ -35,6 +32,8 @@ Default is \code{"posterior_mean"}.
 }}
 
 \item{view_table}{Logical. Whether to display the summary table of the aggregated CEG data in the console. Default is \code{FALSE}.}
+
+\item{prior_table}{A data frame containing prior information for each stage, including \code{Colour}, \code{Level}, \code{Stage}, and other relevant columns.}
 }
 \value{
 A \code{visNetwork} object representing the Chain Event Graph, including contracted nodes and updated edges.

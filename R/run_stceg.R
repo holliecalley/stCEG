@@ -53,14 +53,20 @@
 #' @import gtools
 #' @import zoo
 #' @import leaflet
+#' @import htmlwidgets
 #' @import shinyjs
 #' @import conflicted
+#' @import viridis
+#' @import scales
 #'
 #' @export
 run_stceg <- function(){
   library(shiny)
   library(visNetwork)
+  library(viridis)
+  library(scales)
   library(shinyWidgets)
+  library(htmlwidgets)
   library(tidyverse)
   library(sf)
   library(spData)
@@ -320,7 +326,7 @@ run_stceg <- function(){
                        )
                      ),
 
-                     actionButton("ViewSelected", "View Selected Areas"),
+                     #actionButton("ViewSelected", "View Selected Areas"),
                      conditionalPanel(
                        condition = "input.viewUpdateTable == true",
                        DTOutput("UpdateTable", width = "95%")
@@ -494,7 +500,6 @@ run_stceg <- function(){
         if (input$time_type == "Month-Year") {
           req(input$month_format)
 
-          # Convert the MonthYear column to yearmon format
           print("Attempting to convert MonthYear to yearmon format")
           tryCatch({
             df[[time_col]] <- zoo::as.yearmon(df[[time_col]], format = input$month_format)
@@ -506,15 +511,16 @@ run_stceg <- function(){
             print(paste("Start date:", start_date))
             print(paste("End date:", end_date))
 
-            # Check if start_date or end_date is NA
             if (is.na(start_date) || is.na(end_date)) {
               print("Invalid start or end date for month-year slider.")
               return(NULL)
             }
 
             # Create sequence of months between start_date and end_date
-            month_year_seq <- seq(start_date, end_date, by = 1/12)  # 1/12 means monthly increments for yearmon
-            month_year_labels <- format(month_year_seq, "%b %Y")
+            month_year_seq <- seq(start_date, end_date, by = 1/12)  # Monthly increments
+
+            # Convert yearmon to Date (first day of the month) and format it properly
+            month_year_labels <- format(as.Date(month_year_seq, frac = 0), "%b %Y")
 
             print("Rendering Month-Year slider")
 
@@ -530,8 +536,8 @@ run_stceg <- function(){
             print(e)
             return(NULL)
           })
-
-        } else if (input$time_type == "Date") {
+        }
+        else if (input$time_type == "Date") {
           req(input$date_format)
           df[[time_col]] <- as.Date(df[[time_col]], format = input$date_format)
 
@@ -667,17 +673,24 @@ run_stceg <- function(){
               filter(df_homicides[[time_col]] >= start_time & df_homicides[[time_col]] <= end_time)
 
           } else if (input$time_type == "Month-Year") {
+            # Convert the column to yearmon properly
             df_homicides[[time_col]] <- zoo::as.yearmon(df_homicides[[time_col]], "%Y-%m")
-            start_index <- which(input$timeframe_slider[1] == format(df_homicides[[time_col]], "%b %Y"))
-            end_index <- which(input$timeframe_slider[2] == format(df_homicides[[time_col]], "%b %Y"))
 
-            if (length(start_index) > 0 && length(end_index) > 0) {
-              df_homicides <- df_homicides %>%
-                filter(df_homicides[[time_col]] >= df_homicides[[time_col]][start_index] &
-                         df_homicides[[time_col]] <= df_homicides[[time_col]][end_index])
-            }
+            # Convert input slider values to yearmon
+            start_time <- zoo::as.yearmon(input$timeframe_slider[1], "%b %Y")
+            end_time <- zoo::as.yearmon(input$timeframe_slider[2], "%b %Y")
 
-          } else if (input$time_type == "Year") {
+            # Debugging prints to check values
+            print(paste("Converted time column class:", class(df_homicides[[time_col]])))
+            print(paste("Start time (yearmon):", start_time))
+            print(paste("End time (yearmon):", end_time))
+
+            # Filter using yearmon values directly
+            df_homicides <- df_homicides %>%
+              filter(df_homicides[[time_col]] >= start_time & df_homicides[[time_col]] <= end_time)
+          }
+
+            else if (input$time_type == "Year") {
             req(input$timeframe_slider)
 
             if (inherits(df_homicides[[time_col]], "character")) {
@@ -2725,10 +2738,6 @@ run_stceg <- function(){
           print(paste(selected_values, "-> Variable", selected_indices))
 
         }
-
-        # Store the selected indices in session to make it accessible later
-
-
       })
 
 
