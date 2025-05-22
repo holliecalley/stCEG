@@ -75,6 +75,22 @@ specify_priors <- function(staged_tree_obj, prior_type = "Uniform") {
   nodes_df <- arrange(nodes_df, level2)
   nodes_df$stage <- paste0("u", seq_len(nrow(nodes_df)))
 
+  if (!requireNamespace("crayon", quietly = TRUE)) {
+    cat("Install the 'crayon' package to view colored output.\n")
+  } else {
+    unique_colors <- unique(nodes_df$color)
+
+    hex_to_style <- function(hex) {
+      rgb <- grDevices::col2rgb(hex)
+      crayon::make_style(rgb, bg = TRUE)
+    }
+
+    cat("\nStage Colour Key:\n")
+    for (hex in unique_colors) {
+      style <- hex_to_style(hex)
+      cat(style("     "), " ", hex, "\n")
+    }
+  }
   #nodes_df <- nodes_df %>%
   #  mutate(ColorPreview = sapply(color, function(col) {
   #    style <- make_ansi_style(col, bg = TRUE)  # Create ANSI style with background color
@@ -246,7 +262,7 @@ nodes_df_table <- nodes_df %>%
     #ColorPreview,  # The new color preview column
     Level = level2,
     "Outgoing Edges" = outgoing_edges2,
-    "Number of Nodes" = number_nodes,
+    Nodes = number_nodes,
     Prior = prior,
     "Prior Mean" = prior_mean
   )
@@ -260,3 +276,4 @@ nodes_df_table %>% print()
   #print()
 
 }
+"#FE5F55"
