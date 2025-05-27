@@ -25,6 +25,8 @@ create_ceg(
 
 \item{label}{A character string specifying the type of label to display on edges. Options include:
 \itemize{
+\item \code{"prior"}: Uses posterior label information.
+\item \code{"prior_mean"}: Uses posterior label information.
 \item \code{"posterior"}: Uses posterior label information.
 \item \code{"posterior_mean"}: Uses posterior mean label information.
 \item \code{"none"}: No labels on edges.

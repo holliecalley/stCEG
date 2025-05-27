@@ -54,17 +54,17 @@ The function follows these steps:
 \dontrun{
   # Example event tree object
   event_tree <- create_event_tree(my_data)
-  
+
   # Delete nodes and update colours
   updated_tree <- delete_nodes(event_tree, nodes_to_delete = c("s3", "s5"))
-  
+
   # Define node groups and colours
   node_groups <- list(c("s1", "s2"), c("s6", "s7"))
   colours <- c("#FF0000", "#00FF00")
-  
+
   # Apply colours to the event tree
   coloured_tree <- update_node_colours(updated_tree, node_groups, colours)
-  
+
   # Display the updated tree
   coloured_tree$stagedtree
 }

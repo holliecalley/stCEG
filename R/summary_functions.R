@@ -24,12 +24,14 @@ summary.event_tree <- function(object) {
   object <- object$eventtree$x
 
   # Summarize the nodes
-  cat("Summary of Nodes:\n")
+  cat("Summary of Nodes\n")
+  cat("================\n")
   cat("Number of nodes:", nrow(object$nodes), "\n")
   cat("Unique node levels:", length(unique(object$nodes$level)), "\n")
 
   # Summarize the edges
   cat("\nSummary of Edges:\n")
+  cat("===================\n")
   cat("Number of edges:", nrow(object$edges), "\n")
   cat("Unique labels in edges:", length(unique(object$edges$label1)), "\n")
 
@@ -38,7 +40,7 @@ summary.event_tree <- function(object) {
   edge_labels <- paste(edge_labels, collapse = "\n") # Replace newlines with spaces in the labels themselves
 
   # Print each label on a new line
-  cat("Edge labels:\n", edge_labels)
+  cat("Edge labels:\n", "==============\n"edge_labels)
 
 }
 
@@ -126,7 +128,7 @@ summary.staged_tree <- function(object, ...) {
 
 #' Summarise a Chain Event Graph Model
 #'
-#' Computes the total log marginal likelihood and per-stage log scores for a fitted Chain Event Graph (CEG) model using conjugate prior/posterior updates.
+#' Computes the total log marginal likelihood, effective sample size (ESS), and per-stage log scores for a fitted Chain Event Graph (CEG) model using conjugate prior/posterior updates.
 #'
 #' @param object An object of class `chain_event_graph`, which must contain an `update_table` with prior and data columns for each stage.
 #' @param ... Additional arguments (currently unused).
@@ -134,23 +136,17 @@ summary.staged_tree <- function(object, ...) {
 #' @return An invisible object of class `summary.chain_event_graph`, which is a list containing:
 #' \describe{
 #'   \item{total_log_marginal_likelihood}{Total log marginal likelihood across all stages.}
-#'   \item{per_stage_log_scores}{A data frame with log scores for each stage.}
+#'   \item{per_stage_log_scores}{A data frame with log scores and effective sample sizes (ESS) for each stage.}
 #' }
 #'
 #' @details
-#' The function uses the following log marginal likelihood formula for each stage:
+#' The log marginal likelihood is computed using the Dirichlet-multinomial formula:
 #' \deqn{
 #'   \log p(x \mid \alpha) = \log \Gamma\left( \sum \alpha_i \right) - \log \Gamma\left( \sum (\alpha_i + x_i) \right)
 #'   + \sum \left[ \log \Gamma(\alpha_i + x_i) - \log \Gamma(\alpha_i) \right]
 #' }
-#' where \eqn{\alpha} is the Dirichlet prior vector and \eqn{x} is the vector of observed counts for a given stage.
 #'
-#' The required `update_table` must include:
-#' \itemize{
-#'   \item A `Stage` column with stage identifiers.
-#'   \item A `Prior` column with comma-separated numeric values.
-#'   \item A `Data` column with comma-separated numeric values (observed counts).
-#' }
+#' The effective sample size for a stage is defined as \eqn{ESS = \sum_j (\alpha_{ij} + y_{ij})}.
 #'
 #' @examples
 #' \dontrun{
@@ -167,6 +163,7 @@ summary.chain_event_graph <- function(object, ...) {
   update_table <- object$update_table
   total_score <- 0
   stage_scores <- numeric(nrow(update_table))
+  effective_sample_sizes <- numeric(nrow(update_table))
 
   for (i in 1:nrow(update_table)) {
     prior <- as.numeric(unlist(strsplit(update_table$Prior[i], ",")))
@@ -182,21 +179,26 @@ summary.chain_event_graph <- function(object, ...) {
     stage_score <- term1 + term2
     stage_scores[i] <- stage_score
     total_score <- total_score + stage_score
+
+    # Effective Sample Size = sum of posterior alpha values
+    alpha_star <- prior + data
+    effective_sample_sizes[i] <- sum(alpha_star)
   }
 
   result <- list(
     total_log_marginal_likelihood = total_score,
     per_stage_log_scores = data.frame(
       Stage = update_table$Stage,
-      LogScore = round(stage_scores, 3)
+      LogScore = round(stage_scores, 3),
+      ESS = round(effective_sample_sizes, 2)
     )
   )
 
   cat("Chain Event Graph Summary\n")
   cat("--------------------------\n")
   cat("Total Log Marginal Likelihood: ", round(total_score, 3), "\n\n")
-  cat("Per-Stage Log Scores:\n")
-  print(data.frame(Stage = update_table$Stage, LogScore = round(stage_scores, 3)))
+  cat("Per-Stage Log Scores and Effective Sample Size:\n")
+  print(result$per_stage_log_scores)
 
   class(result) <- "summary.chain_event_graph"
   return(invisible(result))
