@@ -1,0 +1,2230 @@
+Borough,Method_of_Killing,Sex,Domestic_Abuse,Solved_Status
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Kingston upon Thames,Blunt Implement,Male,Not Domestic Abuse,Solved
+Hounslow,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Richmond upon Thames,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Richmond upon Thames,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Hillingdon,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Unsolved
+Lambeth,Shooting,Male,Not Domestic Abuse,Unsolved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Lambeth,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Unsolved
+Lambeth,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Unsolved
+Hounslow,Blunt Implement,Female,Not Domestic Abuse,Solved
+Hounslow,Blunt Implement,Female,Not Domestic Abuse,Solved
+Hounslow,Blunt Implement,Male,Not Domestic Abuse,Solved
+Hounslow,Blunt Implement,Male,Not Domestic Abuse,Solved
+Merton,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Unsolved
+Brent,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Female,Not Domestic Abuse,Solved
+Harrow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Harrow,Blunt Implement,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Shooting,Male,Not Domestic Abuse,Unsolved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Blunt Implement,Male,Not Domestic Abuse,Unsolved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Haringey,Shooting,Male,Not Domestic Abuse,Solved
+Haringey,Shooting,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Shooting,Female,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Blunt Implement,Male,Not Domestic Abuse,Unsolved
+Haringey,Blunt Implement,Male,Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Southwark,Blunt Implement,Male,Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Unsolved
+Southwark,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Unsolved
+Lewisham,Blunt Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Shooting,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Blunt Implement,Female,Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bromley,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Blunt Implement,Female,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bexley,Shooting,Female,Not Domestic Abuse,Solved
+Tower Hamlets,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Female,Not Domestic Abuse,Unsolved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Tower Hamlets,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Tower Hamlets,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Redbridge,Shooting,Male,Not Domestic Abuse,Unsolved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Hackney,Shooting,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Hackney,Shooting,Male,Not Domestic Abuse,Solved
+Hackney,Blunt Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Shooting,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Waltham Forest,Shooting,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Barking and Dagenham,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Barking and Dagenham,Blunt Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Blunt Implement,Female,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Blunt Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Blunt Implement,Male,Domestic Abuse,Solved
+Newham,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Newham,Shooting,Male,Not Domestic Abuse,Solved
+Newham,Shooting,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Havering,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Havering,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Westminster,Blunt Implement,Female,Not Domestic Abuse,Solved
+Westminster,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Shooting,Male,Not Domestic Abuse,Unsolved
+Westminster,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Westminster,Shooting,Male,Not Domestic Abuse,Unsolved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Kensington and Chelsea,Blunt Implement,Male,Not Domestic Abuse,Unsolved
+Wandsworth,Blunt Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Shooting,Male,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Richmond upon Thames,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Richmond upon Thames,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Richmond upon Thames,Blunt Implement,Female,Not Domestic Abuse,Solved
+Richmond upon Thames,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Unsolved
+Brent,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Unsolved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Ealing,Shooting,Male,Not Domestic Abuse,Unsolved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Blunt Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Haringey,Shooting,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Blunt Implement,Female,Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Southwark,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bromley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bromley,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Bromley,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,"Physical Assault, no weapon",Male,Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Blunt Implement,Male,Not Domestic Abuse,Solved
+Croydon,Shooting,Male,Not Domestic Abuse,Solved
+Croydon,Shooting,Male,Not Domestic Abuse,Solved
+Croydon,Shooting,Male,Not Domestic Abuse,Unsolved
+Bexley,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Sutton,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Blunt Implement,Female,Domestic Abuse,Solved
+Tower Hamlets,Blunt Implement,Male,Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Shooting,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Redbridge,Blunt Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Blunt Implement,Male,Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Shooting,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Enfield,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Enfield,Shooting,Male,Not Domestic Abuse,Unsolved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Enfield,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Blunt Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Blunt Implement,Male,Not Domestic Abuse,Solved
+Newham,Shooting,Male,Not Domestic Abuse,Solved
+Newham,Blunt Implement,Male,Not Domestic Abuse,Solved
+Havering,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Havering,Blunt Implement,Male,Not Domestic Abuse,Solved
+Kensington and Chelsea,Shooting,Male,Not Domestic Abuse,Solved
+Kensington and Chelsea,Shooting,Male,Not Domestic Abuse,Solved
+Kensington and Chelsea,Shooting,Male,Not Domestic Abuse,Solved
+Kensington and Chelsea,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Kensington and Chelsea,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Kensington and Chelsea,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Hammersmith and Fulham,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Female,Not Domestic Abuse,Unsolved
+Wandsworth,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Wandsworth,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Richmond upon Thames,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Richmond upon Thames,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Lambeth,Blunt Implement,Female,Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Lambeth,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Merton,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Brent,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Unsolved
+Brent,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Female,Not Domestic Abuse,Solved
+Brent,Shooting,Female,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Unsolved
+Harrow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Blunt Implement,Female,Not Domestic Abuse,Solved
+Barnet,Blunt Implement,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Shooting,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Islington,Blunt Implement,Male,Not Domestic Abuse,Unsolved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Haringey,Blunt Implement,Male,Not Domestic Abuse,Solved
+Haringey,Blunt Implement,Male,Not Domestic Abuse,Solved
+Haringey,Shooting,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Southwark,Blunt Implement,Male,Not Domestic Abuse,Unsolved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Shooting,Female,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Lewisham,Shooting,Male,Not Domestic Abuse,Solved
+Lewisham,Shooting,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Shooting,Male,Not Domestic Abuse,Unsolved
+Lewisham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Lewisham,Shooting,Male,Not Domestic Abuse,Unsolved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Blunt Implement,Male,Not Domestic Abuse,Solved
+Greenwich,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Blunt Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Bexley,Shooting,Male,Not Domestic Abuse,Unsolved
+Bexley,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Redbridge,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Redbridge,Blunt Implement,Female,Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Redbridge,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Shooting,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Shooting,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Shooting,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Enfield,Shooting,Male,Not Domestic Abuse,Unsolved
+Enfield,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Blunt Implement,Female,Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Havering,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Kensington and Chelsea,Shooting,Male,Not Domestic Abuse,Unsolved
+Kensington and Chelsea,Blunt Implement,Male,Not Domestic Abuse,Solved
+Kensington and Chelsea,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Kensington and Chelsea,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Kensington and Chelsea,Shooting,Female,Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Wandsworth,Shooting,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Shooting,Male,Not Domestic Abuse,Unsolved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Kingston upon Thames,"Physical Assault, no weapon",Male,Domestic Abuse,Solved
+Kingston upon Thames,Blunt Implement,Female,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Richmond upon Thames,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Blunt Implement,Female,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Merton,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Merton,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Merton,"Physical Assault, no weapon",Male,Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Solved
+Harrow,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Harrow,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Shooting,Male,Not Domestic Abuse,Unsolved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Shooting,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Ealing,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Ealing,Shooting,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Islington,Blunt Implement,Male,Not Domestic Abuse,Solved
+Islington,Shooting,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Shooting,Male,Not Domestic Abuse,Unsolved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Unsolved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Shooting,Male,Not Domestic Abuse,Solved
+Lewisham,Shooting,Male,Not Domestic Abuse,Unsolved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bromley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bromley,Shooting,Male,Not Domestic Abuse,Solved
+Bromley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Blunt Implement,Male,Not Domestic Abuse,Unsolved
+Greenwich,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Croydon,Shooting,Male,Not Domestic Abuse,Solved
+Croydon,Shooting,Male,Not Domestic Abuse,Solved
+Croydon,Shooting,Female,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,"Physical Assault, no weapon",Male,Not Domestic Abuse,Unsolved
+Merton,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bexley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bexley,Blunt Implement,Male,Not Domestic Abuse,Solved
+Sutton,Shooting,Male,Not Domestic Abuse,Solved
+Sutton,Blunt Implement,Female,Not Domestic Abuse,Solved
+Tower Hamlets,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Hackney,Shooting,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Shooting,Male,Not Domestic Abuse,Unsolved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Shooting,Male,Not Domestic Abuse,Solved
+Hackney,Shooting,Male,Not Domestic Abuse,Unsolved
+Hackney,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Waltham Forest,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Blunt Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Blunt Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Blunt Implement,Male,Not Domestic Abuse,Solved
+Newham,Blunt Implement,Male,Not Domestic Abuse,Unsolved
+Newham,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Newham,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Shooting,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Blunt Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Domestic Abuse,Unsolved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Havering,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Havering,Shooting,Male,Not Domestic Abuse,Solved
+Havering,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Havering,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Kensington and Chelsea,Shooting,Male,Not Domestic Abuse,Solved
+Kensington and Chelsea,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Blunt Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Shooting,Female,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Kingston upon Thames,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hounslow,Shooting,Male,Not Domestic Abuse,Unsolved
+Hounslow,Blunt Implement,Female,Domestic Abuse,Solved
+Hounslow,Blunt Implement,Male,Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Unsolved
+Lambeth,Shooting,Male,Not Domestic Abuse,Unsolved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Lambeth,Shooting,Male,Not Domestic Abuse,Unsolved
+Lambeth,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Unsolved
+Lambeth,Blunt Implement,Female,Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Barnet,Shooting,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Shooting,Male,Not Domestic Abuse,Unsolved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Shooting,Male,Not Domestic Abuse,Unsolved
+Islington,Blunt Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Haringey,Shooting,Female,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Unsolved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Southwark,Shooting,Male,Not Domestic Abuse,Unsolved
+Lewisham,Shooting,Male,Not Domestic Abuse,Solved
+Lewisham,Shooting,Female,Not Domestic Abuse,Solved
+Bromley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bromley,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Bromley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bromley,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Greenwich,Shooting,Female,Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Shooting,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Greenwich,Shooting,Male,Not Domestic Abuse,Unsolved
+Croydon,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Croydon,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bexley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Sutton,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Hackney,Blunt Implement,Male,Not Domestic Abuse,Solved
+Hackney,Blunt Implement,Female,Not Domestic Abuse,Solved
+Hackney,Shooting,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Shooting,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Shooting,Male,Not Domestic Abuse,Unsolved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Blunt Implement,Male,Not Domestic Abuse,Unsolved
+Barking and Dagenham,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Enfield,Shooting,Male,Not Domestic Abuse,Solved
+Enfield,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Newham,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Newham,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Newham,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Newham,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Havering,Shooting,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Shooting,Male,Not Domestic Abuse,Unsolved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Hammersmith and Fulham,Shooting,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Unsolved
+Lambeth,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Lambeth,Shooting,Male,Not Domestic Abuse,Unsolved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Female,Domestic Abuse,Unsolved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Merton,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Merton,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Merton,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Merton,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Domestic Abuse,Solved
+Brent,Blunt Implement,Male,Not Domestic Abuse,Solved
+Brent,"Physical Assault, no weapon",Male,Not Domestic Abuse,Unsolved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Harrow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Shooting,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Barnet,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Barnet,Shooting,Male,Not Domestic Abuse,Solved
+Ealing,Blunt Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Ealing,Shooting,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Haringey,Shooting,Female,Not Domestic Abuse,Unsolved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Unsolved
+Southwark,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Southwark,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Solved
+Lewisham,Blunt Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Blunt Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Greenwich,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Shooting,Male,Not Domestic Abuse,Unsolved
+Bexley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bexley,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Bexley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Sutton,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Sutton,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Tower Hamlets,Blunt Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Shooting,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Tower Hamlets,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Redbridge,Shooting,Male,Not Domestic Abuse,Unsolved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Hackney,Blunt Implement,Male,Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Hackney,Blunt Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Barking and Dagenham,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Blunt Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Enfield,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,"Physical Assault, no weapon",Female,Not Domestic Abuse,Unsolved
+Newham,Blunt Implement,Female,Domestic Abuse,Solved
+Newham,Shooting,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Havering,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Shooting,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Wandsworth,Shooting,Male,Not Domestic Abuse,Solved
+Wandsworth,"Physical Assault, no weapon",Male,Domestic Abuse,Solved
+Wandsworth,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Kingston upon Thames,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hounslow,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Lambeth,Blunt Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Merton,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Harrow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Harrow,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Camden,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Camden,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Ealing,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Islington,Shooting,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Shooting,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Shooting,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Shooting,Male,Not Domestic Abuse,Unsolved
+Haringey,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Solved
+Southwark,Blunt Implement,Female,Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Shooting,Male,Not Domestic Abuse,Unsolved
+Lewisham,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Bromley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bromley,Shooting,Male,Not Domestic Abuse,Unsolved
+Bromley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bromley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Shooting,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Blunt Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Greenwich,"Physical Assault, no weapon",Male,Not Domestic Abuse,Unsolved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Shooting,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Croydon,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Bexley,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Bexley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Sutton,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Sutton,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Sutton,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Tower Hamlets,Blunt Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Tower Hamlets,Blunt Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,"Physical Assault, no weapon",Male,Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Blunt Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Shooting,Male,Not Domestic Abuse,Solved
+Hackney,Shooting,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Waltham Forest,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Waltham Forest,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Blunt Implement,Female,Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Enfield,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Newham,Blunt Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Newham,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Havering,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Westminster,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Shooting,Male,Not Domestic Abuse,Unsolved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Blunt Implement,Male,Not Domestic Abuse,Solved
+Westminster,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Wandsworth,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Shooting,Male,Not Domestic Abuse,Solved
+Hillingdon,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Hillingdon,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Unsolved
+Lambeth,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Blunt Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Brent,Blunt Implement,Male,Not Domestic Abuse,Solved
+Harrow,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Harrow,Shooting,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Barnet,Shooting,Male,Not Domestic Abuse,Solved
+Barnet,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Shooting,Male,Not Domestic Abuse,Solved
+Barnet,Shooting,Male,Not Domestic Abuse,Solved
+Barnet,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Ealing,Blunt Implement,Female,Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Harrow,"Physical Assault, no weapon",Male,Not Domestic Abuse,Unsolved
+Ealing,"Physical Assault, no weapon",Female,Not Domestic Abuse,Unsolved
+Islington,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Shooting,Male,Not Domestic Abuse,Solved
+Islington,Shooting,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Haringey,"Physical Assault, no weapon",Male,Not Domestic Abuse,Unsolved
+Haringey,Shooting,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Blunt Implement,Male,Not Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Solved
+Southwark,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Lewisham,Shooting,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Shooting,Male,Not Domestic Abuse,Solved
+Lewisham,Shooting,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Greenwich,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Croydon,Shooting,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Croydon,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Sutton,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Sutton,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Sutton,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Tower Hamlets,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Tower Hamlets,Blunt Implement,Female,Domestic Abuse,Solved
+Tower Hamlets,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Redbridge,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Hackney,Shooting,Female,Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Shooting,Female,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Blunt Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Shooting,Male,Not Domestic Abuse,Unsolved
+Waltham Forest,Shooting,Male,Not Domestic Abuse,Unsolved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Shooting,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Newham,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Newham,Shooting,Male,Not Domestic Abuse,Solved
+Newham,Shooting,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Shooting,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Shooting,Male,Not Domestic Abuse,Unsolved
+Newham,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Westminster,Shooting,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Kingston upon Thames,Blunt Implement,Female,Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Lambeth,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Blunt Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Merton,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Brent,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Ealing,Blunt Implement,Male,Not Domestic Abuse,Solved
+Ealing,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Islington,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Blunt Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Unsolved
+Southwark,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Blunt Implement,Female,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,"Physical Assault, no weapon",Male,Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Bromley,Blunt Implement,Female,Not Domestic Abuse,Solved
+Bromley,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Bromley,Blunt Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Blunt Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Shooting,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Croydon,Shooting,Male,Not Domestic Abuse,Solved
+Croydon,Blunt Implement,Male,Not Domestic Abuse,Solved
+Croydon,Blunt Implement,Male,Not Domestic Abuse,Solved
+Croydon,Shooting,Male,Not Domestic Abuse,Solved
+Croydon,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Bexley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bexley,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Bexley,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Bexley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Sutton,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Croydon,Shooting,Male,Not Domestic Abuse,Unsolved
+Tower Hamlets,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Tower Hamlets,Shooting,Male,Not Domestic Abuse,Unsolved
+Tower Hamlets,Blunt Implement,Female,Domestic Abuse,Solved
+Tower Hamlets,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Waltham Forest,Blunt Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Blunt Implement,Male,Not Domestic Abuse,Solved
+Newham,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Shooting,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Blunt Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Wandsworth,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Wandsworth,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Kingston upon Thames,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Kingston upon Thames,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hounslow,Blunt Implement,Female,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Richmond upon Thames,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Merton,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Brent,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Shooting,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Camden,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Ealing,Shooting,Male,Not Domestic Abuse,Solved
+Ealing,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Islington,"Physical Assault, no weapon",Male,Domestic Abuse,Solved
+Islington,"Physical Assault, no weapon",Male,Not Domestic Abuse,Unsolved
+Haringey,Shooting,Male,Not Domestic Abuse,Solved
+Haringey,Blunt Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Lewisham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Lewisham,Shooting,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Blunt Implement,Male,Not Domestic Abuse,Solved
+Bromley,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Shooting,Male,Not Domestic Abuse,Solved
+Croydon,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Blunt Implement,Male,Not Domestic Abuse,Solved
+Croydon,Shooting,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Sutton,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Sutton,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Redbridge,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Hackney,Blunt Implement,Female,Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Enfield,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Newham,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Blunt Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Westminster,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Westminster,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Wandsworth,Shooting,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Wandsworth,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Kingston upon Thames,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Richmond upon Thames,Blunt Implement,Female,Not Domestic Abuse,Solved
+Hillingdon,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Lambeth,Blunt Implement,Female,Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Lambeth,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Merton,Blunt Implement,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Female,Not Domestic Abuse,Solved
+Brent,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Unsolved
+Camden,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Barnet,Blunt Implement,Female,Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Islington,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Bromley,Shooting,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Hackney,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Hackney,Shooting,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Waltham Forest,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Barking and Dagenham,Shooting,Female,Domestic Abuse,Solved
+Enfield,Shooting,Male,Not Domestic Abuse,Solved
+Enfield,Shooting,Male,Not Domestic Abuse,Solved
+Enfield,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Havering,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Havering,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Blunt Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Westminster,Shooting,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Shooting,Male,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Richmond upon Thames,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Brent,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Harrow,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Shooting,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Blunt Implement,Female,Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Shooting,Female,Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Haringey,Blunt Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bromley,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Croydon,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Blunt Implement,Male,Domestic Abuse,Solved
+Bexley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Redbridge,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Hackney,Shooting,Female,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Hackney,Blunt Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Enfield,Blunt Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Kensington and Chelsea,Blunt Implement,Female,Not Domestic Abuse,Solved
+Kensington and Chelsea,"Physical Assault, no weapon",Male,Not Domestic Abuse,Unsolved
+Kensington and Chelsea,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Wandsworth,Blunt Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Hounslow,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Hillingdon,Shooting,Male,Not Domestic Abuse,Unsolved
+Hillingdon,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Lambeth,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Blunt Implement,Male,Not Domestic Abuse,Unsolved
+Merton,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Merton,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Harrow,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Harrow,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Harrow,"Physical Assault, no weapon",Male,Domestic Abuse,Solved
+Camden,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Barnet,Blunt Implement,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Blunt Implement,Male,Not Domestic Abuse,Solved
+Ealing,Blunt Implement,Female,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Islington,Blunt Implement,Male,Not Domestic Abuse,Solved
+Islington,Blunt Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Shooting,Male,Not Domestic Abuse,Unsolved
+Haringey,Blunt Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Unsolved
+Southwark,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Southwark,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Blunt Implement,Female,Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Shooting,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Blunt Implement,Male,Not Domestic Abuse,Unsolved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Bexley,Blunt Implement,Male,Not Domestic Abuse,Solved
+Bexley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Tower Hamlets,"Physical Assault, no weapon",Male,Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Blunt Implement,Male,Not Domestic Abuse,Solved
+Redbridge,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Redbridge,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Redbridge,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Shooting,Male,Not Domestic Abuse,Unsolved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Shooting,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Shooting,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,"Physical Assault, no weapon",Male,Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Enfield,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Kensington and Chelsea,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Kensington and Chelsea,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Kensington and Chelsea,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Kensington and Chelsea,Blunt Implement,Female,Domestic Abuse,Unsolved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Kingston upon Thames,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Blunt Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Merton,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Blunt Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Unsolved
+Harrow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Camden,Shooting,Male,Not Domestic Abuse,Solved
+Islington,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Shooting,Male,Not Domestic Abuse,Solved
+Barnet,Shooting,Female,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Islington,Shooting,Male,Not Domestic Abuse,Unsolved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Shooting,Male,Not Domestic Abuse,Unsolved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Blunt Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Southwark,"Physical Assault, no weapon",Female,Not Domestic Abuse,Unsolved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Lewisham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Lewisham,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Greenwich,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Shooting,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Shooting,Male,Not Domestic Abuse,Solved
+Bexley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bexley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bexley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bexley,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Blunt Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Shooting,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Hackney,Blunt Implement,Male,Not Domestic Abuse,Solved
+Bexley,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Waltham Forest,Shooting,Male,Not Domestic Abuse,Solved
+Waltham Forest,Blunt Implement,Male,Not Domestic Abuse,Unsolved
+Barking and Dagenham,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Newham,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Havering,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Kensington and Chelsea,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Female,Domestic Abuse,Unsolved
+Hammersmith and Fulham,Shooting,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Shooting,Male,Not Domestic Abuse,Solved
+Westminster,Blunt Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,"Physical Assault, no weapon",Male,Not Domestic Abuse,Unsolved
+Kingston upon Thames,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Kingston upon Thames,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Hounslow,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Blunt Implement,Male,Not Domestic Abuse,Unsolved
+Lambeth,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Merton,Blunt Implement,Female,Domestic Abuse,Solved
+Merton,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Female,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Domestic Abuse,Unsolved
+Harrow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Shooting,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Islington,Blunt Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Blunt Implement,Female,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Female,Not Domestic Abuse,Unsolved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Southwark,Knife or Sharp Implement,Female,Not Domestic Abuse,Unsolved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,"Physical Assault, no weapon",Male,Not Domestic Abuse,Unsolved
+Lewisham,"Physical Assault, no weapon",Female,Not Domestic Abuse,Unsolved
+Bromley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Blunt Implement,Male,Not Domestic Abuse,Unsolved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Croydon,Shooting,Male,Not Domestic Abuse,Solved
+Croydon,Blunt Implement,Female,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Tower Hamlets,Shooting,Male,Not Domestic Abuse,Solved
+Tower Hamlets,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Shooting,Male,Not Domestic Abuse,Solved
+Redbridge,Blunt Implement,Male,Not Domestic Abuse,Solved
+Hackney,Blunt Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Blunt Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Shooting,Male,Not Domestic Abuse,Unsolved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Enfield,Shooting,Male,Not Domestic Abuse,Unsolved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Newham,Shooting,Male,Not Domestic Abuse,Unsolved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Shooting,Male,Not Domestic Abuse,Solved
+Newham,Shooting,Male,Not Domestic Abuse,Unsolved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Blunt Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Havering,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Havering,Knife or Sharp Implement,Female,Domestic Abuse,Unsolved
+Havering,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Havering,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Kensington and Chelsea,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Westminster,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Westminster,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Blunt Implement,Female,Domestic Abuse,Solved
+Kingston upon Thames,"Physical Assault, no weapon",Male,Not Domestic Abuse,Unsolved
+Kingston upon Thames,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Richmond upon Thames,Knife or Sharp Implement,Female,Domestic Abuse,Unsolved
+Hillingdon,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Blunt Implement,Female,Domestic Abuse,Solved
+Hillingdon,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Merton,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Merton,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Brent,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Blunt Implement,Male,Not Domestic Abuse,Solved
+Barnet,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Barnet,Shooting,Male,Not Domestic Abuse,Unsolved
+Barnet,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Shooting,Male,Not Domestic Abuse,Unsolved
+Haringey,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Haringey,Shooting,Female,Not Domestic Abuse,Unsolved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Shooting,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Shooting,Male,Not Domestic Abuse,Unsolved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Lewisham,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bromley,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Bromley,Blunt Implement,Female,Domestic Abuse,Solved
+Bromley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Blunt Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Blunt Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Greenwich,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Shooting,Male,Not Domestic Abuse,Unsolved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Tower Hamlets,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Tower Hamlets,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Shooting,Male,Not Domestic Abuse,Unsolved
+Hackney,"Physical Assault, no weapon",Male,Not Domestic Abuse,Unsolved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Shooting,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Waltham Forest,Shooting,Male,Not Domestic Abuse,Unsolved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Shooting,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Enfield,Shooting,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Enfield,Blunt Implement,Male,Not Domestic Abuse,Solved
+Enfield,Shooting,Male,Not Domestic Abuse,Unsolved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Newham,"Physical Assault, no weapon",Male,Domestic Abuse,Solved
+Havering,Blunt Implement,Female,Not Domestic Abuse,Solved
+Havering,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Kensington and Chelsea,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Kensington and Chelsea,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Westminster,Shooting,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Wandsworth,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Shooting,Male,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hounslow,Shooting,Male,Not Domestic Abuse,Unsolved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Richmond upon Thames,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Richmond upon Thames,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Richmond upon Thames,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,"Physical Assault, no weapon",Male,Not Domestic Abuse,Unsolved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Female,Domestic Abuse,Unsolved
+Brent,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Harrow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Shooting,Male,Not Domestic Abuse,Unsolved
+Camden,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Barnet,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Blunt Implement,Female,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Islington,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Haringey,Shooting,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Blunt Implement,Female,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Shooting,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bromley,Blunt Implement,Female,Not Domestic Abuse,Solved
+Greenwich,Shooting,Male,Not Domestic Abuse,Unsolved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Female,Not Domestic Abuse,Unsolved
+Croydon,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Croydon,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bexley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Blunt Implement,Female,Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Shooting,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Redbridge,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Redbridge,Blunt Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Blunt Implement,Female,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Blunt Implement,Male,Not Domestic Abuse,Unsolved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Waltham Forest,Shooting,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Enfield,Shooting,Male,Not Domestic Abuse,Unsolved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Newham,Blunt Implement,Female,Not Domestic Abuse,Solved
+Newham,Blunt Implement,Female,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Havering,"Physical Assault, no weapon",Female,Domestic Abuse,Unsolved
+Havering,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Female,Not Domestic Abuse,Unsolved
+Kensington and Chelsea,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Kensington and Chelsea,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Kensington and Chelsea,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Kingston upon Thames,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Merton,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Kingston upon Thames,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Hounslow,Blunt Implement,Male,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Female,Domestic Abuse,Unsolved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Richmond upon Thames,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Richmond upon Thames,"Physical Assault, no weapon",Male,Not Domestic Abuse,Unsolved
+Hillingdon,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Hillingdon,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Hillingdon,Shooting,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Merton,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Merton,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Shooting,Male,Not Domestic Abuse,Unsolved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Harrow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Harrow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Blunt Implement,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Ealing,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Blunt Implement,Male,Not Domestic Abuse,Solved
+Islington,Shooting,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Shooting,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Blunt Implement,Female,Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bromley,Shooting,Male,Not Domestic Abuse,Solved
+Greenwich,Blunt Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Greenwich,Blunt Implement,Female,Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Shooting,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Bexley,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Bexley,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Sutton,Shooting,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Shooting,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Blunt Implement,Female,Domestic Abuse,Solved
+Hackney,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Hackney,Shooting,Male,Not Domestic Abuse,Unsolved
+Hackney,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Blunt Implement,Female,Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Female,Domestic Abuse,Unsolved
+Enfield,Shooting,Male,Not Domestic Abuse,Solved
+Enfield,Blunt Implement,Female,Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Shooting,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Newham,Blunt Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Newham,Blunt Implement,Female,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Kensington and Chelsea,Blunt Implement,Male,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Hammersmith and Fulham,Shooting,Male,Not Domestic Abuse,Unsolved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Shooting,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Wandsworth,Shooting,Male,Not Domestic Abuse,Unsolved
+Kingston upon Thames,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Kingston upon Thames,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hounslow,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Hounslow,Blunt Implement,Male,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Richmond upon Thames,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Richmond upon Thames,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Hillingdon,Shooting,Male,Not Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Blunt Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Blunt Implement,Female,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Lambeth,Shooting,Male,Not Domestic Abuse,Solved
+Merton,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Camden,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Ealing,Blunt Implement,Female,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Shooting,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Shooting,Male,Not Domestic Abuse,Unsolved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Southwark,Blunt Implement,Male,Not Domestic Abuse,Unsolved
+Southwark,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,"Physical Assault, no weapon",Male,Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Bromley,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Bromley,Blunt Implement,Male,Not Domestic Abuse,Unsolved
+Greenwich,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Bexley,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Sutton,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Tower Hamlets,Shooting,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Redbridge,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hackney,Shooting,Male,Not Domestic Abuse,Solved
+Hackney,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Shooting,Male,Not Domestic Abuse,Unsolved
+Brent,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Barking and Dagenham,Blunt Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Enfield,Blunt Implement,Male,Domestic Abuse,Solved
+Newham,Blunt Implement,Female,Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Shooting,Male,Not Domestic Abuse,Unsolved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Shooting,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Havering,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Havering,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Kensington and Chelsea,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Hammersmith and Fulham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Blunt Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Westminster,Blunt Implement,Male,Domestic Abuse,Solved
+Wandsworth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Kingston upon Thames,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Hounslow,"Physical Assault, no weapon",Male,Not Domestic Abuse,Unsolved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hounslow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Richmond upon Thames,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Richmond upon Thames,Knife or Sharp Implement,Male,Domestic Abuse,Solved
+Richmond upon Thames,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Hillingdon,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,Shooting,Male,Not Domestic Abuse,Unsolved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Brent,"Physical Assault, no weapon",Male,Not Domestic Abuse,Unsolved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Brent,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Harrow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Ealing,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Ealing,Blunt Implement,Male,Not Domestic Abuse,Unsolved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Islington,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Haringey,Shooting,Male,Not Domestic Abuse,Solved
+Haringey,Shooting,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Southwark,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Female,Not Domestic Abuse,Unsolved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Croydon,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Croydon,Blunt Implement,Male,Not Domestic Abuse,Solved
+Croydon,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Bexley,Shooting,Male,Not Domestic Abuse,Unsolved
+Greenwich,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Tower Hamlets,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Redbridge,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Redbridge,"Physical Assault, no weapon",Female,Not Domestic Abuse,Solved
+Redbridge,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Redbridge,Shooting,Male,Not Domestic Abuse,Unsolved
+Redbridge,Shooting,Male,Not Domestic Abuse,Unsolved
+Hackney,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Waltham Forest,Shooting,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Shooting,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Barking and Dagenham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barking and Dagenham,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Barking and Dagenham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Enfield,Blunt Implement,Female,Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Enfield,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Enfield,Blunt Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Female,Domestic Abuse,Solved
+Newham,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Newham,Knife or Sharp Implement,Female,Domestic Abuse,Unsolved
+Kensington and Chelsea,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Kensington and Chelsea,Shooting,Male,Not Domestic Abuse,Unsolved
+Hammersmith and Fulham,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Female,Domestic Abuse,Unsolved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Shooting,Male,Not Domestic Abuse,Unsolved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Hillingdon,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Hillingdon,"Physical Assault, no weapon",Male,Not Domestic Abuse,Unsolved
+Lambeth,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Lambeth,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Harrow,Blunt Implement,Male,Not Domestic Abuse,Solved
+Harrow,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Barnet,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Barnet,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Ealing,Shooting,Male,Not Domestic Abuse,Unsolved
+Haringey,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Southwark,"Physical Assault, no weapon",Female,Domestic Abuse,Solved
+Lewisham,Knife or Sharp Implement,Female,Not Domestic Abuse,Solved
+Greenwich,"Physical Assault, no weapon",Male,Not Domestic Abuse,Solved
+Bexley,Shooting,Male,Not Domestic Abuse,Solved
+Tower Hamlets,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Blunt Implement,Male,Not Domestic Abuse,Solved
+Waltham Forest,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved
+Newham,Knife or Sharp Implement,Male,Not Domestic Abuse,Solved
+Westminster,Knife or Sharp Implement,Male,Not Domestic Abuse,Unsolved

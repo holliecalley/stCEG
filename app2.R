@@ -1,3 +1,4 @@
+
 library(shiny)
 library(visNetwork)
 library(colourpicker)
@@ -20,10 +21,21 @@ library(gtools)
 library(zoo)
 library(leaflet)
 library(shinyjs)
+library(htmlwidgets)
+library(scales)  # For color scaling
+library(viridis) # For viridis color palettes
+
 
 
 ui <- fluidPage(
   titlePanel("stCEG - Modelling Over Spatial Areas Using Chain Event Graphs"),
+  tags$head(
+    tags$style(HTML("
+      .leaflet-left .leaflet-control{
+        visibility: hidden;
+      }
+    "))
+  ),
   tabsetPanel(
     tabPanel("Upload Data", 
              sidebarLayout(
@@ -207,15 +219,26 @@ ui <- fluidPage(
                  visNetworkOutput("stagedtree", height = "1000px"),
                  
                  h2('Chain Event Graph'),
-                 selectInput(
-                   "viewcegmap",
-                   "Choose View:",
-                   choices = c("Chain Event Graph", "Chain Event Graph and Map"),
-                   selected = "Chain Event Graph and Map"
+                 
+                 fluidRow(
+                   column(3, # adjust the column width for the selectInput
+                          selectInput(
+                            "viewcegmap",
+                            "Choose View:",
+                            choices = c("Chain Event Graph", "Chain Event Graph and Map"),
+                            selected = "Chain Event Graph and Map"
+                          ), 
+                          selectInput("color_palette", "Choose Colour Palette:",
+                                      choices = c("viridis", "magma", "plasma", "inferno", "cividis", "mako", "rocket", "turbo"), selected = "viridis")),
+                   column(3,uiOutput("last_group_ui"),
+                          uiOutput("unique_values_ui"),
+                          ),
+                   column(6, # adjust the column width for the other inputs
+                          sliderInput("levelSeparation", "Level Separation", min = 500, max = 10000, value = 1000, sep = ""),
+                          checkboxInput("viewUpdateTable", "View Prior-Posterior Update Table", value = TRUE),
+                          checkboxInput("showposteriormean", "Show Posterior Mean", value = TRUE),
+                   )
                  ),
-                 checkboxInput("viewUpdateTable", "View Prior-Posterior Update Table", value = TRUE),
-                 checkboxInput("showposteriormean", "Show Posterior Mean", value = TRUE),
-                 sliderInput("levelSeparation", "Level Separation", min = 500, max = 10000, value = 1000, sep = ""),
                  #visNetworkOutput("ceg_network", height = "1000px"),
                  fluidRow(
                    column(
@@ -654,6 +677,7 @@ server <- function(input, output, session) {
   #-------------------------------------------------------------------------------------------------- 
   #homicide.set <<- NA
   eventtree_pressed <- reactiveVal(FALSE)
+  conditional_values <- reactiveVal(NULL)
   
   homicide_set <<- eventReactive(input$vieweventtree, {
     eventtree_pressed(TRUE)
@@ -690,6 +714,7 @@ server <- function(input, output, session) {
     
     print("unique values list")
     print(unique_values_list)
+    conditional_values(unique_values_list)
     print("state names list")
     print(state_names_list)
     
@@ -804,7 +829,7 @@ server <- function(input, output, session) {
     print(data$edges)
     data$nodes$shape <- 'dot'
     data$nodes$size <- 100
-    data$nodes$color.background <- "#FFFFFF"
+    data$nodes$color <- "#FFFFFF"
     data$nodes$font <- "80px"
     data$nodes$title <- data$nodes$id
     # Check number of edges
@@ -989,7 +1014,7 @@ server <- function(input, output, session) {
     print(data)
     visNetwork(nodes = data$nodes, edges = data$edges, height = "500px") %>%
       visHierarchicalLayout(direction = "LR", levelSeparation = 1000) %>%
-      visNodes(scaling = list(min = 300, max = 300)) %>%
+      visNodes(scaling = list(min = 10, max = 10), font = list(vadjust = -190)) %>%
       visEdges(arrows = list(to = list(enabled = TRUE, scaleFactor = 5))) %>%
       visOptions(manipulation = list(enabled = TRUE,
                                      addEdgeCols = FALSE,
@@ -1006,8 +1031,8 @@ server <- function(input, output, session) {
         Shiny.onInputChange('eventtree_network_selected_remove', nodes.nodes);
       }") %>%
       visPhysics(solver = "forceAtlas2Based", 
-                 forceAtlas2Based = list(gravitationalConstant = -50), 
-                 hierarchicalRepulsion = list(nodeDistance = 300))
+                 forceAtlas2Based = list(gravitationalConstant = -40), 
+                 hierarchicalRepulsion = list(nodeDistance = 200))
   })
   
   observe({
@@ -1592,7 +1617,6 @@ server <- function(input, output, session) {
     
     num_colors <- length(flattened_list) # Number of groups
     colors <- distinctColorPalette(num_colors)
-    
     # Step 2: Update the nodes dataframe with these colors
     for (i in 1:num_colors) {
       group <- flattened_list[[i]]
@@ -1600,7 +1624,7 @@ server <- function(input, output, session) {
       
       # Update the color for each node in the group
       #nodes$color <- "#ffffff"
-      nodes[nodes$id %in% group, "color"] <- color
+      nodes[nodes$id %in% group & nodes$color == "#FFFFFF", "color"] <- color
     }
     nodes$color[nodes$level == 1] <- "#FFFFFF"
     nodes$color[nodes$level == levels_to_exclude] <- "#FFFFFF"
@@ -1960,14 +1984,15 @@ server <- function(input, output, session) {
     } 
     else if (prior_type == "Phantom Individuals Prior") {
       asymmetric_data <- asymmetric_tree_prior()
-      print("asymmetric_data")
-      print(asymmetric_data)
+      #print("asymmetric_data")
+      #print(asymmetric_data)
       
       for (i in 1:nrow(asymmetric_data)){
         data$nodes$adjusted_prior[i] <- paste(rep(round(as.numeric(asymmetric_data$prior[i])/as.numeric(asymmetric_data$outgoing_edges[i]),3), as.numeric(asymmetric_data$outgoing_edges[i])), collapse = ", ")
         
       }
-      
+      print("data")
+      print(data$nodes$adjusted_prior)
     }
     
     assignPriorsToEdges <- function(node_data, edge_data) {
@@ -2359,40 +2384,85 @@ server <- function(input, output, session) {
     grouped_df2(grouped_df)
     #print(grouped_df2())
     
+    
+    observe({
+      selected_palette <- input$color_palette
+      
+      # Generate the color palette based on the selected choice
+      pal <- colorNumeric(viridis(100, option = selected_palette), domain = c(1, 0))
+      
     output$ceg_map <- renderLeaflet({
       shape_data <- shapefileData()
       req(shape_data)
-      
+      areas <- shape_data[[1]]
       # Get the edges from contracted_data
       data <- contracted_data()
+      print(input$unique_values)
+      print(input$last_group)
+      
+      path_df <- calculate_path_products(data$nodes, data$edges)
+      
+      
+      session$userData$unique_value_index[input$unique_values]
+      
+      #print(path_df)
+      conditional_df(path_df)
+      #conditional_prob <- calculate_conditional_prob(path_df, input$unique_values, session$userData$unique_value_index[input$unique_values],input$last_group)
+      
+      area_probs <- calculate_area_probabilities(
+        path_df, input$unique_values, session$userData$unique_value_index[input$unique_values],input$last_group, 
+        areas
+      )
+      
+      # Ensure shapefile_vals$BCU and area_probs have matching case/whitespace
+      shape_data[[1]] <- trimws(as.character(shape_data[[1]]))
+      
+      # Convert list to a named vector (ensuring all areas exist in the vector)
+      area_probs_vec <- unlist(area_probs)
+      
+      # Match areas in shapefile_vals$BCU with area_probs names
+      shape_data$area_probs <- area_probs_vec[shape_data[[1]]]
+      
+      # Print to check
+      print(shape_data)
+      
       edges <- data$edges$label1
       
       # Generate colorblind-friendly colors using a Brewer palette
       num_colors <- nrow(shape_data)  # Number of rows in shape_data
       random_colors <- distinctColorPalette(num_colors)
       
+      # Function to assign colors based on area_probs
+      assign_colors <- function(area_probs, palette_name = "viridis") {
+        # Define a color scale (white for NA, mapped colors for others)
+        color_func <- col_numeric(palette = viridis::viridis(100, option = palette_name), 
+                                  domain = c(1, 0))  # Exclude NAs for scaling
+        
+        # Apply color mapping
+        colors <- sapply(area_probs, function(prob) {
+          if (is.na(prob)) {
+            return("#FFFFFF")  # White for NA values
+          } else {
+            return(color_func(prob))  # Map probability to color scale
+          }
+        })
+        
+        return(colors)
+      }
       
-      # Assign colors based on whether the polygon_id is in edges or not
-      color_assignment <- sapply(shape_data[[1]], function(polygon_id) {
-        if (polygon_id %in% edges) {
-          # If the polygon ID exists in edges, assign a random color
-          return(sample(random_colors, 1))
-        } else {
-          # If the polygon ID does not exist in edges, assign white
-          return("#FFFFFF")
-        }
-      })
-      
-      # Ensure color_assignment is a vector that corresponds to the number of polygons
-      # and matches the order of shape_data.
-      color_assignment <- as.vector(color_assignment)
-      
+      shape_data$color_assignment <- assign_colors(shape_data$area_probs, input$color_palette)
 
         leaflet(data = shape_data) %>%
           addTiles() %>%
+          onRender(
+            "function(el, x) {
+          L.control.zoom({
+            position:'bottomright'
+          }).addTo(this);
+        }") %>%
           addPolygons(
             layerId = ~shape_data[[1]],  # Use the first column as unique polygon IDs
-            fillColor = color_assignment,  # Assign the corresponding colors from color_assignment
+            fillColor = shape_data$color_assignment,  # Assign the corresponding colors from color_assignment
             color = "black",
             weight = 1,
             highlightOptions = highlightOptions(
@@ -2404,10 +2474,17 @@ server <- function(input, output, session) {
             fillOpacity = input$mapOpacity,
             popup = NULL,
             label = ~as.character(shape_data[[1]])
+          ) %>%
+          addLegend(
+            pal = pal,  # Use the dynamic palette
+            values = c(0, 1),  # Fixed range from 0 to 1
+            title = "Probability",
+            position = "bottomright",
+            labFormat = labelFormat(transform = function(x) round(x, 2))
           )
       })
       
-    
+    })
     
   })
   
@@ -2463,12 +2540,225 @@ server <- function(input, output, session) {
     print(df)
   })
   
+  # Function to calculate posterior mean products for all paths
+  # Function to calculate posterior mean products for all paths
+  calculate_path_products <- function(nodes_df, edges_df, root_node = "w0") {
+    
+    # Initialize a list to store paths and products
+    paths_list <- list()
+    
+    # Find all paths from root node (could use graph traversal here)
+    traverse_paths <- function(node, path, product) {
+      # Find outgoing edges from current node
+      next_edges <- edges_df[edges_df$from == node, ]
+      
+      if (nrow(next_edges) == 0) {
+        # If no outgoing edges, it's a terminal node, save the path and product
+        paths_list <<- append(paths_list, list(list(path = path, product = product)))
+      } else {
+        # Otherwise, traverse the next nodes
+        for (i in 1:nrow(next_edges)) {
+          # Access the posteriormean from the edge
+          posteriormean <- as.numeric(next_edges$posteriormean[i])
+          
+          # Append the label1 (from edges_df) to the path
+          new_path <- c(path, next_edges$label1[i])
+          
+          # Continue traversal with the new node
+          traverse_paths(next_edges$to[i], new_path, product * posteriormean)
+        }
+      }
+    }
+    
+    # Start traversal from the root node
+    traverse_paths(root_node, path = character(0), product = 1)
+    
+    # Convert list of paths and products into a data frame
+    path_df <- do.call(rbind, lapply(paths_list, function(x) data.frame(path = paste(x$path, collapse = " -> "), product = x$product)))
+    
+    return(path_df)
+  }
+
+  
+  conditional_df <- reactiveVal(NULL)
+  
+output$unique_values_ui <- renderUI({
+  # Get the unique values list
+  unique_values <- conditional_values()
+  
+  # Create a selectInput with groups
+  selectInput(
+    inputId = "unique_values",
+    label = "Choose Conditionals:",
+    choices = NULL, # We'll populate this dynamically
+    selectize = TRUE,
+    multiple = TRUE
+  )
+})
+
+observe({
+  # Get the unique values
+  unique_values <- conditional_values()
+  
+  # Get shapefile data
+  shapefile_vals <- shapefileData()
+  shapefile_vals <- shapefile_vals[[1]]
+  
+  # Prepare the choices with optgroups and excluding values in shapefileData
+  choices <- list()
+  unique_value_index <- c()  # To store the index for each value
+  
+  for (i in 1:(length(unique_values) - 1)) {
+    # Exclude values found in shapefileData
+    filtered_values <- setdiff(unique_values[[i]], shapefile_vals)
+    
+    # Only add filtered values if they aren't empty
+    if (length(filtered_values) > 0) {
+      # Store the filtered values in choices
+      choices[[paste("Variable", i)]] <- filtered_values
+      
+      # Store the corresponding index for each value
+      unique_value_index <- c(unique_value_index, rep(i, length(filtered_values)))
+    }
+  }
+
+  # Store the index mapping in session for use later
+  session$userData$unique_value_index <- setNames(unique_value_index, unlist(choices))
+  
+  # Update the selectInput choices dynamically, with groups and labels
+  all_choices <- list()
+  for (i in 1:(length(unique_values) - 1)) {
+    # Exclude values found in shapefileData
+    filtered_values <- setdiff(unique_values[[i]], shapefile_vals)
+    
+    # Only add filtered values if they aren't empty
+    if (length(filtered_values) > 0) {
+      # Grouped by the category (e.g., "Variable 1", "Variable 2")
+      all_choices[[paste("Variable", i)]] <- filtered_values
+    }
+  }
+
+  # Update the selectInput choices dynamically with proper categories
+  updateSelectInput(session, "unique_values", 
+                    choices = all_choices,
+                    selected = NULL)  # Default selection
+})
+
+# Observe selected values and output the selected values with their indices
+observe({
+  # Get the selected values from the UI
+  selected_values <- input$unique_values
+  
+  if (length(selected_values) > 0) {
+    # Get the corresponding indices from the stored mapping
+    selected_indices <- session$userData$unique_value_index[selected_values]
+    
+    # Output the selected values and their corresponding indices
+    print(paste(selected_values, "-> Variable", selected_indices))
+    
+  }
+  
+  # Store the selected indices in session to make it accessible later
+
+  
+})
+
+  
+  
+  # Create the dropdown for only the last group in the list (single-select)
+  output$last_group_ui <- renderUI({
+    # Get the unique values list
+    unique_values <- conditional_values()
+    
+    # Get the last group (i.e., the final [[]])
+    last_group <- unique_values[[length(unique_values)]]
+    
+    selectInput(
+      inputId = "last_group",
+      label = "Colour by:",
+      choices = last_group,  # Only show the final group
+      selectize = TRUE  # Enable selectize (optional, makes it searchable)
+    )
+  })
+  
+
+  calculate_conditional_prob <- function(path_df, unique_values, selected_indices, last_group) {
+    # Ensure unique_values is a character vector
+    unique_values <- as.character(unique_values)
+    
+    # Group values by their assigned index
+    grouped_conditions <- split(unique_values, selected_indices)
+    
+    # Step 1: Filter paths directly based on AND/OR logic
+    condition_paths <- path_df[sapply(path_df$path, function(path) {
+      path_components <- unlist(strsplit(path, " -> "))  # Convert path to vector
+      
+      # Apply AND/OR logic for each group
+      all(sapply(grouped_conditions, function(group) {
+        if (length(group) == 1) {
+          group %in% path_components  # AND condition: must be present
+        } else {
+          any(group %in% path_components)  # OR condition: at least one must be present
+        }
+      }))
+    }), , drop = FALSE]  # Prevent accidental list conversion
+    
+    # If no matching paths exist, return 0 probability
+    if (nrow(condition_paths) == 0) {
+      print(paste("P(", last_group, "|", paste(unique_values, collapse = ", "), ") = 0"))
+      return(0)
+    }
+    
+    # Step 2: Compute joint probability P(last_group and unique_values)
+    joint_prob <- sum(condition_paths$product[sapply(condition_paths$path, function(path) {
+      last_group %in% unlist(strsplit(path, " -> "))
+    })])
+    
+    # Step 3: Compute marginal probability P(unique_values)
+    marginal_prob <- sum(condition_paths$product)
+    
+    # Step 4: Compute conditional probability P(last_group | unique_values)
+    conditional_prob <- ifelse(marginal_prob > 0, joint_prob / marginal_prob, 0)
+    
+    print(paste("P(", last_group, "|", paste(unique_values, collapse = ", "), ") = ", conditional_prob, sep = ""))
+    return(conditional_prob)
+  }
+  
+  calculate_area_probabilities <- function(path_df, unique_values, selected_indices, last_group, shapefile_vals) {
+    area_probs <- list()  # Store probabilities for each area
+    
+    # Loop over each area in shapefile_vals
+    for (area in shapefile_vals) {
+      # Filter paths for the current area
+      area_paths <- path_df[sapply(path_df$path, function(path) {
+        area %in% unlist(strsplit(path, " -> "))  # Ensure area is in path
+      }), , drop = FALSE]
+      
+      # If no paths exist for this area, assign probability 0
+      if (nrow(area_paths) == 0) {
+        area_probs[[area]] <- NA
+      } else {
+        # Compute probability for the given area
+        area_probs[[area]] <- calculate_conditional_prob(area_paths, unique_values, selected_indices, last_group)
+      }
+    }
+    
+    return(area_probs)  # Return a named list of probabilities
+  }
+  
+  
   output$ceg_network <- renderVisNetwork({
     data <- contracted_data()
     edges <- data$edges
     nodes <- data$nodes
-    print("ceg data")
-    print(data)
+    
+    
+    # Print the result
+   # print(paste("P(", input$last_group, "|", paste(input$unique_values, collapse = ", "), ") = ", conditional_prob, sep = ""))
+    
+   # print("ceg data")
+  #  assign("ceg_data", list(nodes = nodes, edges = edges), envir = .GlobalEnv)
+  #  print(data)
     
     if (is.null(contracted_data())) {
       return(NULL)
@@ -2854,6 +3144,12 @@ server <- function(input, output, session) {
         
         leaflet(data = shape_data) %>%
           addTiles() %>%
+          onRender(
+            "function(el, x) {
+          L.control.zoom({
+            position:'bottomright'
+          }).addTo(this);
+        }")%>%
           addPolygons(
             layerId = ~shape_data[[1]], # Use the BCU column as unique polygon IDs
             fillColor = ~fillColor, # Assign colorblind-friendly colors
@@ -3357,9 +3653,7 @@ server <- function(input, output, session) {
   })
   
   
-  
-  
-  
+ 
   
   
   
@@ -3431,9 +3725,9 @@ server <- function(input, output, session) {
   })
   
   
-  
-  
+
   
 }
+
 
 shinyApp(ui, server)
