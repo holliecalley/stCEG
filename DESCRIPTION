@@ -8,8 +8,7 @@ Authors@R: c(
                      GitHub = "holliecalley")),
   person("Daniel", "Williamson", role = "ctb",
          comment = c(ORCID = "0000-0001-8917-3300",
-                     affiliation = "University of Exeter"))
-)
+                     affiliation = "University of Exeter")))
 Description: 'stCEG' is an R package with an integrated 'Shiny' interface that facilitates the creation of Chain Event Graphs (CEGs) over spatial areas. It allows users to fully customise both the structure and underlying model of the CEG, offering a high degree of flexibility for tailored analyses.
 URL: https://github.com/holliecalley/stCEG
 BugReports: https://github.com/holliecalley/stCEG/issues
