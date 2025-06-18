@@ -9,7 +9,6 @@
 #'   \item `staged_tree_obj$x$nodes` : A data frame of node attributes with columns such as `id`, `level`, `colour`, `label`, etc.
 #'   \item `staged_tree_obj$x$edges` : A data frame of edge attributes with columns such as `from`, `to`, `label1`, `label2`, `label3`, etc.
 #' }
-#' @param prior_table A data frame containing prior information for each stage, including `Colour`, `Level`, `Stage`, and other relevant columns.
 #' @param level_separation Numeric. The level separation value for hierarchical layout in the visualised graph. Default is 1200.
 #' @param node_distance Numeric. The node distance value for hierarchical layout in the visualised graph. Default is 400.
 #' @param label A character string specifying the type of label to display on edges. Options include:
@@ -29,17 +28,25 @@
 #'
 #' The function also provides detailed printing of updated edges and contracted nodes for debugging purposes.
 #'
-#' @import purrr
 #' @import stringr
 #' @import DT
+#' @importFrom purrr pmap map_chr
 #'
 #' @examples
+#' \dontrun{
 #' # Example usage of the create_ceg function:
-#' event_tree <- create_event_tree(data, c(2,4,5), "both", level_separation = 1500, node_distance = 250)  # Generate the graph data
-#' coloured_tree <- calculate_ahc_colouring(event_tree)
+#' data <- data.frame(
+#'   Area = sample(c("Enfield", "Lewisham"), 100, replace = TRUE),
+#'   DomesticAbuse = sample(c("Yes", "No"), 100, replace = TRUE),
+#'   Sex = sample(c("Male", "Female"), 100, replace = TRUE),
+#'   Solved = sample(c("Solved", "Unsolved"), 100, replace = TRUE)
+#' )
+#' event_tree <- create_event_tree(data, columns = c(1:4), "both")
+#' coloured_tree <- ahc_colouring(event_tree)
 #' tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
 #' staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
 #' ceg <- create_ceg(staged_tree, tree_priors, view_table = TRUE)
+#' }
 #'
 #' @export
 #'
@@ -141,7 +148,7 @@ create_ceg <- function(staged_tree_obj, level_separation = 1200, node_distance =
   # Check the column names of updated_edges to ensure 'colour' is the correct name
   #print(colnames(updated_edges))
 
-print(updated_edges)
+#print(updated_edges)
 
   # Merge and summarize edges
   merged_edges <- updated_edges %>%
@@ -156,7 +163,7 @@ print(updated_edges)
       .groups = 'drop'
     )
 
-  print(merged_edges)
+  #print(merged_edges)
 
   merged_edges <- merged_edges %>%
     group_by(colour_from) %>%
@@ -207,9 +214,8 @@ print(updated_edges)
   #assign("ceg_data", list(nodes = contracted_nodes, edges = merged_edges), envir = .GlobalEnv)
   # Return the contracted nodes and edges
 
-  print("testing")
   # print(contracted_nodes)
-  print(merged_edges)
+  #print(merged_edges)
 
   if (label == "posterior") {
     merged_edges$label <- merged_edges$label_individuals  # Assign "names" (label1)
@@ -383,13 +389,11 @@ print(updated_edges)
     )%>%
     visEvents(stabilizationIterationsDone = "function() { this.physics.options.enabled = false; }")
 
-  library(DT)
-
   # Count number of unique stages
   num_stages <- length(unique(merged_table$Stage))
 
   # Create the datatable with styling
-  UpdateTable <- datatable(
+  UpdateTable <- DT::datatable(
     merged_table,
     escape = FALSE,
     class = 'stripe hover row-border compact',  # modern minimal style
@@ -504,71 +508,41 @@ compare_ceg_models <- function(summary1, summary2) {
     preferred_model = ifelse(log_BF > 0, "Model 1", "Model 2")
   )
 
+  jeffreys_scale <- function(BF) {
+    if (BF <= 0 || is.na(BF)) {
+      return("Invalid Bayes Factor")
+    }
+
+    evidence_strength <- function(x) {
+      if (x >= 1 & x < 3) {
+        return("Weak")
+      } else if (x >= 3 & x < 10) {
+        return("Moderate")
+      } else if (x >= 10 & x < 30) {
+        return("Strong")
+      } else if (x >= 30 & x < 100) {
+        return("Very strong")
+      } else {
+        return("Decisive")
+      }
+    }
+
+    if (BF == 1) {
+      return("No evidence either way")
+    } else if (BF > 1) {
+      return(paste(evidence_strength(BF), "evidence for Model 2 over Model 1"))
+    } else {
+      return(paste(evidence_strength(1 / BF), "evidence for Model 1 over Model 2"))
+    }
+  }
+
   # Print the requested values
   cat("Log marginal of model 1: ", round(log_marginal_1, 3), "\n")
   cat("Log marginal of model 2: ", round(log_marginal_2, 3), "\n")
   cat("Log Bayes factor of Model 1 vs Model 2: ", round(log_BF, 3), "\n")
-  cat("Bayes factor of Model 1 vs Model 2: ", round(BF, 3), "\n")
-
+  #cat("Bayes factor of Model 1 vs Model 2: ", BF, "\n")
+  #cat("Jeffreys interpretation: ", jeffreys_scale(BF), "\n")
   cat("Preferred Model:", preferred_model, "\n")
-
-  jeffreys_scale <- function(BF) {
-    # Handle positive Bayes factors
-    if (BF < 1) {
-      return("Evidence against the alternative model")
-    } else if (BF >= 1 & BF < 3) {
-      return("Weak evidence for the alternative model")
-    } else if (BF >= 3 & BF < 10) {
-      return("Moderate evidence for the alternative model")
-    } else if (BF >= 10 & BF < 30) {
-      return("Strong evidence for the alternative model")
-    } else if (BF >= 30 & BF < 100) {
-      return("Very strong evidence for the alternative model")
-    } else {
-      return("Decisive evidence for the alternative model")
-    }
-  }
-
-  # Extend to handle the negative reciprocal
-  #jeffreys_scale_negative <- function(BF) {
-  #  # Reciprocal represents evidence for Model 2, interpreting negative Bayes factor
-  #  if (BF < 1) {
-  #    return("Weak evidence for Model 2 (moderate evidence against Model 1)")
-#    } else if (BF >= 1 & BF < 3) {
-#      return("Moderate evidence for Model 2 (weak evidence against Model 1)")
-#    } else if (BF >= 3 & BF < 10) {
-#      return("Strong evidence for Model 2")
- #   } else if (BF >= 10 & BF < 30) {
-#      return("Very strong evidence for Model 2")
-#    } else if (BF >= 30 & BF < 100) {
- #     return("Decisive evidence for Model 2")
-#    } else {
-#      return("Extreme evidence for Model 2")
-#    }
-#  }
-#
-#  # Jeffreys scale interpretation for Model 1 (positive Bayes factor)
-#  jeffreys_model1 <- jeffreys_scale(BF)
- #
-#  # Jeffreys scale interpretation for Model 2 (negative reciprocal of Bayes factor)
-
-##  jeffreys_model2 <- jeffreys_scale_negative(1 / BF)
- #
-  # Prepare the table comparing Bayes factors with Jeffreys scale
-#  comparison_table <- data.frame(
- #   Model = c("Model 1", "Model 2"),
-  #  LogBayesFactor = c(log_BF, -log_BF),
-  #  BayesFactor = c(BF, 1 / BF),  # For Model 2, it's the inverse of Model 1
-  #  Interpretation = c(jeffreys_model1, jeffreys_model2)
-  #)
-#
-#  # Print the comparison table
- # cat("Log Bayes Factors Comparison and Jeffreys Scale of Evidence:\n")
- # print(comparison_table)
-
-  # Add statement about the negative reciprocal favoring Model 2
-  #cat("\nNote: The negative reciprocal of the Bayes factor favors Model 2, as it would represent evidence against Model 1 in this case.\n")
-
 
   class(result) <- "ceg_model_comparison"
   invisible(result)

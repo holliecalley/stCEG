@@ -3,6 +3,7 @@
 #' This function provides a summary of an object of class `event_tree`. It outputs key information about the nodes and edges of the event tree, including the number of nodes and edges, unique levels and labels, and the labels of the edges (with newlines replaced by spaces).
 #'
 #' @param object An object of class `event_tree`. This object should have a list structure with `eventtree` containing a nested list where `x` is a dataframe with `nodes` and `edges` attributes.
+#' @param ... Additional arguments passed to or from other methods (ignored).
 #'
 #' @return Prints a summary of the event tree to the console, including:
 #'   - The number of nodes and the unique node levels
@@ -11,10 +12,11 @@
 #'
 #' @examples
 #' # Example of using the summary function with an event_tree object
+#' \dontrun{
 #' summary(event_tree_object)
-#'
+#'}
 #' @export
-summary.event_tree <- function(object) {
+summary.event_tree <- function(object, ...) {
   # Ensure the object is of class 'event_tree'
   if (!inherits(object, "event_tree")) {
     stop("Object must be of class 'event_tree'")
@@ -40,7 +42,7 @@ summary.event_tree <- function(object) {
   edge_labels <- paste(edge_labels, collapse = "\n") # Replace newlines with spaces in the labels themselves
 
   # Print each label on a new line
-  cat("Edge labels:\n", "==============\n"edge_labels)
+  cat("Edge labels:\n", "==============\n", edge_labels)
 
 }
 
@@ -53,7 +55,7 @@ summary.event_tree <- function(object) {
 #' @param ... Additional arguments (currently unused).
 #'
 #' @details
-#' This function prints a summary that includes:
+#' This function #prints a summary that includes:
 #' \itemize{
 #'   \item Total number of nodes and edges.
 #'   \item Number of nodes still uncoloured (white) that are not in the first or last level.
@@ -140,13 +142,10 @@ summary.staged_tree <- function(object, ...) {
 #' }
 #'
 #' @details
-#' The log marginal likelihood is computed using the Dirichlet-multinomial formula:
-#' \deqn{
-#'   \log p(x \mid \alpha) = \log \Gamma\left( \sum \alpha_i \right) - \log \Gamma\left( \sum (\alpha_i + x_i) \right)
-#'   + \sum \left[ \log \Gamma(\alpha_i + x_i) - \log \Gamma(\alpha_i) \right]
-#' }
+#' The log marginal likelihood is computed using the Dirichlet-multinomial formula.
 #'
 #' The effective sample size for a stage is defined as \eqn{ESS = \sum_j (\alpha_{ij} + y_{ij})}.
+#' It represents the amount of information (prior + observed) available for that stage.
 #'
 #' @examples
 #' \dontrun{
@@ -169,6 +168,9 @@ summary.chain_event_graph <- function(object, ...) {
     prior <- as.numeric(unlist(strsplit(update_table$Prior[i], ",")))
     data <- as.numeric(unlist(strsplit(update_table$Data[i], ",")))
 
+    prior <- ifelse(prior == 0, 1e-10, prior)
+    data <- ifelse(data == 0, 1e-10,data)
+
     alpha_sum <- sum(prior)
     x_sum <- sum(data)
     posterior_sum <- alpha_sum + x_sum
@@ -177,6 +179,7 @@ summary.chain_event_graph <- function(object, ...) {
     term2 <- sum(lgamma(prior + data) - lgamma(prior))
 
     stage_score <- term1 + term2
+    #if (is.nan(stage_score)) stage_score <- 0
     stage_scores[i] <- stage_score
     total_score <- total_score + stage_score
 
@@ -185,20 +188,35 @@ summary.chain_event_graph <- function(object, ...) {
     effective_sample_sizes[i] <- sum(alpha_star)
   }
 
+  # Create separate flag column for low ESS
+  ess_flags <- ifelse(effective_sample_sizes < 100, "**", "")
+
+  df <- data.frame(
+    Stage = update_table$Stage,
+    LogScore = round(stage_scores, 3),
+    ESS = round(effective_sample_sizes, 2),
+    Flag = ess_flags,  # temporary name
+    stringsAsFactors = FALSE
+  )
+
+  # Rename the last column to have no name
+  names(df)[4] <- ""
+
+  # Store in result
   result <- list(
     total_log_marginal_likelihood = total_score,
-    per_stage_log_scores = data.frame(
-      Stage = update_table$Stage,
-      LogScore = round(stage_scores, 3),
-      ESS = round(effective_sample_sizes, 2)
-    )
+    per_stage_log_scores = df
   )
 
   cat("Chain Event Graph Summary\n")
   cat("--------------------------\n")
   cat("Total Log Marginal Likelihood: ", round(total_score, 3), "\n\n")
-  cat("Per-Stage Log Scores and Effective Sample Size:\n")
-  print(result$per_stage_log_scores)
+  cat("Per-stage metrics:\n")
+  print(result$per_stage_log_scores, row.names = FALSE)
+
+  cat("\nNote: ESS (Effective Sample Size) reflects the total information (prior + data) available for each stage.\n")
+  cat("      Stages with ESS < 100 are flagged with '**' as potentially low-information stages.\n")
+  cat("      Increasing the strength of the prior would help this.\n")
 
   class(result) <- "summary.chain_event_graph"
   return(invisible(result))

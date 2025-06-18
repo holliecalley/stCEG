@@ -11,15 +11,25 @@
 #' @details
 #' This function processes an event tree or partial staged tree, calculates priors based on the outgoing edges from each node, and performs Agglomerative Hierarchical Clustering (AHC) to colour the nodes of the event tree. It returns a `visNetwork` object that can be visualized as a coloured event tree. The function also computes the likelihood and scores based on merging stages in the event tree.
 #'
-#' @import randomcoloR
 #'
 #' @examples
-#' # Assuming 'event_tree_data' is a preloaded object with event tree or staged tree data:
-#' coloured_tree <- ahc_colouring(event_tree_data)
-#' coloured_tree
+#' \dontrun{
+#' data <- data.frame(
+#'   Area = sample(c("Enfield", "Lewisham"), 100, replace = TRUE),
+#'   DomesticAbuse = sample(c("Yes", "No"), 100, replace = TRUE),
+#'   Sex = sample(c("Male", "Female"), 100, replace = TRUE),
+#'   Solved = sample(c("Solved", "Unsolved"), 100, replace = TRUE)
+#' )
+#' event_tree <- create_event_tree(data, columns = c(1:4), "both")
+#' coloured_tree <- ahc_colouring(event_tree)
+#' }
 #'
 #' @export
 ahc_colouring <- function(event_tree_obj, level_separation = 1000, node_distance = 300) {
+
+  if (!requireNamespace("randomcoloR", quietly = TRUE)) {
+    stop("Package 'randomcoloR' needed for this function to work. Please install it.", call. = FALSE)
+  }
 
   exampledata <- event_tree_obj$filtereddf
   #exampledata
@@ -370,7 +380,7 @@ ahc_colouring <- function(event_tree_obj, level_separation = 1000, node_distance
   #print(flattened_list)
 
   num_colours <- length(flattened_list) # Number of groups
-  colors <- distinctColorPalette(num_colours)
+  colors <- randomcoloR::distinctColorPalette(num_colours)
 
   # Step 2: Update the nodes dataframe with these colours
   for (i in 1:num_colours) {
@@ -416,9 +426,9 @@ ahc_colouring <- function(event_tree_obj, level_separation = 1000, node_distance
   #print(nodes)
   # Check for conflicts: Nodes with the same colour but different outgoing edge labels
   conflicting_nodes <- nodes %>%
-    dplyr::filter(color != "#FFFFFF") %>%  # Ignore white-coloured nodes
+    filter(color != "#FFFFFF") %>%  # Ignore white-coloured nodes
     group_by(color) %>%
-    dplyr::filter(n_distinct(outgoing_labels) > 1) %>%
+    filter(n_distinct(outgoing_labels) > 1) %>%
     pull(id) %>%
     unique()
 

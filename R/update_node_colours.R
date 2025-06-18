@@ -28,7 +28,7 @@
 #' @examples
 #' \dontrun{
 #'   # Example event tree object
-#'   event_tree <- create_event_tree(my_data)
+#' event_tree <- create_event_tree(data, columns = c(1:4), "both")
 #'
 #'   # Delete nodes and update colours
 #'   updated_tree <- delete_nodes(event_tree, nodes_to_delete = c("s3", "s5"))
@@ -44,7 +44,8 @@
 #'   coloured_tree$stagedtree
 #' }
 #'
-#' @import visNetwork dplyr
+#' @import visNetwork
+#' @importFrom dplyr %>% select filter mutate arrange summarise summarise_all group_by ungroup distinct rename pull relocate bind_rows bind_cols left_join right_join inner_join full_join anti_join semi_join rowwise across everything case_when
 #' @export
 update_node_colours <- function(event_tree_obj, node_groups, colours, level_separation = 1000, node_distance = 300) {
 
@@ -105,8 +106,8 @@ update_node_colours <- function(event_tree_obj, node_groups, colours, level_sepa
   }
 
 
-  print("nodes2")
-  print(nodes2)
+  #print("nodes2")
+  #print(nodes2)
   # Check for conflicts: Nodes with the same colour but different outgoing edge labels
   conflicting_nodes <- nodes2 %>%
     filter(color != "#FFFFFF") %>%  # Ignore white-coloured nodes

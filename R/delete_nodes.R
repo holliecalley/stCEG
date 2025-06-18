@@ -29,7 +29,13 @@
 #' @examples
 #' \dontrun{
 #'   # Example event tree object
-#'   event_tree <- create_event_tree(my_data)
+#' data <- data.frame(
+#'   Area = sample(c("Enfield", "Lewisham"), 100, replace = TRUE),
+#'   DomesticAbuse = sample(c("Yes", "No"), 100, replace = TRUE),
+#'   Sex = sample(c("Male", "Female"), 100, replace = TRUE),
+#'   Solved = sample(c("Solved", "Unsolved"), 100, replace = TRUE)
+#' )
+#' event_tree <- create_event_tree(data, columns = c(1:4), "both")
 #'
 #'   # Delete nodes s3 and s5
 #'   updated_tree <- delete_nodes(event_tree, nodes_to_delete = c("s3", "s5"))
@@ -38,7 +44,8 @@
 #'   updated_tree$eventtree
 #' }
 #'
-#' @import visNetwork dplyr
+#' @import visNetwork
+#' @importFrom dplyr %>% select filter mutate arrange summarise summarise_all group_by ungroup distinct rename pull relocate bind_rows bind_cols left_join right_join inner_join full_join anti_join semi_join rowwise across everything case_when
 #' @export
 delete_nodes <- function(event_tree_obj, nodes_to_delete, level_separation = 1000, node_distance = 300) {
   # Extract nodes and edges from the create_event_tree object
@@ -112,11 +119,11 @@ delete_nodes <- function(event_tree_obj, nodes_to_delete, level_separation = 100
     added_edges <- setdiff(paste(data2$edges$from, data2$edges$to),
                            paste(data_before$edges$from, data_before$edges$to))
 
-    cat("Edges removed:\n")
-    print(data_before$edges[with(data_before$edges, paste(from, to)) %in% deleted_edges, ])
+    #cat("Edges removed:\n")
+    #print(data_before$edges[with(data_before$edges, paste(from, to)) %in% deleted_edges, ])
 
-    cat("Edges added:\n")
-    print(data2$edges[with(data2$edges, paste(from, to)) %in% added_edges, ])
+    #cat("Edges added:\n")
+    #print(data2$edges[with(data2$edges, paste(from, to)) %in% added_edges, ])
 
     # Extract numeric parts of the node IDs
     get_numeric_part <- function(x) as.numeric(gsub("[^0-9]", "", x))
@@ -137,11 +144,6 @@ delete_nodes <- function(event_tree_obj, nodes_to_delete, level_separation = 100
 
     deleted_from_counts <- table(data_before$edges$from[with(data_before$edges, paste(from, to)) %in% deleted_edges])
     added_from_counts <- table(data2$edges$from[with(data2$edges, paste(from, to)) %in% added_edges])
-
-    print(deleted_from_counts)
-    print(added_from_counts)
-    print("data2")
-    print(data2)
 
 
 
@@ -208,8 +210,8 @@ delete_nodes <- function(event_tree_obj, nodes_to_delete, level_separation = 100
     # This step depends on how you want to append or assign new IDs. Here we reassign sequential IDs.
 
     # Check the updated data
-    print(data2$nodes)
-    print(data2$edges)
+    #print(data2$nodes)
+    #print(data2$edges)
 
     data2$nodes <- data2$nodes %>%
       mutate(fixed = list(list(x = TRUE, y = FALSE)))

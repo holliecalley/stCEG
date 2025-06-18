@@ -142,8 +142,8 @@ staged_tree_prior <- function(staged_tree_obj, prior_table,level_separation = 15
     edges_df$label <- edges_df$label_prior_mean  # Assign "priors" (label_prior_frac)
   }
 
-  print(nodes_df)
-  print(edges_df)
+  #print(nodes_df)
+  #print(edges_df)
   #assign("stagedtree_data", list(nodes = nodes_df, edges = edges_df), envir = .GlobalEnv)
 
   network_plot <- visNetwork(nodes = nodes_df, edges = edges_df) %>%

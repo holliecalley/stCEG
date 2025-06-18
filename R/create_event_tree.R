@@ -25,8 +25,9 @@
 #'
 #' @import igraph
 #' @import visNetwork
-#' @import dplyr
-#' @import tidyr
+#' @importFrom dplyr %>% select filter mutate arrange summarise summarise_all group_by ungroup distinct rename pull relocate bind_rows bind_cols left_join right_join inner_join full_join anti_join all_of semi_join rowwise across everything case_when
+#' @importFrom tidyr pivot_longer pivot_wider separate unite drop_na replace_na fill complete nesting expand_grid expand
+
 #'
 #' @examples
 #' \dontrun{
@@ -37,7 +38,7 @@
 #'   Solved = sample(c("Solved", "Unsolved"), 100, replace = TRUE)
 #' )
 #'
-#' create_event_tree(data, columns = 1:4)
+#' event_tree <- create_event_tree(data, columns = c(1:4), "both")
 #' }
 #'
 #' @export
@@ -77,10 +78,8 @@ create_event_tree <- function(dataset, columns = seq_along(dataset), label_type 
     start_index <- start_index + total_states
   }
 
-  print("unique values list")
-  print(unique_values_list)
-  print("state names list")
-  print(state_names_list)
+ #print(unique_values_list)
+ #print(state_names_list)
 
   # Add vertices to the graph: starting with the root node "s0"
   g <- add_vertices(g, 1, name = "s0")
@@ -90,8 +89,8 @@ create_event_tree <- function(dataset, columns = seq_along(dataset), label_type 
     g <- add_vertices(g, length(state_names_list[[i]]), name = state_names_list[[i]])
   }
   vertex_names <- V(g)$name
-  print("Vertex names of the graph:")
-  print(vertex_names)
+  #print("Vertex names of the graph:")
+  #print(vertex_names)
 
   # Function to generate combinations and counts dynamically
   generate_combinations <- function(df, cols) {
@@ -125,7 +124,6 @@ create_event_tree <- function(dataset, columns = seq_along(dataset), label_type 
 
   # Calculate counts dynamically
   counts_list <- lapply(1:num_vars, function(x) generate_combinations(homicide_data2, 1:x))
-  print(counts_list)
   # Add edges between parent and child nodes dynamically
   edges <- c()
   state_indices <- rep(1, num_vars)
@@ -167,15 +165,9 @@ create_event_tree <- function(dataset, columns = seq_along(dataset), label_type 
     }
   }
 
-  # Print the final edge list in the desired format
-  print("edges")
-  print(edges)
-
-
 
 
   g <- add_edges(g, edges)
-  print(g)
   # Plot the graph
   layout <- layout_as_tree(g)
   layout <- -layout[, 2:1]
@@ -188,9 +180,9 @@ create_event_tree <- function(dataset, columns = seq_along(dataset), label_type 
   # Adjust the times argument in the rep function
   # `1` is for the root node, and the rest corresponds to the number of states at each level
   num_levels <- num_vars + 1  # Including the root node
-  print("state_names_list")
+  #print("state_names_list")
   data$nodes$level <- rep(1:num_levels, times = c(1, sapply(1:num_vars, function(x) length(state_names_list[[x]]))))
-  print(data$edges)
+  #print(data$edges)
   data$nodes$shape <- 'dot'
   data$nodes$size <- 100
   data$nodes$color.background <- "#FFFFFF"
@@ -204,8 +196,6 @@ create_event_tree <- function(dataset, columns = seq_along(dataset), label_type 
   # Step 1: Find the union of all column names across the data frames in counts_list
   # Step 1: Find the union of all column names across the data frames in counts_list
   all_column_names <- unique(unlist(lapply(counts_list, colnames)))
-  print("all_column_names")
-  print(all_column_names)
   # Step 2: Function to add missing columns to each data frame and ensure "count" is last
   align_columns <- function(df, all_column_names) {
     missing_cols <- setdiff(all_column_names, colnames(df))  # Find columns that are missing
@@ -221,9 +211,6 @@ create_event_tree <- function(dataset, columns = seq_along(dataset), label_type 
 
   # Step 4: Flatten the list of aligned data frames into one using rbind
   df_flat <- do.call(rbind, counts_list_aligned)
-
-  print("df_flat")
-  print(df_flat)
 
   get_last_non_zero_na_rowwise <- function(df) {
     # Exclude the 'count' column

@@ -15,26 +15,17 @@
 An invisible object of class \code{summary.chain_event_graph}, which is a list containing:
 \describe{
 \item{total_log_marginal_likelihood}{Total log marginal likelihood across all stages.}
-\item{per_stage_log_scores}{A data frame with log scores for each stage.}
+\item{per_stage_log_scores}{A data frame with log scores and effective sample sizes (ESS) for each stage.}
 }
 }
 \description{
-Computes the total log marginal likelihood and per-stage log scores for a fitted Chain Event Graph (CEG) model using conjugate prior/posterior updates.
+Computes the total log marginal likelihood, effective sample size (ESS), and per-stage log scores for a fitted Chain Event Graph (CEG) model using conjugate prior/posterior updates.
 }
 \details{
-The function uses the following log marginal likelihood formula for each stage:
-\deqn{
-  \log p(x \mid \alpha) = \log \Gamma\left( \sum \alpha_i \right) - \log \Gamma\left( \sum (\alpha_i + x_i) \right)
-  + \sum \left[ \log \Gamma(\alpha_i + x_i) - \log \Gamma(\alpha_i) \right]
-}
-where \eqn{\alpha} is the Dirichlet prior vector and \eqn{x} is the vector of observed counts for a given stage.
+The log marginal likelihood is computed using the Dirichlet-multinomial formula.
 
-The required \code{update_table} must include:
-\itemize{
-\item A \code{Stage} column with stage identifiers.
-\item A \code{Prior} column with comma-separated numeric values.
-\item A \code{Data} column with comma-separated numeric values (observed counts).
-}
+The effective sample size for a stage is defined as \eqn{ESS = \sum_j (\alpha_{ij} + y_{ij})}.
+It represents the amount of information (prior + observed) available for that stage.
 }
 \examples{
 \dontrun{

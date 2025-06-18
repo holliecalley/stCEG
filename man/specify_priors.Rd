@@ -28,24 +28,14 @@ For the "Uniform" and "Phantom" priors, the function calculates the priors for e
 The "Custom" option allows the user to manually input prior values for each row. If incorrect values are provided, an error will be raised.
 }
 \examples{
-staged_tree_obj <- list(
-  stagedtree = list(
-    x = list(
-      nodes = data.frame(
-        color = c("#FFFFFF", "#FF0000"),
-        level2 = c(1, 2),
-        outgoing_edges2 = c(2, 3),
-        number_nodes = c(1, 2)
-      ),
-      edges = data.frame(
-        from = c(1, 2),
-        to = c(2, 3)
-      )
-    )
-  )
+\dontrun{
+data <- data.frame(
+  Area = sample(c("Enfield", "Lewisham"), 100, replace = TRUE),
+  DomesticAbuse = sample(c("Yes", "No"), 100, replace = TRUE),
+  Sex = sample(c("Male", "Female"), 100, replace = TRUE),
+  Solved = sample(c("Solved", "Unsolved"), 100, replace = TRUE)
 )
-
-specify_priors(staged_tree_obj, prior_type = "Uniform")
-specify_priors(staged_tree_obj, prior_type = "Phantom")
-specify_priors(staged_tree_obj, prior_type = "Custom")
+event_tree <- create_event_tree(data, columns = c(1:4), "both")
+coloured_tree <- ahc_colouring(event_tree)
+tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")}
 }

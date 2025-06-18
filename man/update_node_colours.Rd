@@ -53,7 +53,7 @@ The function follows these steps:
 \examples{
 \dontrun{
   # Example event tree object
-  event_tree <- create_event_tree(my_data)
+event_tree <- create_event_tree(data, columns = c(1:4), "both")
 
   # Delete nodes and update colours
   updated_tree <- delete_nodes(event_tree, nodes_to_delete = c("s3", "s5"))

@@ -34,8 +34,6 @@ Default is \code{"posterior_mean"}.
 }}
 
 \item{view_table}{Logical. Whether to display the summary table of the aggregated CEG data in the console. Default is \code{FALSE}.}
-
-\item{prior_table}{A data frame containing prior information for each stage, including \code{Colour}, \code{Level}, \code{Stage}, and other relevant columns.}
 }
 \value{
 A \code{visNetwork} object representing the Chain Event Graph, including contracted nodes and updated edges.
@@ -53,11 +51,19 @@ with hierarchical layout, customizable labels, and node distance adjustments.
 The function also provides detailed printing of updated edges and contracted nodes for debugging purposes.
 }
 \examples{
+\dontrun{
 # Example usage of the create_ceg function:
-event_tree <- create_event_tree(data, c(2,4,5), "both", level_separation = 1500, node_distance = 250)  # Generate the graph data
-coloured_tree <- calculate_ahc_colouring(event_tree)
+data <- data.frame(
+  Area = sample(c("Enfield", "Lewisham"), 100, replace = TRUE),
+  DomesticAbuse = sample(c("Yes", "No"), 100, replace = TRUE),
+  Sex = sample(c("Male", "Female"), 100, replace = TRUE),
+  Solved = sample(c("Solved", "Unsolved"), 100, replace = TRUE)
+)
+event_tree <- create_event_tree(data, columns = c(1:4), "both")
+coloured_tree <- ahc_colouring(event_tree)
 tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
 staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
 ceg <- create_ceg(staged_tree, tree_priors, view_table = TRUE)
+}
 
 }

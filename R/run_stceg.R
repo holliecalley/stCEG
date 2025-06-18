@@ -29,12 +29,12 @@
 #' visualizations and data manipulation features.
 #'
 #' @examples
+#' \dontrun{
 #' # Run the app
-#' run_stceg()
+#' run_stceg()}
 #'
-#' @import shiny
+#' @importFrom shiny HTML actionButton checkboxInput column conditionalPanel eventReactive fileInput fluidRow h2 mainPanel modalButton modalDialog numericInput observe observeEvent radioButtons reactive reactiveVal reactiveValues removeModal renderText renderUI req selectInput shinyApp showModal showNotification sidebarLayout sidebarPanel sliderInput tabPanel tagList tags textInput textOutput uiOutput updateSelectInput
 #' @import visNetwork
-#' @import colourpicker
 #' @import shinyWidgets
 #' @import tidyverse
 #' @import sf
@@ -46,74 +46,59 @@
 #' @import colorspace
 #' @import igraph
 #' @import shinycssloaders
-#' @import dirmult
 #' @import hwep
 #' @import RColorBrewer
-#' @import randomcoloR
-#' @import gtools
 #' @import zoo
 #' @import leaflet
 #' @import htmlwidgets
-#' @import shinyjs
-#' @import conflicted
-#' @import viridis
 #' @import scales
+#' @importFrom shinyjs click delay disable disabled enable extendShinyjs hidden hide hideElement html info inlineCSS onclick onevent removeClass reset runjs showElement showLog toggle toggleClass toggleCssClass useShinyjs
+#' @importFrom viridis scale_color_viridis scale_colour_viridis scale_fill_viridis
+#' @importFrom gtools rdirichlet
+#' @importFrom stats setNames smooth
+#' @importFrom utils  tail read.csv unzip
+#' @importFrom graphics arrows
+#' @importFrom dplyr %>% select filter mutate arrange summarise summarise_all group_by ungroup distinct rename pull relocate bind_rows bind_cols left_join right_join inner_join full_join anti_join semi_join rowwise across everything case_when
+#' @importFrom dplyr summarize count join_by n n_distinct first reframe slice
+#' @importFrom dplyr coalesce na_if
+#' @importFrom purrr pmap
 #'
 #' @export
 run_stceg <- function(){
-  library(shiny)
-  library(visNetwork)
-  library(viridis)
-  library(scales)
-  library(shinyWidgets)
-  library(htmlwidgets)
-  library(tidyverse)
-  library(sf)
-  library(spData)
-  library(shinyjqui)
-  library(DT)
-  library(sortable)
-  library(stagedtrees)
-  library(colorspace)
-  library(igraph)
-  library(shinycssloaders)
-  library(dirmult)
-  library(hwep)
-  library(RColorBrewer)
-  library(randomcoloR)
-  library(gtools)
-  library(zoo)
-  library(leaflet)
-  library(shinyjs)
-  library(conflicted)
-  library(purrr)
 
-    conflicted::conflict_prefer("rdirichlet", "gtools")   # Fix dirmult vs. gtools
-    conflicted::conflict_prefer("as_data_frame", "igraph") # Fix dplyr vs. igraph
-    conflicted::conflict_prefer("groups", "igraph")        # Fix dplyr vs. igraph
-    conflicted::conflict_prefer("permute", "igraph")       # Fix gtools vs. igraph
-    conflicted::conflict_prefer("union", "igraph")         # Fix dplyr vs. igraph
-    conflicted::conflict_prefer("dataTableOutput", "shiny") # Fix DT vs. shiny
-    conflicted::conflict_prefer("renderDataTable", "shiny") # Fix DT vs. shiny
-    conflicted::conflict_prefer("alert", "shinyjs")        # Fix shinyWidgets vs. shinyjs
-    conflicted::conflict_prefer("runExample", "shinyjs")   # Fix shiny vs. shinyjs
-    conflicted::conflict_prefer("show", "shinyjs")         # Fix colorspace vs. shinyjs
-    conflicted::conflict_prefer("crossing", "tidyr")       # Fix igraph vs. tidyr
-    conflicted::conflict_prefer("filter", "dplyr")
+  if (!requireNamespace("randomcoloR", quietly = TRUE)) {
+    stop("Package 'randomcoloR' needed for this function to work. Please install it.", call. = FALSE)
+  }
+  if (!requireNamespace("colourpicker", quietly = TRUE)) {
+    stop("Package 'colourpicker' needed for this function to work. Please install it.", call. = FALSE)
+  }
+    #conflicted::conflict_prefer("rdirichlet", "gtools")   # Fix dirmult vs. gtools
+    #conflicted::conflict_prefer("as_data_frame", "igraph") # Fix dplyr vs. igraph
+    #conflicted::conflict_prefer("groups", "igraph")        # Fix dplyr vs. igraph
+    #conflicted::conflict_prefer("permute", "igraph")       # Fix gtools vs. igraph
+    #conflicted::conflict_prefer("union", "igraph")         # Fix dplyr vs. igraph
+    #conflicted::conflict_prefer("dataTableOutput", "shiny") # Fix DT vs. shiny
+    #conflicted::conflict_prefer("renderDataTable", "shiny") # Fix DT vs. shiny
+    #conflicted::conflict_prefer("alert", "shinyjs")        # Fix shinyWidgets vs. shinyjs
+    #conflicted::conflict_prefer("runExample", "shinyjs")   # Fix shiny vs. shinyjs
+    #conflicted::conflict_prefer("show", "shinyjs")         # Fix colorspace vs. shinyjs
+    #conflicted::conflict_prefer("crossing", "tidyr")       # Fix igraph vs. tidyr
+    #conflicted::conflict_prefer("filter", "dplyr")
 
-    ui <- fluidPage(
-      titlePanel("stCEG - Modelling Over Spatial Areas Using Chain Event Graphs"),
-      tags$head(
-        tags$style(HTML("
-      .leaflet-left .leaflet-control{
-        visibility: hidden;
-      }
-    "))
-      ),
-      tabsetPanel(
-        tabPanel("Upload Data",
-                 sidebarLayout(
-                   sidebarPanel(fileInput(
+    ui <- shiny::fluidPage(
+      shiny::titlePanel("stCEG - Modelling Over Spatial Areas Using Chain Event Graphs"),
+      shiny::tags$head(
+        shiny::tags$style(shiny::HTML("
+    .leaflet-left .leaflet-control {
+      visibility: hidden;
+    }
+  "))
+      )
+      ,
+      shiny::tabsetPanel(
+        shiny::tabPanel("Upload Data",
+                 shiny::sidebarLayout(
+                   shiny::sidebarPanel(shiny::fileInput(
                      "file1",
                      "Choose CSV File",
                      multiple = TRUE,
@@ -124,8 +109,8 @@ run_stceg <- function(){
                      )
                    ),
 
-                   uiOutput("area_division_checkboxes"),
-                   uiOutput("time_division_checkboxes"),
+                   shiny::uiOutput("area_division_checkboxes"),
+                   shiny::uiOutput("time_division_checkboxes"),
 
 
                    # Horizontal line ----
@@ -486,30 +471,30 @@ run_stceg <- function(){
         df <- homicides()
         time_col <- input$selected_time_columns
 
-        print(paste("Selected time column:", time_col))
-        print("Column names in df:")
-        print(colnames(df))
+        #print(paste("Selected time column:", time_col))
+        #print("Column names in df:")
+        #print(colnames(df))
 
         if (!time_col %in% colnames(df)) {
           print("Error: Selected column does not exist in the data frame.")
           return(NULL)
         }
 
-        print(paste("Column type:", class(df[[time_col]])))
+        #print(paste("Column type:", class(df[[time_col]])))
 
         if (input$time_type == "Month-Year") {
           req(input$month_format)
 
-          print("Attempting to convert MonthYear to yearmon format")
+          #print("Attempting to convert MonthYear to yearmon format")
           tryCatch({
             df[[time_col]] <- zoo::as.yearmon(df[[time_col]], format = input$month_format)
-            print("Converted MonthYear to yearmon format successfully.")
+            #print("Converted MonthYear to yearmon format successfully.")
 
             start_date <- min(df[[time_col]], na.rm = TRUE)
             end_date <- max(df[[time_col]], na.rm = TRUE)
 
-            print(paste("Start date:", start_date))
-            print(paste("End date:", end_date))
+            #print(paste("Start date:", start_date))
+            #print(paste("End date:", end_date))
 
             if (is.na(start_date) || is.na(end_date)) {
               print("Invalid start or end date for month-year slider.")
@@ -522,7 +507,7 @@ run_stceg <- function(){
             # Convert yearmon to Date (first day of the month) and format it properly
             month_year_labels <- format(as.Date(month_year_seq, frac = 0), "%b %Y")
 
-            print("Rendering Month-Year slider")
+            #print("Rendering Month-Year slider")
 
             sliderTextInput(
               inputId = "timeframe_slider",
@@ -541,7 +526,7 @@ run_stceg <- function(){
           req(input$date_format)
           df[[time_col]] <- as.Date(df[[time_col]], format = input$date_format)
 
-          print("Rendering Date slider")
+          #print("Rendering Date slider")
 
           sliderInput(
             "timeframe_slider",
@@ -555,7 +540,7 @@ run_stceg <- function(){
         else if (input$time_type == "Year") {
           df[[time_col]] <- as.numeric(df[[time_col]])
 
-          print("Rendering Year slider")
+          #print("Rendering Year slider")
 
           sliderInput(
             "timeframe_slider",
@@ -681,9 +666,9 @@ run_stceg <- function(){
             end_time <- zoo::as.yearmon(input$timeframe_slider[2], "%b %Y")
 
             # Debugging prints to check values
-            print(paste("Converted time column class:", class(df_homicides[[time_col]])))
-            print(paste("Start time (yearmon):", start_time))
-            print(paste("End time (yearmon):", end_time))
+            #print(paste("Converted time column class:", class(df_homicides[[time_col]])))
+            #print(paste("Start time (yearmon):", start_time))
+            #print(paste("End time (yearmon):", end_time))
 
             # Filter using yearmon values directly
             df_homicides <- df_homicides %>%
@@ -760,7 +745,7 @@ run_stceg <- function(){
       eventtree_pressed <- reactiveVal(FALSE)
       conditional_values <- reactiveVal(NULL)
 
-      homicide_set <<- eventReactive(input$vieweventtree, {
+      homicide_set <- eventReactive(input$vieweventtree, {
         eventtree_pressed(TRUE)
         g <- make_empty_graph()
         parent <- "s0"
@@ -793,11 +778,11 @@ run_stceg <- function(){
           start_index <- start_index + total_states
         }
 
-        print("unique values list")
-        print(unique_values_list)
+        #print("unique values list")
+        #print(unique_values_list)
         conditional_values(unique_values_list)
-        print("state names list")
-        print(state_names_list)
+        #print("state names list")
+        #print(state_names_list)
 
         # Add vertices to the graph: starting with the root node "s0"
         g <- add_vertices(g, 1, name = "s0")
@@ -807,8 +792,8 @@ run_stceg <- function(){
           g <- add_vertices(g, length(state_names_list[[i]]), name = state_names_list[[i]])
         }
         vertex_names <- V(g)$name
-        print("Vertex names of the graph:")
-        print(vertex_names)
+        #print("Vertex names of the graph:")
+        #print(vertex_names)
 
         # Function to generate combinations and counts dynamically
         generate_combinations <- function(df, cols) {
@@ -842,7 +827,7 @@ run_stceg <- function(){
 
         # Calculate counts dynamically
         counts_list <- lapply(1:num_vars, function(x) generate_combinations(homicide_data2, 1:x))
-        print(counts_list)
+        #print(counts_list)
         # Add edges between parent and child nodes dynamically
         edges <- c()
         state_indices <- rep(1, num_vars)
@@ -884,15 +869,15 @@ run_stceg <- function(){
           }
         }
 
-        # Print the final edge list in the desired format
-        print("edges")
-        print(edges)
+        # #print the final edge list in the desired format
+        #print("edges")
+        #print(edges)
 
 
 
 
         g <- add_edges(g, edges)
-        print(g)
+        #print(g)
         # Plot the graph
         layout <- layout.reingold.tilford(g)
         layout <- -layout[, 2:1]
@@ -905,9 +890,9 @@ run_stceg <- function(){
         # Adjust the times argument in the rep function
         # `1` is for the root node, and the rest corresponds to the number of states at each level
         num_levels <- num_vars + 1  # Including the root node
-        print("state_names_list")
+        #print("state_names_list")
         data$nodes$level <- rep(1:num_levels, times = c(1, sapply(1:num_vars, function(x) length(state_names_list[[x]]))))
-        print(data$edges)
+        #print(data$edges)
         data$nodes$shape <- 'dot'
         data$nodes$size <- 100
         data$nodes$color <- "#FFFFFF"
@@ -921,8 +906,8 @@ run_stceg <- function(){
         # Step 1: Find the union of all column names across the data frames in counts_list
         # Step 1: Find the union of all column names across the data frames in counts_list
         all_column_names <- unique(unlist(lapply(counts_list, colnames)))
-        print("all_column_names")
-        print(all_column_names)
+        #print("all_column_names")
+        #print(all_column_names)
         # Step 2: Function to add missing columns to each data frame and ensure "count" is last
         align_columns <- function(df, all_column_names) {
           missing_cols <- setdiff(all_column_names, colnames(df))  # Find columns that are missing
@@ -939,8 +924,8 @@ run_stceg <- function(){
         # Step 4: Flatten the list of aligned data frames into one using rbind
         df_flat <- do.call(rbind, counts_list_aligned)
 
-        print("df_flat")
-        print(df_flat)
+        #print("df_flat")
+        #print(df_flat)
 
         get_last_non_zero_na_rowwise <- function(df) {
           # Exclude the 'count' column
@@ -972,14 +957,14 @@ run_stceg <- function(){
         }
 
         last_entries <- get_last_non_zero_na_rowwise(df_flat)
-        print("last_entries")
-        print(last_entries)
+        #print("last_entries")
+        #print(last_entries)
         # Add this vector as a new column in the data$edges dataframe
         data$edges$label1 <- last_entries
 
         # Print the updated data$edges dataframe to check the new column
-        print("Updated data$edges with new label1 column:")
-        print(data$edges)
+        #print("Updated data$edges with new label1 column:")
+        #print(data$edges)
 
 
         # Check the result
@@ -1092,7 +1077,7 @@ run_stceg <- function(){
 
       output$eventtree_network <- renderVisNetwork({
         data <- updated_graph_data()
-        print(data)
+        #print(data)
         visNetwork(nodes = data$nodes, edges = data$edges, height = "500px") %>%
           visHierarchicalLayout(direction = "LR", levelSeparation = 1000) %>%
           visNodes(scaling = list(min = 10, max = 10), font = list(vadjust = -190)) %>%
@@ -1175,8 +1160,8 @@ run_stceg <- function(){
         current_selection <- selected_nodes()
         updated_selection <- unique(c(current_selection, new_selection))
         selected_nodes(updated_selection)
-        print("Nodes selected:")
-        print(updated_selection)  # Debugging statement
+        #print("Nodes selected:")
+        #print(updated_selection)  # Debugging statement
       })
 
       observeEvent(input$eventtree_network_selected_remove, {
@@ -1184,16 +1169,16 @@ run_stceg <- function(){
         current_selection <- selected_nodes()
         updated_selection <- current_selection[current_selection %in% deselected_nodes]
         selected_nodes(updated_selection)
-        print("Nodes selected:")
-        print(updated_selection)  # Debugging statement
+        #print("Nodes selected:")
+        #print(updated_selection)  # Debugging statement
       })
 
 
       # Observe the updateColor button
       observeEvent(input$updateColor, {
-        print("Update Color button clicked")  # Debugging statement
+        #print("Update Color button clicked")  # Debugging statement
         selected_nodes_list <- selected_nodes()
-        print(selected_nodes_list)  # Debugging statement to print selected nodes
+        #print(selected_nodes_list)  # Debugging statement to print selected nodes
 
         if (!is.null(selected_nodes_list) && length(selected_nodes_list) > 0) {
           data <- updated_graph_data()
@@ -1214,8 +1199,8 @@ run_stceg <- function(){
       observeEvent(input$deleteNode, {
         # Get the list of currently selected nodes
         selected_nodes_list <- selected_nodes()
-        print("Selected nodes to delete:")
-        print(selected_nodes_list)  # Debugging statement to print selected nodes
+        #print("Selected nodes to delete:")
+        #print(selected_nodes_list)  # Debugging statement to print selected nodes
 
         if (!is.null(selected_nodes_list) && length(selected_nodes_list) > 0) {
           # Access current graph data
@@ -1274,10 +1259,10 @@ run_stceg <- function(){
 
 
           cat("Edges removed:\n")
-          print(data_before$edges[with(data_before$edges, paste(from, to)) %in% deleted_edges, ])
+          #print(data_before$edges[with(data_before$edges, paste(from, to)) %in% deleted_edges, ])
 
           cat("Edges added:\n")
-          print(data$edges[with(data$edges, paste(from, to)) %in% added_edges, ])
+          #print(data$edges[with(data$edges, paste(from, to)) %in% added_edges, ])
 
 
           # Find the unique 'from' nodes in the added edges
@@ -1322,8 +1307,8 @@ run_stceg <- function(){
             visUpdateEdges(edges = data$edges)
 
           # Print deletion success message
-          print("Edges and nodes updated:")
-          print(data$nodes)  # Debugging statement to print updated edges
+          #print("Edges and nodes updated:")
+          #print(data$nodes)  # Debugging statement to print updated edges
 
         } else {
           # Show a modal dialog if no nodes are selected
@@ -1362,7 +1347,7 @@ run_stceg <- function(){
 
       observeEvent(input$AHCColoring, {
         data2 <- updated_graph_data()
-        print("data2")
+        #print("data2")
         #print(data2)
 
         exampledata <- homicide_data()
@@ -1399,10 +1384,10 @@ run_stceg <- function(){
         #edges_to_consider
         edges_to_consider <- inner_join(edges_to_consider, label_matching, by = join_by(from == from))
         nodes_to_consider <- inner_join(nodes_to_consider, edges_to_consider, by = join_by(id == from), keep = FALSE)
-        print("nodes_to_consider")
-        print(nodes_to_consider)
-        print("edges")
-        print(edges)
+        #print("nodes_to_consider")
+        #print(nodes_to_consider)
+        #print("edges")
+        #print(edges)
 
         convert_to_matrix <- function(label2_list_str) {
           # Split the string into a numeric vector
@@ -1426,25 +1411,25 @@ run_stceg <- function(){
         exampledata[] <- lapply(exampledata, function(x) {
           if (!is.factor(x)) as.factor(x) else x
         })
-        print("exampledata")
+        #print("exampledata")
         #print(exampledata)
 
 
 
         # Calculate number of variables
         numbvariables <- ncol(exampledata)
-        print("numvars:")
-        print(numbvariables)
+        #print("numvars:")
+        #print(numbvariables)
 
         # Calculate number of categories for each column
         numbcat <- sapply(exampledata, nlevels)
-        print("numcat:")
-        print(as.vector(numbcat))
+        #print("numcat:")
+        #print(as.vector(numbcat))
 
         # Determine the size of the largest category
         equivsize <- max(nodes_to_consider$outgoing_edges)
-        print("equivsize:")
-        print(equivsize)
+        #print("equivsize:")
+        #print(equivsize)
 
         # Calculate the number of combinations
         numb <- numeric(numbvariables)
@@ -1454,8 +1439,8 @@ run_stceg <- function(){
           numb[i] <- prod(numbcat[1:(i-1)])
         }
 
-        print("numb")
-        print(numb)
+        #print("numb")
+        #print(numb)
 
         #print(prior)
 
@@ -1490,8 +1475,8 @@ run_stceg <- function(){
 
         #print(nodes_to_consider)
 
-        print("prior")
-        print(prior)
+        #print("prior")
+        #print(prior)
 
         #Datalist1: list of the number of individuals going from the stage along a particular edge in C_{0}
         data <- lapply(nodes_to_consider$label2_list, convert_to_matrix)
@@ -1506,8 +1491,8 @@ run_stceg <- function(){
           pull(node_ids)  # Extract the list of node IDs
 
         # Print the resulting list of vectors
-        print(comparisonset)
-        print("end of comparisonset")
+        #print(comparisonset)
+        #print("end of comparisonset")
         # Initialize labelling as an empty matrix with 0 rows and columns
 
 
@@ -1529,13 +1514,13 @@ run_stceg <- function(){
         for (k in 1:(numbvariables - 1)) {
           # Alphabetically sort the levels of the current variable
           sorted_levels <- sort(levels(factor(exampledata3[[k]])))
-          print("sorted levels")
-          print(sorted_levels)
+          #print("sorted levels")
+          #print(sorted_levels)
 
           # Create the initial label with "NA" and appropriate repetitions
           label <- c("NA", rep("NA", sum(numb[1:k]) - 1))
           label <- c(label, rep(sorted_levels, numb[k]))
-          print(label)
+          #print(label)
 
           # If not the last variable, continue adding labels for subsequent variables
           if (k < (numbvariables - 1)) {
@@ -1560,23 +1545,23 @@ run_stceg <- function(){
         # Combine the sequence with the `labelling` matrix
         # Use `matrix` to ensure the row numbers are a column vector with correct dimensions
         labelling <- cbind(labelling, row_numbers)
-        print("labelling")
-        print(labelling)
+        #print("labelling")
+        #print(labelling)
 
         mergedlist <-c()
         for (i in 1:nrow(nodes_to_consider)){
           mergedlist<-c(mergedlist,list(labelling[i,]))
         }
-        print("mergedlist")
-        print(mergedlist)
+        #print("mergedlist")
+        #print(mergedlist)
         merged1<-c()
         lik <-0
         for( i in 1: nrow(nodes_to_consider)){
           alpha<-unlist(prior[i])
-          print("alpha")
-          print(alpha)
+          #print("alpha")
+          #print(alpha)
           N<-unlist(data[i])
-          print(N)
+          #print(N)
           lik<-lik+sum(lgamma(alpha+N)-lgamma(alpha))+sum(lgamma(sum(alpha))-lgamma(sum(alpha+N)))
         }
         score<-c(lik)
@@ -1680,8 +1665,8 @@ run_stceg <- function(){
         # Flatten the nested lists into simple vectors and print them
         flattened_list <- lapply(row_numbers_list, function(x) unlist(x))
         included_ids <- unlist(flattened_list)
-        print(flattened_list)
-        print(included_ids)
+        #print(flattened_list)
+        #print(included_ids)
         #print("rownumbers")
         #print(row_numbers)
         # Step 2: Identify missing IDs
@@ -1694,10 +1679,10 @@ run_stceg <- function(){
         }
 
         # Print the updated flattened_list
-        print(flattened_list)
+        #print(flattened_list)
 
         num_colors <- length(flattened_list) # Number of groups
-        colors <- distinctColorPalette(num_colors)
+        colors <- randomcoloR::distinctColorPalette(num_colors)
         # Step 2: Update the nodes dataframe with these colors
         for (i in 1:num_colors) {
           group <- flattened_list[[i]]
@@ -1711,8 +1696,8 @@ run_stceg <- function(){
         nodes$color[nodes$level == levels_to_exclude] <- "#FFFFFF"
         nodes$number <- 1
 
-        print(nodes)
-        print(edges)
+        #print(nodes)
+        #print(edges)
 
         updated_graph_data(list(nodes = nodes, edges = edges))
 
@@ -1728,7 +1713,7 @@ run_stceg <- function(){
       # Observe the finishedColoring button click
       observeEvent(input$finishedColoring, {
         data <- updated_graph_data()
-        print(data$nodes)
+        #print(data$nodes)
 
         # Get unique levels from the nodes
         levels <- unique(data$nodes$level)
@@ -1812,8 +1797,8 @@ run_stceg <- function(){
         if (!is.null(node_colors_levels_data)) {
           unique_colors_levels_data <- unique(node_colors_levels_data[node_colors_levels_data$level2 != max(node_colors_levels_data$level2), c("color", "level2", "outgoing_edges", "number_nodes")])
           unique_colors_levels_data$stage <- paste0("u", seq_len(nrow(unique_colors_levels_data)))
-          print("unique_colors_levels_data")
-          print(unique_colors_levels_data)
+          #print("unique_colors_levels_data")
+          #print(unique_colors_levels_data)
 
           max_edges <- max(unique_colors_levels_data$outgoing_edges)
 
@@ -1846,7 +1831,7 @@ run_stceg <- function(){
             # Filter out rows where level is the maximum level
             node_colors_levels_data2 <- filter(node_colors_levels_data, level != max_level)
 
-            print(node_colors_levels_data2)
+            #print(node_colors_levels_data2)
 
             equivsize <- max(node_colors_levels_data2$outgoing_edges)
             node_colors_levels_data2$prior <- NA
@@ -1882,8 +1867,8 @@ run_stceg <- function(){
             #        ungroup()  # Ungroup after rowwise operation
 
             # Display the updated dataframe
-            print("node_colors_levels_data2")
-            print(node_colors_levels_data2)
+            #print("node_colors_levels_data2")
+            #print(node_colors_levels_data2)
             asymmetric_tree_prior(node_colors_levels_data2)
 
             df_grouped_by_color <- node_colors_levels_data2 %>%
@@ -1895,7 +1880,7 @@ run_stceg <- function(){
               df_grouped_by_color$prior[i] <- paste(rep(round(as.numeric(df_grouped_by_color$total_prior[i])/as.numeric(df_grouped_by_color$outgoing_edges[i]),3), as.numeric(df_grouped_by_color$outgoing_edges[i])), collapse = ", ")
             }
             # View the result
-            print(df_grouped_by_color)
+            #print(df_grouped_by_color)
 
 
             # View the merged dataframe
@@ -1908,7 +1893,7 @@ run_stceg <- function(){
               select(-prior.x, -prior.y)
 
             # View the result
-            print(unique_colors_levels_data)
+            #print(unique_colors_levels_data)
           }
 
 
@@ -1918,7 +1903,7 @@ run_stceg <- function(){
           output$colorLevelTable <- renderDT({
 
             table_df <- node_colors_levels2() %>%
-              arrange(mixedorder(stage)) %>%  # Order by Stage
+              arrange(gtools::mixedorder(stage)) %>%  # Order by Stage
               select(
                 `Stage Colour` = color,
                 `Stage` = stage,
@@ -1993,8 +1978,8 @@ run_stceg <- function(){
         #edited_node_colors_levels_data <- node_colors_levels2()
 
         # Debugging: Print the edited data to verify prior updates
-        print("Edited node_colors_levels_data:")
-        print(edited_node_colors_levels_data)
+        #print("Edited node_colors_levels_data:")
+        #print(edited_node_colors_levels_data)
 
         # Get the updated_graph_data
         data <- updated_graph_data()
@@ -2012,13 +1997,13 @@ run_stceg <- function(){
 
         # Update the reactive value with adjusted data
         updated_graph_data(data)
-        print(updated_graph_data())
+        #print(updated_graph_data())
       })
 
       observeEvent(input$viewstagedtree, {
         data <- updated_graph_data()
-        print("data")
-        print(data)
+        #print("data")
+        #print(data)
         prior_type <- input$priorChoice
 
         convertPrior <- function(prior) {
@@ -2058,8 +2043,8 @@ run_stceg <- function(){
           }
 
           # Debugging: Verify data after processing
-          print("Processed Data (nodes):")
-          print(data$nodes)
+          #print("Processed Data (nodes):")
+          #print(data$nodes)
 
 
         }
@@ -2072,8 +2057,8 @@ run_stceg <- function(){
             data$nodes$adjusted_prior[i] <- paste(rep(round(as.numeric(asymmetric_data$prior[i])/as.numeric(asymmetric_data$outgoing_edges[i]),3), as.numeric(asymmetric_data$outgoing_edges[i])), collapse = ", ")
 
           }
-          print("data")
-          print(data$nodes$adjusted_prior)
+          #print("data")
+          #print(data$nodes$adjusted_prior)
         }
 
         assignPriorsToEdges <- function(node_data, edge_data) {
@@ -2201,8 +2186,8 @@ run_stceg <- function(){
         data$nodes <- assignVarianceToNodes(data$nodes)
 
         # Debugging: Verify nodes data with variance
-        print("Processed Data with Variance (nodes):")
-        print(data$nodes)
+        #print("Processed Data with Variance (nodes):")
+        #print(data$nodes)
 
         createTooltipWithPrior <- function(prior, ratio, priorvariance) {
           if (!is.na(prior) && prior != "") {
@@ -2234,8 +2219,8 @@ run_stceg <- function(){
           })
 
           # Debugging: Verify tooltips
-          print("Tooltips:")
-          print(data$nodes$title)
+          #print("Tooltips:")
+          #print(data$nodes$title)
 
           staged_tree_data(data)
         })
@@ -2274,8 +2259,8 @@ run_stceg <- function(){
         data <- staged_tree_data()
         nodes <- data$nodes
         edges <- data$edges
-        print(nodes)
-        print(edges)
+        #print(nodes)
+        #print(edges)
 
         # Initialize contract IDs
         nodes$contract_id <- paste0(nodes$level2, "-", nodes$color)
@@ -2318,8 +2303,8 @@ run_stceg <- function(){
           group_by(contract_id) %>%
           summarise(ids = paste(id, collapse = ", "), label = first(label), level = first(level2), color = first(color), prior_variance = first(priorvariance), .groups = 'drop') #prior_mean = first(ratio),
 
-        print("Contracted Nodes before:")
-        print(contracted_nodes)
+        #print("Contracted Nodes before:")
+        #print(contracted_nodes)
 
         # Sort contracted_nodes by current labels numerically
         contracted_nodes <- contracted_nodes[order(as.numeric(gsub("[^0-9]", "", contracted_nodes$label))), ]
@@ -2351,7 +2336,7 @@ run_stceg <- function(){
         updated_edges$to <- id_mapping[as.character(updated_edges$to)]
 
         # Check for NAs
-        print("Checking for NAs in updated_edges:")
+        #print("Checking for NAs in updated_edges:")
         if (any(is.na(updated_edges$from)) || any(is.na(updated_edges$to))) {
           print("NAs found in updated_edges$from or updated_edges$to:")
           print(updated_edges[is.na(updated_edges$from) | is.na(updated_edges$to), ])
@@ -2387,8 +2372,8 @@ run_stceg <- function(){
         contracted_nodes$font <- "80px"
         contracted_data(list(nodes = contracted_nodes, edges = merged_edges))
         data <- contracted_data()
-        print("data:")
-        print(data)
+        #print("data:")
+        #print(data)
         edges <- data$edges
         nodes <- data$nodes
         edges <- merge(edges, nodes, by.x = "from", by.y = "id", all.x = FALSE, suffixes = c("_from", "_to"))
@@ -2426,8 +2411,8 @@ run_stceg <- function(){
         edges2$priormean <- round((edges2$prior_table/edges2$total_stage_prior),3)
 
         #print("Summarised Edges with Grouped Sums:")
-        print("edges2")
-        print(edges2)
+        #print("edges2")
+        #print(edges2)
         # Display the summarised dataframe
 
         edges <- edges %>%
@@ -2436,12 +2421,12 @@ run_stceg <- function(){
         edges <- edges %>% select(from, to, label1, font.size, color_to, smooth, level, prior_table, priormean, data_table, posterior_table, posteriormean)
 
         edges$color <- "#000000"
-        print(edges)
+        #print(edges)
         contracted_data(list(nodes = contracted_nodes, edges = edges))
 
         data_number_table <- node_colors_levels2()
         data_number_table$color_to <- data_number_table$color
-        print(data_number_table)
+        #print(data_number_table)
 
         grouped_df <- edges2 %>%
           group_by(color_to) %>%
@@ -2455,13 +2440,13 @@ run_stceg <- function(){
         grouped_df <- rename(grouped_df, color = color_to)
         #grouped_df <- grouped_df %>%
         #  left_join(data_number_table, by = "color_to")
-        print("grouped_df")
+        #print("grouped_df")
         #print(grouped_df)
 
         stage_column <- node_colors_levels2()
         stage_column <- stage_column[c(1,5)]
         grouped_df <- left_join(grouped_df, stage_column, by = "color" )
-        print(grouped_df)
+        #print(grouped_df)
         grouped_df2(grouped_df)
         #print(grouped_df2())
 
@@ -2478,8 +2463,8 @@ run_stceg <- function(){
             areas <- shape_data[[1]]
             # Get the edges from contracted_data
             data <- contracted_data()
-            print(input$unique_values)
-            print(input$last_group)
+            #print(input$unique_values)
+            #print(input$last_group)
 
             path_df <- calculate_path_products(data$nodes, data$edges)
 
@@ -2505,13 +2490,13 @@ run_stceg <- function(){
             shape_data$area_probs <- area_probs_vec[shape_data[[1]]]
 
             # Print to check
-            print(shape_data)
+            #print(shape_data)
 
             edges <- data$edges$label1
 
             # Generate colorblind-friendly colors using a Brewer palette
             num_colors <- nrow(shape_data)  # Number of rows in shape_data
-            random_colors <- distinctColorPalette(num_colors)
+            random_colors <- randomcoloR::distinctColorPalette(num_colors)
 
             # Function to assign colors based on area_probs
             assign_colors <- function(area_probs, palette_name = "viridis") {
@@ -2618,7 +2603,7 @@ run_stceg <- function(){
                            "Posterior Mean: ", posteriormean, "<br>",
                            "Posterior Variance:(", paste(variances, collapse = ", "), ")")
           )
-        print(df)
+        #print(df)
       })
 
       # Function to calculate posterior mean products for all paths
@@ -2735,7 +2720,7 @@ run_stceg <- function(){
           selected_indices <- session$userData$unique_value_index[selected_values]
 
           # Output the selected values and their corresponding indices
-          print(paste(selected_values, "-> Variable", selected_indices))
+          #print(paste(selected_values, "-> Variable", selected_indices))
 
         }
       })
@@ -2846,7 +2831,7 @@ run_stceg <- function(){
         # Prepare tooltips for nodes
         nodes <- nodes %>%
           full_join(grouped_df3(), by = c("color" = "color")) # Assuming `posterior_variance` is in grouped_df2
-        print(nodes)
+        #print(nodes)
         # Prepare edges (without tooltips)
         # Ensure no tooltip is included for edges
 
@@ -3141,15 +3126,12 @@ run_stceg <- function(){
           shape_data <- shapefileData()
           req(shape_data)
 
-          # Render the Leaflet map
-          library(RColorBrewer)
-
           output$map <- renderLeaflet({
             req(shape_data)
-            print("shape_data[[1]]")
+            #print("shape_data[[1]]")
             visoutputdata <- updated_graph_data()
-            print("visoutputdata")
-            print(visoutputdata)
+            #print("visoutputdata")
+            #print(visoutputdata)
             selected_ids <- selected_polygon()
             print(paste("Selected polygons:", toString(selected_ids)))  # Debugging
 
@@ -3168,8 +3150,8 @@ run_stceg <- function(){
               floret3 <- tryCatch({
                 extract_floret(visoutputdata$nodes, visoutputdata$edges, shape_data[[1]][i])
               }, error = function(e) NULL)
-              print(shape_data[[1]][i])
-              print(floret3)
+              #print(shape_data[[1]][i])
+              #print(floret3)
 
               # Initialize the fillColor for the current shape
               fillColor <- "white"  # Default color
@@ -3177,28 +3159,28 @@ run_stceg <- function(){
               # Check if floret3 is not NULL
               # Check if floret3 is not NULL
               if (!is.null(floret3)) {
-                # Extract nodes from floret3
                 nodes <- floret3$nodes
 
-                # Identify the maximum level
-                max_level <- max(nodes$level)
+                if (nrow(nodes) > 0 && !all(is.na(nodes$level))) {
+                  max_level <- max(nodes$level, na.rm = TRUE)
 
-                # Filter for nodes that are not at the max level
-                non_max_level_nodes <- nodes[nodes$level != max_level, ]
+                  non_max_level_nodes <- nodes[nodes$level != max_level, ]
 
-                # Check conditions for color assignment
-                if (nrow(non_max_level_nodes) > 0) {
-                  if (all(non_max_level_nodes$color == "#FFFFFF")) {
-                    fillColor <- "orangered"  # All non-max-level nodes are white
+                  if (nrow(non_max_level_nodes) > 0) {
+                    if (all(non_max_level_nodes$color == "#FFFFFF")) {
+                      fillColor <- "orangered"  # All non-max-level nodes are white
+                    } else if (all(non_max_level_nodes$color != "#FFFFFF")) {
+                      fillColor <- "darkgreen"  # All non-max-level nodes are colored
+                    } else {
+                      fillColor <- "orange"  # Mixed colors
+                    }
                   }
-                  else if (all(non_max_level_nodes$color != "#FFFFFF")) {
-                    fillColor <- "darkgreen"  # All non-max-level nodes are white
-                  }
-                  else {
-                    fillColor <- "orange"  # At least one non-max-level node is colored
-                  }
+                } else {
+                  # handle case with no nodes or no valid levels
+                  fillColor <- "white"  # or whatever fallback you want
                 }
               }
+
 
               # Update the color for the specific polygon in the shape data
               shape_data$fillColor[shape_data[[1]] == shape_data[[1]][i]] <- fillColor
@@ -3382,8 +3364,8 @@ run_stceg <- function(){
           } else {
             all_florets(NULL)  # Set all_florets to NULL if no valid florets were found
           }
-          print("all_florets")
-          print(all_florets)
+          #print("all_florets")
+          #print(all_florets)
 
 
           if (is.null(floret3) || (nrow(floret3$nodes) == 0 && nrow(floret3$edges) == 0)) {
@@ -3396,8 +3378,8 @@ run_stceg <- function(){
             ))
           } else {
             floret <- first_floret()
-            print("floret")
-            print(floret)
+            #print("floret")
+            #print(floret)
             output$dynamic_vis <- renderVisNetwork({
               floret$nodes$title <- NULL
               visNetwork(floret$nodes, floret$edges) %>%
@@ -3585,10 +3567,10 @@ run_stceg <- function(){
 
 
           selected_ids <- selected_polygon()
-          print("selected_nodes")
-          print(selected_nodes)
-          print("all_paths")
-          print(all_paths)
+          #print("selected_nodes")
+          #print(selected_nodes)
+          #print("all_paths")
+          #print(all_paths)
           print(toString(selected_ids))
           # Match nodes with the same path as selected nodes
           #matching_nodes <- combined_nodes$id[all_paths %in% sapply(selected_nodes, function(node) get_path_to_origin_standardized(node, full_edges))]
@@ -3680,8 +3662,8 @@ run_stceg <- function(){
 
               # Extract all unique color values from both the floret and graph_data
               all_colors <- unique(c(stored_colors$all_colors, selected_color, graph_data$nodes$color))
-              print(all_colors)
-              print("all_colors")
+              #print(all_colors)
+              #print("all_colors")
               # Update stored_colors to include all unique colors
               stored_colors$all_colors <- all_colors
 

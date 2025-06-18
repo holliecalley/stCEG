@@ -52,7 +52,13 @@ The function performs the following steps:
 \examples{
 \dontrun{
   # Example event tree object
-  event_tree <- create_event_tree(my_data)
+data <- data.frame(
+  Area = sample(c("Enfield", "Lewisham"), 100, replace = TRUE),
+  DomesticAbuse = sample(c("Yes", "No"), 100, replace = TRUE),
+  Sex = sample(c("Male", "Female"), 100, replace = TRUE),
+  Solved = sample(c("Solved", "Unsolved"), 100, replace = TRUE)
+)
+event_tree <- create_event_tree(data, columns = c(1:4), "both")
 
   # Delete nodes s3 and s5
   updated_tree <- delete_nodes(event_tree, nodes_to_delete = c("s3", "s5"))

@@ -23,8 +23,15 @@ This function applies Agglomerative Hierarchical Clustering (AHC) to colour the 
 This function processes an event tree or partial staged tree, calculates priors based on the outgoing edges from each node, and performs Agglomerative Hierarchical Clustering (AHC) to colour the nodes of the event tree. It returns a \code{visNetwork} object that can be visualized as a coloured event tree. The function also computes the likelihood and scores based on merging stages in the event tree.
 }
 \examples{
-# Assuming 'event_tree_data' is a preloaded object with event tree or staged tree data:
-coloured_tree <- ahc_colouring(event_tree_data)
-coloured_tree
+\dontrun{
+data <- data.frame(
+  Area = sample(c("Enfield", "Lewisham"), 100, replace = TRUE),
+  DomesticAbuse = sample(c("Yes", "No"), 100, replace = TRUE),
+  Sex = sample(c("Male", "Female"), 100, replace = TRUE),
+  Solved = sample(c("Solved", "Unsolved"), 100, replace = TRUE)
+)
+event_tree <- create_event_tree(data, columns = c(1:4), "both")
+coloured_tree <- ahc_colouring(event_tree)
+}
 
 }

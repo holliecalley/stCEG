@@ -51,7 +51,7 @@ data <- data.frame(
   Solved = sample(c("Solved", "Unsolved"), 100, replace = TRUE)
 )
 
-create_event_tree(data, columns = 1:4)
+event_tree <- create_event_tree(data, columns = c(1:4), "both")
 }
 
 }

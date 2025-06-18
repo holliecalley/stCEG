@@ -4,10 +4,12 @@
 \alias{summary.event_tree}
 \title{Summary of an Event Tree}
 \usage{
-\method{summary}{event_tree}(object)
+\method{summary}{event_tree}(object, ...)
 }
 \arguments{
 \item{object}{An object of class \code{event_tree}. This object should have a list structure with \code{eventtree} containing a nested list where \code{x} is a dataframe with \code{nodes} and \code{edges} attributes.}
+
+\item{...}{Additional arguments passed to or from other methods (ignored).}
 }
 \value{
 Prints a summary of the event tree to the console, including:
@@ -22,6 +24,7 @@ This function provides a summary of an object of class \code{event_tree}. It out
 }
 \examples{
 # Example of using the summary function with an event_tree object
+\dontrun{
 summary(event_tree_object)
-
+}
 }

@@ -15,7 +15,7 @@
 Provides a visual and textual summary of a staged tree object, including counts of nodes and edges, node colour distributions, and uncoloured nodes in intermediate levels.
 }
 \details{
-This function prints a summary that includes:
+This function #prints a summary that includes:
 \itemize{
 \item Total number of nodes and edges.
 \item Number of nodes still uncoloured (white) that are not in the first or last level.
