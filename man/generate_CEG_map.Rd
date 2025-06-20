@@ -34,3 +34,15 @@ This function generates an interactive map using the Leaflet package to visualiz
 area in the Chain Event Graph (CEG). The map is color-coded based on area-specific probabilities, which
 are calculated from the path products and conditional probabilities.
 }
+\examples{
+data <- homicides
+event_tree <- create_event_tree(data, columns = c(9,2,4,5), "both")
+coloured_tree <- ahc_colouring(event_tree)
+
+# Cannot run this whole chunk at once as specify_priors needs user input
+\dontrun{tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
+staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
+ceg <- create_ceg(staged_tree, view_table = TRUE)
+generate_CEG_map(bcu_shapefile, ceg)}
+
+}

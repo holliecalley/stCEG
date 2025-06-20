@@ -27,35 +27,26 @@
 #' - Returns an updated `visNetwork` visualization of the event tree.
 #'
 #' @examples
-#' \dontrun{
-#'   # Example event tree object
-#' data <- data.frame(
-#'   Area = sample(c("Enfield", "Lewisham"), 100, replace = TRUE),
-#'   DomesticAbuse = sample(c("Yes", "No"), 100, replace = TRUE),
-#'   Sex = sample(c("Male", "Female"), 100, replace = TRUE),
-#'   Solved = sample(c("Solved", "Unsolved"), 100, replace = TRUE)
-#' )
-#' event_tree <- create_event_tree(data, columns = c(1:4), "both")
+#' data <- homicides
+#' event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
+#' event_tree
 #'
-#'   # Delete nodes s3 and s5
-#'   updated_tree <- delete_nodes(event_tree, nodes_to_delete = c("s3", "s5"))
-#'
-#'   # Display the updated tree
-#'   updated_tree$eventtree
-#' }
+#' updated_tree <- delete_nodes(event_tree, nodes_to_delete = c("s14", "s18"))
+#' updated_tree
 #'
 #' @import visNetwork
 #' @importFrom dplyr %>% select filter mutate arrange summarise summarise_all group_by ungroup distinct rename pull relocate bind_rows bind_cols left_join right_join inner_join full_join anti_join semi_join rowwise across everything case_when
 #' @export
+#'
 delete_nodes <- function(event_tree_obj, nodes_to_delete, level_separation = 1000, node_distance = 300) {
-  # Extract nodes and edges from the create_event_tree object
 
+  # Extract nodes and edges from the create_event_tree object
   if (!is.null(event_tree_obj$eventtree)) {
     data2 <- event_tree_obj$eventtree$x
   } else if (!is.null(event_tree_obj$stagedtree)) {
     data2 <- event_tree_obj$stagedtree$x
   } else {
-    stop("Neither eventtree nor stagedtree exists in delete_nodes_obj")
+    stop("Neither eventtree nor stagedtree exists")
   }
 
   filtereddf <- event_tree_obj$filtereddf
@@ -65,6 +56,7 @@ delete_nodes <- function(event_tree_obj, nodes_to_delete, level_separation = 100
 
     # Loop through selected nodes to delete them
     for (node in nodes_to_delete) {
+
       # Find the outgoing edges of the node to be deleted
       outgoing_edges <- data2$edges[data2$edges$from == node, ]
 
@@ -128,10 +120,6 @@ delete_nodes <- function(event_tree_obj, nodes_to_delete, level_separation = 100
     # Extract numeric parts of the node IDs
     get_numeric_part <- function(x) as.numeric(gsub("[^0-9]", "", x))
 
-    # Reorder data2$edges by the numeric part of 'from', and then 'to'
-    #data2$edges <- data2$edges[order(get_numeric_part(data2$edges$from),
-    #                                 get_numeric_part(data2$edges$to)), ]
-
     # Reset the row numbers to match the new order
     rownames(data2$edges) <- seq_len(nrow(data2$edges))
 
@@ -139,13 +127,10 @@ delete_nodes <- function(event_tree_obj, nodes_to_delete, level_separation = 100
     unique_from_nodes <- unique(data2$edges$from[with(data2$edges, paste(from, to)) %in% added_edges])
 
     # Increment the 'level' for each of these unique nodes in data$nodes
-    data2$nodes$level2[data2$nodes$id %in% unique_from_nodes] <-
-      data2$nodes$level2[data2$nodes$id %in% unique_from_nodes] + 1
+    data2$nodes$level2[data2$nodes$id %in% unique_from_nodes] <- data2$nodes$level2[data2$nodes$id %in% unique_from_nodes] + 1
 
     deleted_from_counts <- table(data_before$edges$from[with(data_before$edges, paste(from, to)) %in% deleted_edges])
     added_from_counts <- table(data2$edges$from[with(data2$edges, paste(from, to)) %in% added_edges])
-
-
 
 
     # Update outgoing edges for deleted edges
@@ -189,8 +174,6 @@ delete_nodes <- function(event_tree_obj, nodes_to_delete, level_separation = 100
     data2$edges <- data2$edges %>%
       distinct()
 
-    # Assuming 'data2$nodes' is your nodes data frame and 'data2$edges' is your edges data frame
-
     # Step 1: Identify the node IDs that appear in the edges
     used_node_ids <- unique(c(data2$edges$from, data2$edges$to))
 
@@ -205,9 +188,6 @@ delete_nodes <- function(event_tree_obj, nodes_to_delete, level_separation = 100
     data2$nodes$label <- id_mapping[data2$nodes$label]
     data2$edges$from <- id_mapping[data2$edges$from]
     data2$edges$to <- id_mapping[data2$edges$to]
-
-    # Optional: Append the remaining node IDs (if needed, or you can simply reindex as shown)
-    # This step depends on how you want to append or assign new IDs. Here we reassign sequential IDs.
 
     # Check the updated data
     #print(data2$nodes)

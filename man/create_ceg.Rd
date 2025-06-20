@@ -51,19 +51,14 @@ with hierarchical layout, customizable labels, and node distance adjustments.
 The function also provides detailed printing of updated edges and contracted nodes for debugging purposes.
 }
 \examples{
-\dontrun{
-# Example usage of the create_ceg function:
-data <- data.frame(
-  Area = sample(c("Enfield", "Lewisham"), 100, replace = TRUE),
-  DomesticAbuse = sample(c("Yes", "No"), 100, replace = TRUE),
-  Sex = sample(c("Male", "Female"), 100, replace = TRUE),
-  Solved = sample(c("Solved", "Unsolved"), 100, replace = TRUE)
-)
-event_tree <- create_event_tree(data, columns = c(1:4), "both")
+data <- homicides
+event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
 coloured_tree <- ahc_colouring(event_tree)
-tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
+
+# Cannot run this whole chunk at once as specify_priors needs user input
+\dontrun{tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
 staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
-ceg <- create_ceg(staged_tree, tree_priors, view_table = TRUE)
-}
+ceg <- create_ceg(staged_tree, view_table = TRUE)}
+
 
 }

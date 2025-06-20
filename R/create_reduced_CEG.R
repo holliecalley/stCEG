@@ -18,6 +18,19 @@
 #' @importFrom dplyr %>% select filter mutate arrange summarise summarise_all group_by ungroup distinct rename pull relocate bind_rows bind_cols left_join right_join inner_join full_join anti_join semi_join rowwise across everything case_when
 #' @importFrom igraph graph_from_data_frame
 #' @export
+#'
+#' @examples
+#' data <- homicides
+#' event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
+#' coloured_tree <- ahc_colouring(event_tree)
+#'
+#' # Cannot run this whole chunk at once as specify_priors needs user input
+#' \dontrun{tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
+#' staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
+#' ceg <- create_ceg(staged_tree, view_table = TRUE)
+#' create_reduced_CEG(ceg, "Adult")}
+#'
+#'
 create_reduced_CEG <- function(ceg_object, start_labels, level_separation = 1200, node_distance = 300) {
 
   extract_floret <- function(nodes, edges, start_label1) {

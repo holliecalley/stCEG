@@ -16,18 +16,29 @@
 #' - Tooltips for nodes show the prior distribution, mean, and variance.
 #' - Edge labels can show the names, priors, or prior means based on the `label_type` parameter.
 #'
+#'@examples
+#' data <- homicides
+#' event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
+#' coloured_tree <- ahc_colouring(event_tree)
+#' # cannot run this whole chunk as one, as specify_priors needs user input
+#' \dontrun{tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
+#' staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
+#' staged_tree}
+#'
 #' @import visNetwork
 #'
 #' @export
 staged_tree_prior <- function(staged_tree_obj, prior_table,level_separation = 1500, node_distance = 250, label_type = "priors") {
+
+  # Error if not a staged_tree object
   if (!("stagedtree" %in% names(staged_tree_obj)) || !("x" %in% names(staged_tree_obj$stagedtree))) {
     stop("Error: Need a staged tree object.")
   }
 
-
   nodes_df <- staged_tree_obj$stagedtree$x$nodes
   edges_df <- staged_tree_obj$stagedtree$x$edges
 
+  #Unlist prior for Dirichlet calculations
   convertPrior <- function(prior) {
     as.numeric(unlist(strsplit(prior, ",")))
   }
@@ -54,6 +65,7 @@ staged_tree_prior <- function(staged_tree_obj, prior_table,level_separation = 15
     return(round((priors * (total - priors)) / (total^2 * (total + 1)), 3))
   }
 
+  # Create tooltip when hovering
   createTooltipWithPrior <- function(prior, ratio, priorvariance) {
     if (!is.na(prior) && prior != "") {
       tooltip_text <- paste(
@@ -82,7 +94,7 @@ staged_tree_prior <- function(staged_tree_obj, prior_table,level_separation = 15
     prior_row <- prior_table[prior_table$"Colour" == color_match & prior_table$"Level" == level2_match, ]
 
     if (nrow(prior_row) > 0) {
-      prior_value <- prior_row$Prior[1]  # Assume one row per stage
+      prior_value <- prior_row$Prior[1]
 
       # Get the matching nodes
       same_group_nodes <- nodes_df[nodes_df$color == color_match & nodes_df$level2 == level2_match, ]
@@ -142,9 +154,7 @@ staged_tree_prior <- function(staged_tree_obj, prior_table,level_separation = 15
     edges_df$label <- edges_df$label_prior_mean  # Assign "priors" (label_prior_frac)
   }
 
-  #print(nodes_df)
-  #print(edges_df)
-  #assign("stagedtree_data", list(nodes = nodes_df, edges = edges_df), envir = .GlobalEnv)
+# VisNetwork visualisation
 
   network_plot <- visNetwork(nodes = nodes_df, edges = edges_df) %>%
     visHierarchicalLayout(direction = "LR", levelSeparation = level_separation) %>%

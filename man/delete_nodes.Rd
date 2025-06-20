@@ -50,21 +50,11 @@ The function performs the following steps:
 }
 }
 \examples{
-\dontrun{
-  # Example event tree object
-data <- data.frame(
-  Area = sample(c("Enfield", "Lewisham"), 100, replace = TRUE),
-  DomesticAbuse = sample(c("Yes", "No"), 100, replace = TRUE),
-  Sex = sample(c("Male", "Female"), 100, replace = TRUE),
-  Solved = sample(c("Solved", "Unsolved"), 100, replace = TRUE)
-)
-event_tree <- create_event_tree(data, columns = c(1:4), "both")
+data <- homicides
+event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
+event_tree
 
-  # Delete nodes s3 and s5
-  updated_tree <- delete_nodes(event_tree, nodes_to_delete = c("s3", "s5"))
-
-  # Display the updated tree
-  updated_tree$eventtree
-}
+updated_tree <- delete_nodes(event_tree, nodes_to_delete = c("s14", "s18"))
+updated_tree
 
 }

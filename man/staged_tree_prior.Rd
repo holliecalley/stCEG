@@ -37,3 +37,13 @@ This function applies prior distributions to a staged tree, adjusting priors and
 \item Edge labels can show the names, priors, or prior means based on the \code{label_type} parameter.
 }
 }
+\examples{
+data <- homicides
+event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
+coloured_tree <- ahc_colouring(event_tree)
+# cannot run this whole chunk as one, as specify_priors needs user input
+\dontrun{tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
+staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
+staged_tree}
+
+}

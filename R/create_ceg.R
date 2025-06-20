@@ -30,23 +30,20 @@
 #'
 #' @import stringr
 #' @import DT
+#' @import htmltools
+#' @import visNetwork
 #' @importFrom purrr pmap map_chr
 #'
 #' @examples
-#' \dontrun{
-#' # Example usage of the create_ceg function:
-#' data <- data.frame(
-#'   Area = sample(c("Enfield", "Lewisham"), 100, replace = TRUE),
-#'   DomesticAbuse = sample(c("Yes", "No"), 100, replace = TRUE),
-#'   Sex = sample(c("Male", "Female"), 100, replace = TRUE),
-#'   Solved = sample(c("Solved", "Unsolved"), 100, replace = TRUE)
-#' )
-#' event_tree <- create_event_tree(data, columns = c(1:4), "both")
+#' data <- homicides
+#' event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
 #' coloured_tree <- ahc_colouring(event_tree)
-#' tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
+#'
+#' # Cannot run this whole chunk at once as specify_priors needs user input
+#' \dontrun{tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
 #' staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
-#' ceg <- create_ceg(staged_tree, tree_priors, view_table = TRUE)
-#' }
+#' ceg <- create_ceg(staged_tree, view_table = TRUE)}
+#'
 #'
 #' @export
 #'
@@ -54,7 +51,6 @@ create_ceg <- function(staged_tree_obj, level_separation = 1200, node_distance =
   nodes <- staged_tree_obj$stagedtreewithpriors$x$nodes
   edges <- staged_tree_obj$stagedtreewithpriors$x$edges
   nodes$size = 400
-
 
   # Initialize contract IDs
   nodes$contract_id <- paste0(nodes$level2, "-", nodes$color)
@@ -211,11 +207,10 @@ create_ceg <- function(staged_tree_obj, level_separation = 1200, node_distance =
   merged_edges <- merged_edges %>%
     left_join(contracted_nodes %>% select(label, level), by = c("from" = "label"))
 
-  #assign("ceg_data", list(nodes = contracted_nodes, edges = merged_edges), envir = .GlobalEnv)
   # Return the contracted nodes and edges
 
-  # print(contracted_nodes)
-  #print(merged_edges)
+  print(contracted_nodes)
+  print(merged_edges)
 
   if (label == "posterior") {
     merged_edges$label <- merged_edges$label_individuals  # Assign "names" (label1)
@@ -298,6 +293,37 @@ create_ceg <- function(staged_tree_obj, level_separation = 1200, node_distance =
 
   # Ensure 'Colour' is a character vector
   merged_table$Colour <- as.character(merged_table$Colour)
+
+  # Count number of unique stages
+  num_stages <- length(unique(merged_table$Stage))
+
+  # Create the datatable with styling
+  UpdateTable <- DT::datatable(
+    merged_table,
+    escape = FALSE,
+    class = 'stripe hover row-border compact',  # modern minimal style
+    options = list(
+      pageLength = num_stages,
+      dom = 't<"bottom"i>',  # modern layout: table body, then info and pagination at bottom
+      columnDefs = list(
+        list(targets = which(names(merged_table) == "Colour"), visible = FALSE)
+      ),
+      initComplete = JS(  # modern header styling
+        "function(settings, json) {",
+        "$(this.api().table().header()).css({'background-color': '#f9f9f9', 'color': '#333', 'font-family': 'Segoe UI, sans-serif', 'font-size': '14px'});",
+        "}"
+      )
+    )
+  ) %>%
+    formatStyle(
+      'Stage',
+      backgroundColor = styleEqual(merged_table$Stage, merged_table$Colour),
+      fontFamily = 'Segoe UI, sans-serif',
+      fontSize = '13px',
+      color = 'black',
+      fontWeight = '500',
+      padding = '6px'
+    )
 
   ChainEventGraph <- visNetwork(nodes = contracted_nodes, edges = merged_edges) %>%
     visHierarchicalLayout(direction = "LR", levelSeparation = level_separation) %>%
@@ -389,61 +415,32 @@ create_ceg <- function(staged_tree_obj, level_separation = 1200, node_distance =
     )%>%
     visEvents(stabilizationIterationsDone = "function() { this.physics.options.enabled = false; }")
 
-  # Count number of unique stages
-  num_stages <- length(unique(merged_table$Stage))
-
-  # Create the datatable with styling
-  UpdateTable <- DT::datatable(
-    merged_table,
-    escape = FALSE,
-    class = 'stripe hover row-border compact',  # modern minimal style
-    options = list(
-      pageLength = num_stages,
-      dom = 't<"bottom"i>',  # modern layout: table body, then info and pagination at bottom
-      columnDefs = list(
-        list(targets = which(names(merged_table) == "Colour"), visible = FALSE)
-      ),
-      initComplete = JS(  # modern header styling
-        "function(settings, json) {",
-        "$(this.api().table().header()).css({'background-color': '#f9f9f9', 'color': '#333', 'font-family': 'Segoe UI, sans-serif', 'font-size': '14px'});",
-        "}"
-      )
-    )
-  ) %>%
-    formatStyle(
-      'Stage',
-      backgroundColor = styleEqual(merged_table$Stage, merged_table$Colour),
-      fontFamily = 'Segoe UI, sans-serif',
-      fontSize = '13px',
-      color = 'black',
-      fontWeight = '500',
-      padding = '6px'
-    )
-
   # Create the result list (with invisible filtereddf)
   result <- merged_table
+
+  print(contracted_nodes)
+  print(merged_edges)
+
+  # Return both the network plot and the result
 
 
   if (view_table) {
     print(ChainEventGraph)  # Display the first object
     readline(prompt = "Press Enter to see the update table:")  # Wait for user to press Enter
     print(UpdateTable)  # Display the second object
-    invisible(NULL)  # Ensure no output is returned in the console
-    #return(list(ceg = ChainEventGraph, update_table = result))
-
     output <- list(ceg = ChainEventGraph, update_table = result)
     class(output) <- "chain_event_graph"
     return(output)
 
   } else {
-    print(ChainEventGraph)  # Display only the first object if view_table is FALSE
-    invisible(NULL)  # Ensure no output is returned in the console
+    #print(ChainEventGraph)  # Display only the first object if view_table is FALSE
     output <- list(ceg = ChainEventGraph, update_table = result)
     class(output) <- "chain_event_graph"
     return(output)
   }
 
 }
+
 
 
 
@@ -480,9 +477,30 @@ create_ceg <- function(staged_tree_obj, level_separation = 1200, node_distance =
 #' The function prints the log marginal likelihoods, log Bayes factor, Bayes factor, and preferred model.
 #'
 #' @examples
+#' data <- homicides
+#' event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
+#' coloured_tree <- ahc_colouring(event_tree)
+#'
+#' # Cannot run this whole chunk at once as specify_priors needs user input
+#' \dontrun{tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
+#' staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
+#' ceg <- create_ceg(staged_tree, view_table = TRUE)}
+#'
+#' # Define node groups and colours
+#' node_groups <- list(c("s1", "s2"), c("s3", "s4"))
+#' colours <- c("#BBA0CA", "#8AC6D0")
+#'
+#' # Apply colours to the event tree
+#' custom_tree <- update_node_colours(event_tree, node_groups, colours)
+#' custom_coloured_tree <- ahc_colouring(custom_tree)
+#'
+#' # Cannot run this whole chunk at once as specify_priors needs user input
+#' \dontrun{custom_tree_priors <- specify_priors(custom_coloured_tree, prior_type = "Uniform")
+#' custom_staged_tree <- staged_tree_prior(custom_coloured_tree, custom_tree_priors)
+#' ceg2 <- create_ceg(custom_staged_tree, view_table = TRUE)}
 #' \dontrun{
-#' model1_summary <- summary(fit_ceg_model1)
-#' model2_summary <- summary(fit_ceg_model2)
+#' model1_summary <- summary(ceg)
+#' model2_summary <- summary(ceg2)
 #' compare_ceg_models(model1_summary, model2_summary)
 #' }
 #'

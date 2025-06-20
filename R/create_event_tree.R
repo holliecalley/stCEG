@@ -30,17 +30,9 @@
 
 #'
 #' @examples
-#' \dontrun{
-#' data <- data.frame(
-#'   Area = sample(c("Enfield", "Lewisham"), 100, replace = TRUE),
-#'   DomesticAbuse = sample(c("Yes", "No"), 100, replace = TRUE),
-#'   Sex = sample(c("Male", "Female"), 100, replace = TRUE),
-#'   Solved = sample(c("Solved", "Unsolved"), 100, replace = TRUE)
-#' )
-#'
-#' event_tree <- create_event_tree(data, columns = c(1:4), "both")
-#' }
-#'
+#' data <- homicides
+#' event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
+#' event_tree
 #' @export
 create_event_tree <- function(dataset, columns = seq_along(dataset), label_type = "both", level_separation = 1000, node_distance = 300) {
   g <- make_empty_graph()
@@ -49,7 +41,6 @@ create_event_tree <- function(dataset, columns = seq_along(dataset), label_type 
   # Filter dataset based on specified columns
   homicide_data2 <- dataset[, columns]
   filtereddf <- homicide_data2
-  #assign("filtereddf", filtereddf, envir = .GlobalEnv)
 
   num_vars <- length(columns)  # Number of variables chosen by the user
 
@@ -193,7 +184,7 @@ create_event_tree <- function(dataset, columns = seq_along(dataset), label_type 
 
   # Flatten the data and extract second-to-last column (label1) and count (label2)
   # Ensure all data frames have the same number of columns by padding with NA
-  # Step 1: Find the union of all column names across the data frames in counts_list
+
   # Step 1: Find the union of all column names across the data frames in counts_list
   all_column_names <- unique(unlist(lapply(counts_list, colnames)))
   # Step 2: Function to add missing columns to each data frame and ensure "count" is last
@@ -252,14 +243,10 @@ create_event_tree <- function(dataset, columns = seq_along(dataset), label_type 
   #data$edges$label2 <- label2
   #data$edges$label3 <- label3
 
-
   data$edges$label <- switch(label_type,
                              names = data$edges$label1,
                              both = data$edges$label3)
 
-  #data$edges$label1 <- unlist(lapply(1:num_vars, function(x) rep(unique_values_list[[x]], each = prod(sapply((x+1):num_vars, function(y) length(unique_values_list[[y]]))))))
-  #data$edges$label2 <- unlist(lapply(counts_list, function(x) x$count))
-  #data$edges$label3 <- paste(data$edges$label1, "\n", data$edges$label2)
   data$edges$font.size <- 100
   data$edges$color <- "#000000"
   data$edges$arrows <- "to"

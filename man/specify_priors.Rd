@@ -28,14 +28,9 @@ For the "Uniform" and "Phantom" priors, the function calculates the priors for e
 The "Custom" option allows the user to manually input prior values for each row. If incorrect values are provided, an error will be raised.
 }
 \examples{
-\dontrun{
-data <- data.frame(
-  Area = sample(c("Enfield", "Lewisham"), 100, replace = TRUE),
-  DomesticAbuse = sample(c("Yes", "No"), 100, replace = TRUE),
-  Sex = sample(c("Male", "Female"), 100, replace = TRUE),
-  Solved = sample(c("Solved", "Unsolved"), 100, replace = TRUE)
-)
-event_tree <- create_event_tree(data, columns = c(1:4), "both")
+data <- homicides
+event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
 coloured_tree <- ahc_colouring(event_tree)
+\dontrun{
 tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")}
 }

@@ -13,16 +13,11 @@
 #'
 #'
 #' @examples
-#' \dontrun{
-#' data <- data.frame(
-#'   Area = sample(c("Enfield", "Lewisham"), 100, replace = TRUE),
-#'   DomesticAbuse = sample(c("Yes", "No"), 100, replace = TRUE),
-#'   Sex = sample(c("Male", "Female"), 100, replace = TRUE),
-#'   Solved = sample(c("Solved", "Unsolved"), 100, replace = TRUE)
-#' )
-#' event_tree <- create_event_tree(data, columns = c(1:4), "both")
+#' data <- homicides
+#' event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
+#' event_tree
 #' coloured_tree <- ahc_colouring(event_tree)
-#' }
+#' coloured_tree
 #'
 #' @export
 ahc_colouring <- function(event_tree_obj, level_separation = 1000, node_distance = 300) {
@@ -32,14 +27,14 @@ ahc_colouring <- function(event_tree_obj, level_separation = 1000, node_distance
   }
 
   exampledata <- event_tree_obj$filtereddf
-  #exampledata
 
+# Setting error if incorrect format
   if (!is.null(event_tree_obj$eventtree)) {
     tree <- event_tree_obj$eventtree
   } else if (!is.null(event_tree_obj$stagedtree)) {
     tree <- event_tree_obj$stagedtree
   } else {
-    stop("Neither eventtree nor stagedtree exists in delete_nodes_obj")
+    stop("Neither eventtree nor stagedtree exists")
   }
 
   # Extract nodes and edges
@@ -58,7 +53,6 @@ ahc_colouring <- function(event_tree_obj, level_separation = 1000, node_distance
   nodes_to_consider$id2 <- 1:nrow(nodes_to_consider)
   nodes_to_consider2 <- nodes_to_consider$id
 
-  #edges <- data2$edges
   edges_to_consider <- edges %>%
     group_by(from) %>%
     summarize(
@@ -69,9 +63,7 @@ ahc_colouring <- function(event_tree_obj, level_separation = 1000, node_distance
     summarize(
       label_list = paste(label1, collapse = ", ")
     )
-  #print("label_matching")
-  #print(label_matching)
-  #edges_to_consider
+
   # Count outgoing edges for each 'from' node
   outgoing_edges <- edges %>%
     count(from, name = "outgoing_edges")
@@ -80,12 +72,6 @@ ahc_colouring <- function(event_tree_obj, level_separation = 1000, node_distance
   nodes_to_consider <- inner_join(nodes_to_consider, edges_to_consider, by = join_by(id == from), keep = FALSE)
 
   # Add the outgoing edges information as a new column in the nodes dataframe
-  #nodes_to_consider$outgoing_edges <- nodes_to_consider$label_list
-
-  #print("nodes_to_consider")
-  #print(nodes_to_consider)
-  #print("edges")
-  #print(edges)
 
   convert_to_matrix <- function(label2_list_str) {
     # Split the string into a numeric vector
@@ -137,11 +123,6 @@ ahc_colouring <- function(event_tree_obj, level_separation = 1000, node_distance
     numb[i] <- prod(numbcat[1:(i-1)])
   }
 
-  #print("numb")
-  #print(numb)
-
-  #print(prior)
-
 
   nodes_to_consider$prior <- 0
 
@@ -153,13 +134,15 @@ ahc_colouring <- function(event_tree_obj, level_separation = 1000, node_distance
     # Get the current row's 'id' from nodes_to_consider
     current_id <- nodes_to_consider$id[i]
     #print(current_id)
-    # Get the number of outgoing edges for this node (this could be a count of edges with 'from' = current_id)
+    # Step 1: Get the number of outgoing edges for this node (this could be a count of edges with 'from' = current_id)
     outgoing_edges <- nodes_to_consider$outgoing_edges[i]
     #print(outgoing_edges)
+
     # Step 2: Calculate the new prior (divide current prior by the number of outgoing edges)
     current_prior <- nodes_to_consider$prior[i]  # Assuming prior column exists
     new_prior <- current_prior / outgoing_edges
     #print(new_prior)
+
     # Step 3: Update the 'prior' for rows in edges where 'from' equals the current 'id'
     # and update the corresponding 'prior' in nodes_to_consider based on 'to'
     to_nodes <- edges$to[edges$from == current_id]  # Get all 'to' nodes where 'from' equals current_id
@@ -171,15 +154,11 @@ ahc_colouring <- function(event_tree_obj, level_separation = 1000, node_distance
     prior<-c(prior,list(rbind(rep(nodes_to_consider$prior[i]/outgoing_edges,outgoing_edges))))
   }
 
-  #print(nodes_to_consider)
-
-  #print("prior")
-  #print(prior)
 
   #Datalist1: list of the number of individuals going from the stage along a particular edge in C_{0}
   data <- lapply(nodes_to_consider$label2_list, convert_to_matrix)
   # Print the resulting list of matrices
-  #print("data")
+  # print("data")
   # print(data)
 
   #List of the stages that can be merged in the first step
@@ -189,10 +168,9 @@ ahc_colouring <- function(event_tree_obj, level_separation = 1000, node_distance
     pull(node_ids)  # Extract the list of node IDs
 
   # Print the resulting list of vectors
-  #print(comparisonset)
-  #print("end of comparisonset")
+  # print(comparisonset)
+  # print("end of comparisonset")
   # Initialize labelling as an empty matrix with 0 rows and columns
-
 
   # Print the levels of the factor
   #print(levels(column_vector))
@@ -204,9 +182,7 @@ ahc_colouring <- function(event_tree_obj, level_separation = 1000, node_distance
 
   #print(sorted_levels)
   # Initialize labelling matrix
-  # Initialize labelling matrix
   labelling <-c()
-  # Initialize labelling matrix
   labelling <- NULL
 
   for (k in 1:(numbvariables - 1)) {
@@ -232,10 +208,6 @@ ahc_colouring <- function(event_tree_obj, level_separation = 1000, node_distance
   }
 
   labelling <- nodes_to_consider$label_list
-
-  # Print the resulting labelling matrix
-  # print(labelling)
-
 
 
   row_numbers <- nodes_to_consider$id
@@ -277,8 +249,7 @@ ahc_colouring <- function(event_tree_obj, level_separation = 1000, node_distance
             #to compare
             compare1<-comparisonset[[k]][i]
             compare2<-comparisonset[[k]][j]
-            #we calculate the difference between
-            #the CEG where two stages are merged
+            #we calculate the difference between the CEG where two stages are merged
             result<-lgamma(sum(prior[[compare1]]+prior[[compare2]]))-lgamma(sum(prior[[ compare1]]+data[[compare1]]+prior[[compare2]]+data[[compare2]]))+
               sum(lgamma(prior[[compare1]]+data[[compare1]]+prior[[compare2]]+data[[ compare2]]))-sum(lgamma(prior[[compare1]]+prior[[compare2]]))-
               #and the CEG where the two stages are not merged
@@ -309,7 +280,7 @@ ahc_colouring <- function(event_tree_obj, level_separation = 1000, node_distance
       merged1<-cbind(merged1,merged)
     }
   }
-  #Output: stages of the finest partition to be combined to obtain the most probable CEG structure
+  # Output: stages of the finest partition to be combined to obtain the most probable CEG structure
   stages<-c(1)
   for (i in 2:numbvariables){
     stages<-c(stages,comparisonset[[i-1]])
@@ -367,11 +338,13 @@ ahc_colouring <- function(event_tree_obj, level_separation = 1000, node_distance
   #print(included_ids)
   #print("rownumbers")
   #print(row_numbers)
-  # Step 2: Identify missing IDs
+
+  # Identify missing IDs
   missing_ids <- setdiff(nodes_to_consider2, included_ids)
   #print("missing:")
   #print(missing_ids)
-  # Step 3: Add each missing ID as an individual sublist to flattened_list
+
+  # Add each missing ID as an individual sublist to flattened_list
   for (row_number in missing_ids) {
     flattened_list <- append(flattened_list, list(row_number))
   }
@@ -382,7 +355,7 @@ ahc_colouring <- function(event_tree_obj, level_separation = 1000, node_distance
   num_colours <- length(flattened_list) # Number of groups
   colors <- randomcoloR::distinctColorPalette(num_colours)
 
-  # Step 2: Update the nodes dataframe with these colours
+  # Update the nodes dataframe with these colours
   for (i in 1:num_colours) {
     group <- flattened_list[[i]]
     color <- colors[i]
@@ -394,8 +367,6 @@ ahc_colouring <- function(event_tree_obj, level_separation = 1000, node_distance
   nodes$color[nodes$level == 1] <- "#FFFFFF"
   nodes$color[nodes$level == levels_to_exclude] <- "#FFFFFF"
   nodes$number <- 1
-  #  print(nodes)
-  # print(edges)
 
   # Create a dataframe of outgoing edge labels for each node
   outgoing_edges_labels <- edges %>%
@@ -421,9 +392,6 @@ ahc_colouring <- function(event_tree_obj, level_separation = 1000, node_distance
   }
 
   # Merge outgoing edge labels with nodes data
-  #nodes <- left_join(nodes, outgoing_edges_labels, by = c("id" = "from"))
-  #print("nodes hello")
-  #print(nodes)
   # Check for conflicts: Nodes with the same colour but different outgoing edge labels
   conflicting_nodes <- nodes %>%
     filter(color != "#FFFFFF") %>%  # Ignore white-coloured nodes

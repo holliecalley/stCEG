@@ -40,9 +40,30 @@ Interpretation of the Bayes factor is guided by Jeffreys' scale:
 The function prints the log marginal likelihoods, log Bayes factor, Bayes factor, and preferred model.
 }
 \examples{
+data <- homicides
+event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
+coloured_tree <- ahc_colouring(event_tree)
+
+# Cannot run this whole chunk at once as specify_priors needs user input
+\dontrun{tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
+staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
+ceg <- create_ceg(staged_tree, view_table = TRUE)}
+
+# Define node groups and colours
+node_groups <- list(c("s1", "s2"), c("s3", "s4"))
+colours <- c("#BBA0CA", "#8AC6D0")
+
+# Apply colours to the event tree
+custom_tree <- update_node_colours(event_tree, node_groups, colours)
+custom_coloured_tree <- ahc_colouring(custom_tree)
+
+# Cannot run this whole chunk at once as specify_priors needs user input
+\dontrun{custom_tree_priors <- specify_priors(custom_coloured_tree, prior_type = "Uniform")
+custom_staged_tree <- staged_tree_prior(custom_coloured_tree, custom_tree_priors)
+ceg2 <- create_ceg(custom_staged_tree, view_table = TRUE)}
 \dontrun{
-model1_summary <- summary(fit_ceg_model1)
-model2_summary <- summary(fit_ceg_model2)
+model1_summary <- summary(ceg)
+model2_summary <- summary(ceg2)
 compare_ceg_models(model1_summary, model2_summary)
 }
 

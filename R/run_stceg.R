@@ -42,7 +42,6 @@
 #' @import shinyjqui
 #' @import DT
 #' @import sortable
-#' @import stagedtrees
 #' @import colorspace
 #' @import igraph
 #' @import shinycssloaders
@@ -72,18 +71,6 @@ run_stceg <- function(){
   if (!requireNamespace("colourpicker", quietly = TRUE)) {
     stop("Package 'colourpicker' needed for this function to work. Please install it.", call. = FALSE)
   }
-    #conflicted::conflict_prefer("rdirichlet", "gtools")   # Fix dirmult vs. gtools
-    #conflicted::conflict_prefer("as_data_frame", "igraph") # Fix dplyr vs. igraph
-    #conflicted::conflict_prefer("groups", "igraph")        # Fix dplyr vs. igraph
-    #conflicted::conflict_prefer("permute", "igraph")       # Fix gtools vs. igraph
-    #conflicted::conflict_prefer("union", "igraph")         # Fix dplyr vs. igraph
-    #conflicted::conflict_prefer("dataTableOutput", "shiny") # Fix DT vs. shiny
-    #conflicted::conflict_prefer("renderDataTable", "shiny") # Fix DT vs. shiny
-    #conflicted::conflict_prefer("alert", "shinyjs")        # Fix shinyWidgets vs. shinyjs
-    #conflicted::conflict_prefer("runExample", "shinyjs")   # Fix shiny vs. shinyjs
-    #conflicted::conflict_prefer("show", "shinyjs")         # Fix colorspace vs. shinyjs
-    #conflicted::conflict_prefer("crossing", "tidyr")       # Fix igraph vs. tidyr
-    #conflicted::conflict_prefer("filter", "dplyr")
 
     ui <- shiny::fluidPage(
       shiny::titlePanel("stCEG - Modelling Over Spatial Areas Using Chain Event Graphs"),
@@ -118,6 +105,7 @@ run_stceg <- function(){
 
                    #textInput("na_values", "Specify NA values", value = ""),
                    checkboxInput("exclude_row_numbers", "Exclude First Column as Row Numbers", FALSE),
+
                    # Input: Checkbox if file has header ----
                    checkboxInput("header", "Header", TRUE),
 
@@ -257,15 +245,6 @@ run_stceg <- function(){
                               column(2, actionButton("finishedColoring", "Finished Colouring"))
                      ),
 
-                     #leafletOutput("map", height = "600px"),
-                     #visNetworkOutput("eventtree_network", height = "1000px"),  # Shared ID
-
-                     #h2('Event Tree'),
-                     #checkboxInput("toggleLabels", "Hide data values", value = TRUE),
-                     #actionButton("deleteNode", "Delete Selected Node"),
-                     #actionButton("finishedColoring", "Finished Colouring"),
-                     #visNetworkOutput("eventtree_network", height = "1000px"),
-
                      h2('Staged Tree'),
                      selectInput(
                        inputId = "priorChoice",
@@ -319,22 +298,6 @@ run_stceg <- function(){
                    )
                  )
         ),
-        #    tabPanel("Plot Map", fluid = TRUE,
-        #             sidebarLayout(
-        #
-        #               sidebarPanel(
-        #                 fileInput(
-        #                   "shapefile",
-        #                   "Upload Shapefile (ZIP)",
-        #                   accept = ".zip"
-        #                 ),
-        #                 textInput("crs", "Specify CRS (if missing):", value = NA),
-        #                 sliderInput("mapOpacity", "Layer Opacity", min = 0, max = 1, value = 0.5, sep = ""),
-        #                 actionButton("process_shapefile", "Process Shapefile")
-        #               ),
-        #               mainPanel(
-        #                 leafletOutput("map", height = "600px")
-        #               ))),
       ))
 
 
@@ -462,7 +425,6 @@ run_stceg <- function(){
       })
 
 
-
       # Rendering the time dropdown slider based on the selected time division
       # Check the selected time column and convert appropriately
       output$time_dropdown <- renderUI({
@@ -471,30 +433,21 @@ run_stceg <- function(){
         df <- homicides()
         time_col <- input$selected_time_columns
 
-        #print(paste("Selected time column:", time_col))
-        #print("Column names in df:")
-        #print(colnames(df))
-
         if (!time_col %in% colnames(df)) {
           print("Error: Selected column does not exist in the data frame.")
           return(NULL)
         }
 
-        #print(paste("Column type:", class(df[[time_col]])))
 
         if (input$time_type == "Month-Year") {
           req(input$month_format)
 
-          #print("Attempting to convert MonthYear to yearmon format")
           tryCatch({
             df[[time_col]] <- zoo::as.yearmon(df[[time_col]], format = input$month_format)
             #print("Converted MonthYear to yearmon format successfully.")
 
             start_date <- min(df[[time_col]], na.rm = TRUE)
             end_date <- max(df[[time_col]], na.rm = TRUE)
-
-            #print(paste("Start date:", start_date))
-            #print(paste("End date:", end_date))
 
             if (is.na(start_date) || is.na(end_date)) {
               print("Invalid start or end date for month-year slider.")
@@ -554,9 +507,6 @@ run_stceg <- function(){
           )
         }
       })
-
-
-
 
 
       # Update the picker inputs based on available choices
@@ -725,21 +675,6 @@ run_stceg <- function(){
         datatable(homicide_data())
       })
 
-
-
-
-
-
-      #--------------------------------------------------------------------------------------------------
-
-      #graph_data <- reactiveValues(
-      #   data = homicide_set()
-      #    nodes = data$nodes,
-      #    edges = data$edges
-      #  )
-
-
-
       #--------------------------------------------------------------------------------------------------
       #homicide.set <<- NA
       eventtree_pressed <- reactiveVal(FALSE)
@@ -869,12 +804,6 @@ run_stceg <- function(){
           }
         }
 
-        # #print the final edge list in the desired format
-        #print("edges")
-        #print(edges)
-
-
-
 
         g <- add_edges(g, edges)
         #print(g)
@@ -903,11 +832,12 @@ run_stceg <- function(){
 
         # Flatten the data and extract second-to-last column (label1) and count (label2)
         # Ensure all data frames have the same number of columns by padding with NA
-        # Step 1: Find the union of all column names across the data frames in counts_list
+
         # Step 1: Find the union of all column names across the data frames in counts_list
         all_column_names <- unique(unlist(lapply(counts_list, colnames)))
         #print("all_column_names")
         #print(all_column_names)
+
         # Step 2: Function to add missing columns to each data frame and ensure "count" is last
         align_columns <- function(df, all_column_names) {
           missing_cols <- setdiff(all_column_names, colnames(df))  # Find columns that are missing
@@ -957,17 +887,9 @@ run_stceg <- function(){
         }
 
         last_entries <- get_last_non_zero_na_rowwise(df_flat)
-        #print("last_entries")
-        #print(last_entries)
+
         # Add this vector as a new column in the data$edges dataframe
         data$edges$label1 <- last_entries
-
-        # Print the updated data$edges dataframe to check the new column
-        #print("Updated data$edges with new label1 column:")
-        #print(data$edges)
-
-
-        # Check the result
 
         # The last column is the count (label2)
         #data$edges$label1 <- last_entries
@@ -975,16 +897,6 @@ run_stceg <- function(){
         #print(data$edges)
         data$edges$label3 <- paste(data$edges$label1, "\n", data$edges$label2)
 
-        # Assign labels to edges in the graph
-        #data$edges$label1 <- label1
-        #data$edges$label2 <- label2
-        #data$edges$label3 <- label3
-
-
-
-        #data$edges$label1 <- unlist(lapply(1:num_vars, function(x) rep(unique_values_list[[x]], each = prod(sapply((x+1):num_vars, function(y) length(unique_values_list[[y]]))))))
-        #data$edges$label2 <- unlist(lapply(counts_list, function(x) x$count))
-        #data$edges$label3 <- paste(data$edges$label1, "\n", data$edges$label2)
         data$edges$font.size <- 70
         data$edges$color <- "#000000"
         data$edges$arrows <- "to"
@@ -1064,16 +976,6 @@ run_stceg <- function(){
 
       node_colors <- reactiveVal(NULL)
 
-
-
-      # Reactive expression for updated graph data with node colors
-      # updated_graph_data_with_colors <- reactive({
-      #    data <- updated_graph_data()
-      #    if (!is.null(node_colors())) {
-      #      data$nodes$color <- node_colors()
-      #    }
-      #    data
-      #  })
 
       output$eventtree_network <- renderVisNetwork({
         data <- updated_graph_data()
@@ -1324,27 +1226,6 @@ run_stceg <- function(){
       })
 
 
-
-
-
-
-
-
-
-      # observeEvent(input$updateColor, {
-      #   data <- updated_graph_data()
-      #   selected_nodes <- visNetworkProxy("eventtree_network")$getSelectedNodes()
-      #   new_color <- input$nodeColor
-      #
-      #   if (length(selected_nodes) > 0) {
-      #     data$nodes$color[data$nodes$id %in% selected_nodes] <- new_color
-      #     updated_graph_data(data)
-      #     visNetworkProxy("eventtree_network") %>%
-      #       visUpdateNodes(nodes = data$nodes)
-      #   }
-      # })
-
-
       observeEvent(input$AHCColoring, {
         data2 <- updated_graph_data()
         #print("data2")
@@ -1384,10 +1265,6 @@ run_stceg <- function(){
         #edges_to_consider
         edges_to_consider <- inner_join(edges_to_consider, label_matching, by = join_by(from == from))
         nodes_to_consider <- inner_join(nodes_to_consider, edges_to_consider, by = join_by(id == from), keep = FALSE)
-        #print("nodes_to_consider")
-        #print(nodes_to_consider)
-        #print("edges")
-        #print(edges)
 
         convert_to_matrix <- function(label2_list_str) {
           # Split the string into a numeric vector
@@ -1411,10 +1288,6 @@ run_stceg <- function(){
         exampledata[] <- lapply(exampledata, function(x) {
           if (!is.factor(x)) as.factor(x) else x
         })
-        #print("exampledata")
-        #print(exampledata)
-
-
 
         # Calculate number of variables
         numbvariables <- ncol(exampledata)
@@ -1439,11 +1312,6 @@ run_stceg <- function(){
           numb[i] <- prod(numbcat[1:(i-1)])
         }
 
-        #print("numb")
-        #print(numb)
-
-        #print(prior)
-
 
         nodes_to_consider$prior <- NA
 
@@ -1462,8 +1330,7 @@ run_stceg <- function(){
           current_prior <- nodes_to_consider$prior[i]  # Assuming prior column exists
           new_prior <- current_prior / outgoing_edges
 
-          # Step 3: Update the 'prior' for rows in edges where 'from' equals the current 'id'
-          # and update the corresponding 'prior' in nodes_to_consider based on 'to'
+          # Step 3: Update the 'prior' for rows in edges where 'from' equals the current 'id' and update the corresponding 'prior' in nodes_to_consider based on 'to'
           to_nodes <- edges$to[edges$from == current_id]  # Get all 'to' nodes where 'from' equals current_id
 
           # Update the 'prior' for corresponding nodes in nodes_to_consider
@@ -1472,11 +1339,6 @@ run_stceg <- function(){
           }
           prior<-c(prior,list(rbind(rep(nodes_to_consider$prior[i]/outgoing_edges,outgoing_edges))))
         }
-
-        #print(nodes_to_consider)
-
-        #print("prior")
-        #print(prior)
 
         #Datalist1: list of the number of individuals going from the stage along a particular edge in C_{0}
         data <- lapply(nodes_to_consider$label2_list, convert_to_matrix)
@@ -1490,23 +1352,6 @@ run_stceg <- function(){
           summarise(node_ids = list(id2)) %>%
           pull(node_ids)  # Extract the list of node IDs
 
-        # Print the resulting list of vectors
-        #print(comparisonset)
-        #print("end of comparisonset")
-        # Initialize labelling as an empty matrix with 0 rows and columns
-
-
-        # Print the levels of the factor
-        #print(levels(column_vector))
-        # Extract and sort levels
-        #sorted_levels <- sort(levels(factor_levels))
-
-        # Print sorted levels
-        #print(sorted_levels)
-
-        #print(sorted_levels)
-        # Initialize labelling matrix
-        # Initialize labelling matrix
         labelling <-c()
         # Initialize labelling matrix
         labelling <- NULL
@@ -1534,10 +1379,6 @@ run_stceg <- function(){
         }
 
         labelling <- nodes_to_consider$label_list
-
-        # Print the resulting labelling matrix
-        # print(labelling)
-
 
 
         row_numbers <- nodes_to_consider$id
@@ -1579,8 +1420,7 @@ run_stceg <- function(){
                   #to compare
                   compare1<-comparisonset[[k]][i]
                   compare2<-comparisonset[[k]][j]
-                  #we calculate the difference between
-                  #the CEG where two stages are merged
+                  #we calculate the difference between the CEG where two stages are merged
                   result<-lgamma(sum(prior[[compare1]]+prior[[compare2]]))-lgamma(sum(prior[[ compare1]]+data[[compare1]]+prior[[compare2]]+data[[compare2]]))+
                     sum(lgamma(prior[[compare1]]+data[[compare1]]+prior[[compare2]]+data[[ compare2]]))-sum(lgamma(prior[[compare1]]+prior[[compare2]]))-
                     #and the CEG where the two stages are not merged
@@ -1850,8 +1690,7 @@ run_stceg <- function(){
               current_prior <- node_colors_levels_data2$prior[i]  # Assuming prior column exists
               new_prior <- current_prior / outgoing_edges
 
-              # Step 3: Update the 'prior' for rows in edges where 'from' equals the current 'id'
-              # and update the corresponding 'prior' in nodes_to_consider based on 'to'
+              # Step 3: Update the 'prior' for rows in edges where 'from' equals the current 'id' and update the corresponding 'prior' in nodes_to_consider based on 'to'
               to_nodes <- edges2$to[edges2$from == current_id]  # Get all 'to' nodes where 'from' equals current_id
 
               # Update the 'prior' for corresponding nodes in nodes_to_consider
@@ -1859,12 +1698,6 @@ run_stceg <- function(){
                 node_colors_levels_data2$prior[node_colors_levels_data2$id == j] <- new_prior}
 
             }
-            #     node_colors_levels_data2 <- node_colors_levels_data2 %>%
-            #        rowwise() %>%
-            #        mutate(
-            #          prior = paste(rep(prior / outgoing_edges, outgoing_edges), collapse = ", ")
-            #        ) %>%
-            #        ungroup()  # Ungroup after rowwise operation
 
             # Display the updated dataframe
             #print("node_colors_levels_data2")
@@ -1977,10 +1810,6 @@ run_stceg <- function(){
         }
         #edited_node_colors_levels_data <- node_colors_levels2()
 
-        # Debugging: Print the edited data to verify prior updates
-        #print("Edited node_colors_levels_data:")
-        #print(edited_node_colors_levels_data)
-
         # Get the updated_graph_data
         data <- updated_graph_data()
         prior_type <- input$priorChoice
@@ -2041,10 +1870,6 @@ run_stceg <- function(){
               }
             }
           }
-
-          # Debugging: Verify data after processing
-          #print("Processed Data (nodes):")
-          #print(data$nodes)
 
 
         }
@@ -2185,9 +2010,6 @@ run_stceg <- function(){
         # Calculate variance for nodes
         data$nodes <- assignVarianceToNodes(data$nodes)
 
-        # Debugging: Verify nodes data with variance
-        #print("Processed Data with Variance (nodes):")
-        #print(data$nodes)
 
         createTooltipWithPrior <- function(prior, ratio, priorvariance) {
           if (!is.na(prior) && prior != "") {
@@ -2217,10 +2039,6 @@ run_stceg <- function(){
           data$nodes$title <- apply(data$nodes, 1, function(row) {
             createTooltipWithPrior(row['prior'], row['ratio'], row['priorvariance'])
           })
-
-          # Debugging: Verify tooltips
-          #print("Tooltips:")
-          #print(data$nodes$title)
 
           staged_tree_data(data)
         })
@@ -2303,9 +2121,6 @@ run_stceg <- function(){
           group_by(contract_id) %>%
           summarise(ids = paste(id, collapse = ", "), label = first(label), level = first(level2), color = first(color), prior_variance = first(priorvariance), .groups = 'drop') #prior_mean = first(ratio),
 
-        #print("Contracted Nodes before:")
-        #print(contracted_nodes)
-
         # Sort contracted_nodes by current labels numerically
         contracted_nodes <- contracted_nodes[order(as.numeric(gsub("[^0-9]", "", contracted_nodes$label))), ]
 
@@ -2314,19 +2129,12 @@ run_stceg <- function(){
         contracted_nodes$label <- paste0("w", 0:(num_nodes - 1))
         contracted_nodes$label[num_nodes] <- paste0("w", "\u221E")  # Unicode for ∞
 
-        #print("Contracted Nodes after:")
-        #print(contracted_nodes)
-        #print(contracted_nodes$ids)
-
         # Create a mapping from each individual ID to the contracted ID
         id_mapping <- unlist(lapply(1:nrow(contracted_nodes), function(i) {
           ids <- unlist(strsplit(contracted_nodes$ids[i], ",\\s*"))
           ids <- trimws(ids)
           setNames(rep(contracted_nodes$label[i], length(ids)), ids)
         }))
-
-        #print("ID Mapping:")
-        #print(id_mapping)
 
         # Copy edges data
         updated_edges <- edges
@@ -2361,10 +2169,6 @@ run_stceg <- function(){
           list(enabled = TRUE, type = "curvedCW", roundness = curvature)
         })
 
-        # Print the updated edges
-        #print("Updated Edges:")
-        #print(merged_edges)
-        #print(merged_edges$smooth)
 
         # Store the contracted data
         contracted_nodes$id <- contracted_nodes$label
@@ -2607,7 +2411,6 @@ run_stceg <- function(){
       })
 
       # Function to calculate posterior mean products for all paths
-      # Function to calculate posterior mean products for all paths
       calculate_path_products <- function(nodes_df, edges_df, root_node = "w0") {
 
         # Initialize a list to store paths and products
@@ -2719,9 +2522,6 @@ run_stceg <- function(){
           # Get the corresponding indices from the stored mapping
           selected_indices <- session$userData$unique_value_index[selected_values]
 
-          # Output the selected values and their corresponding indices
-          #print(paste(selected_values, "-> Variable", selected_indices))
-
         }
       })
 
@@ -2814,13 +2614,6 @@ run_stceg <- function(){
         edges <- data$edges
         nodes <- data$nodes
 
-
-        # Print the result
-        # print(paste("P(", input$last_group, "|", paste(input$unique_values, collapse = ", "), ") = ", conditional_prob, sep = ""))
-
-        # print("ceg data")
-        #  assign("ceg_data", list(nodes = nodes, edges = edges), envir = .GlobalEnv)
-        #  print(data)
 
         if (is.null(contracted_data())) {
           return(NULL)
@@ -2926,31 +2719,6 @@ run_stceg <- function(){
       })
 
 
-
-
-
-
-
-
-
-      # Render the contracted graph
-      # output$ceg_network <- renderVisNetwork({
-      # Retrieve the contracted data from the reactive value
-      #   data <- contracted_data()
-
-      #     visNetwork(nodes = data$nodes, edges = data$edges, height = "500px") %>%
-      #       visHierarchicalLayout(direction = "LR", levelSeparation = 1000) %>%
-      #       visNodes(scaling = list(min = 300, max = 300)) %>%
-      #       visOptions(manipulation = list(enabled = TRUE,
-      #                                      addEdgeCols = FALSE,
-      #                                      addNodeCols = FALSE,
-      #                                      editEdgeCols = FALSE,
-      #                                      editNodeCols = c("color"),
-      #                                      multiselect = TRUE), nodesIdSelection = TRUE) %>%
-      #       visInteraction(dragNodes = FALSE, multiselect = TRUE, navigationButtons = TRUE) %>%
-      #       visPhysics(solver = "forceAtlas2Based",
-      #                  forceAtlas2Based = list(gravitationalConstant = -50), hierarchicalRepulsion = list(nodeDistance = 300))
-      #   })
 
       extract_floret <- function(nodes, edges, start_label1) {
         # Find all 'from' edges associated with the start_label1
@@ -3068,8 +2836,6 @@ run_stceg <- function(){
             # Example for UK Ordnance Survey National Grid, EPSG:27700
             st_crs(shape_data) <- as.numeric(input_crs)
 
-            # You could also assign EPSG:27700 for UK National Grid if no CRS is provided
-            # st_crs(shape_data) <- 27700
           }
 
           # Transform the shapefile to WGS84 (EPSG:4326) which is standard for Leaflet maps
@@ -3157,7 +2923,6 @@ run_stceg <- function(){
               fillColor <- "white"  # Default color
 
               # Check if floret3 is not NULL
-              # Check if floret3 is not NULL
               if (!is.null(floret3)) {
                 nodes <- floret3$nodes
 
@@ -3188,9 +2953,7 @@ run_stceg <- function(){
 
 
 
-            #there needs to be a search over florets here, which changes based on colouring
-
-            #shape_data$fillColor <- "darkgreen"
+            # There needs to be a search over florets here, which changes based on colouring
 
             shape_data$previous_fillColor <- shape_data$fillColor
 

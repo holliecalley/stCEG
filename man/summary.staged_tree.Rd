@@ -29,9 +29,13 @@ If the \code{crayon} package is available, the function displays background colo
 White-coloured nodes (\verb{#FFFFFF}) that are not in the minimum or maximum level are flagged as "Nodes left to be coloured."
 }
 \examples{
-\dontrun{
-staged_tree <- create_staged_tree(data)
-summary(staged_tree)
-}
+data <- homicides
+event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
+coloured_tree <- ahc_colouring(event_tree)
+
+# cannot run this whole chunk as one, as specify_priors needs user input
+\dontrun{tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
+staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
+homicides_ST_summary <- summary(staged_tree)}
 
 }

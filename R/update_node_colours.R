@@ -26,23 +26,17 @@
 #' - Updates the event tree visualization using `visNetwork`.
 #'
 #' @examples
-#' \dontrun{
-#'   # Example event tree object
-#' event_tree <- create_event_tree(data, columns = c(1:4), "both")
+#' data <- homicides
+#' event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
+#' event_tree
 #'
-#'   # Delete nodes and update colours
-#'   updated_tree <- delete_nodes(event_tree, nodes_to_delete = c("s3", "s5"))
+#' # Define node groups and colours
+#' node_groups <- list(c("s1", "s2"), c("s3", "s4"))
+#' colours <- c("#BBA0CA", "#8AC6D0")
 #'
-#'   # Define node groups and colours
-#'   node_groups <- list(c("s1", "s2"), c("s6", "s7"))
-#'   colours <- c("#FF0000", "#00FF00")
-#'
-#'   # Apply colours to the event tree
-#'   coloured_tree <- update_node_colours(updated_tree, node_groups, colours)
-#'
-#'   # Display the updated tree
-#'   coloured_tree$stagedtree
-#' }
+#' # Apply colours to the event tree
+#' coloured_tree <- update_node_colours(event_tree, node_groups, colours)
+#' coloured_tree
 #'
 #' @import visNetwork
 #' @importFrom dplyr %>% select filter mutate arrange summarise summarise_all group_by ungroup distinct rename pull relocate bind_rows bind_cols left_join right_join inner_join full_join anti_join semi_join rowwise across everything case_when
@@ -105,9 +99,6 @@ update_node_colours <- function(event_tree_obj, node_groups, colours, level_sepa
       select(-outgoing_edges2.x, -outgoing_edges2.y)
   }
 
-
-  #print("nodes2")
-  #print(nodes2)
   # Check for conflicts: Nodes with the same colour but different outgoing edge labels
   conflicting_nodes <- nodes2 %>%
     filter(color != "#FFFFFF") %>%  # Ignore white-coloured nodes
@@ -121,10 +112,6 @@ update_node_colours <- function(event_tree_obj, node_groups, colours, level_sepa
     stop(paste("Error: The following nodes have the same colour but different outgoing edge labels:",
                paste(conflicting_nodes, collapse = ", ")))
   }
-
-  # Save updated nodes & edges to environment
-  #stagedtreedf <- list(nodes = nodes2, edges = edges2)
-  #assign("stagedtreedf", stagedtreedf, envir = .GlobalEnv)
 
   # Ensure nodes are movable in Y direction but fixed in X
   nodes2 <- nodes2 %>%
@@ -167,7 +154,5 @@ update_node_colours <- function(event_tree_obj, node_groups, colours, level_sepa
 
   class(output) <- "staged_tree"
   return(output)
-
-
 
 }

@@ -3,13 +3,10 @@ Title: Fully Customisable Chain Event Graphs over Spatial Areas
 Version: 0.0.0.9000
 Authors@R: c(
   person("Hollie", "Calley", email = "hc629@exeter.ac.uk", role = c("aut", "cre"),
-         comment = c(ORCID = "0009-0002-1814-8428",
-                     affiliation = "University of Exeter",
-                     GitHub = "holliecalley")),
+         comment = c(ORCID = "0009-0002-1814-8428")),
   person("Daniel", "Williamson", role = "ctb",
-         comment = c(ORCID = "0000-0001-8917-3300",
-                     affiliation = "University of Exeter")))
-Description: 'stCEG' is an R package with an integrated 'Shiny' interface that facilitates the creation of Chain Event Graphs (CEGs) over spatial areas. It allows users to fully customise both the structure and underlying model of the CEG, offering a high degree of flexibility for tailored analyses.
+         comment = c(ORCID = "0000-0001-8917-3300")))
+Description: An R package with an integrated 'Shiny' interface that facilitates the creation of Chain Event Graphs (CEGs) over spatial areas. It allows users to fully customise both the structure and underlying model of the CEG, offering a high degree of flexibility for tailored analyses.
 URL: https://github.com/holliecalley/stCEG
 BugReports: https://github.com/holliecalley/stCEG/issues
 License: GPL (>= 3)
@@ -23,6 +20,7 @@ Imports:
     crayon,
     dplyr,
     gtools,
+    htmltools,
     htmlwidgets,
     hwep,
     igraph,
@@ -37,7 +35,6 @@ Imports:
     shinyjs,
     sortable,
     spData,
-    stagedtrees,
     stringr,
     tidyr,
     tidyverse,
@@ -45,4 +42,6 @@ Imports:
     visNetwork,
     zoo
 Suggests: randomcoloR, colourpicker
-
+Depends: 
+    R (>= 3.5)
+LazyData: true

@@ -43,15 +43,7 @@ The function follows these steps:
 }
 }
 \examples{
-\dontrun{
-data <- data.frame(
-  Area = sample(c("Enfield", "Lewisham"), 100, replace = TRUE),
-  DomesticAbuse = sample(c("Yes", "No"), 100, replace = TRUE),
-  Sex = sample(c("Male", "Female"), 100, replace = TRUE),
-  Solved = sample(c("Solved", "Unsolved"), 100, replace = TRUE)
-)
-
-event_tree <- create_event_tree(data, columns = c(1:4), "both")
-}
-
+data <- homicides
+event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
+event_tree
 }

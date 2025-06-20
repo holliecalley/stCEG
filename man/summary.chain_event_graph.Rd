@@ -28,9 +28,14 @@ The effective sample size for a stage is defined as \eqn{ESS = \sum_j (\alpha_{i
 It represents the amount of information (prior + observed) available for that stage.
 }
 \examples{
-\dontrun{
-ceg_model <- fit_ceg(my_data)
-summary(ceg_model)
-}
+data <- homicides
+event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
+coloured_tree <- ahc_colouring(event_tree)
+
+# Cannot run this whole chunk at once as specify_priors needs user input
+\dontrun{tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
+staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
+ceg <- create_ceg(staged_tree, view_table = TRUE)
+homicides_CEG_summary <- summary(ceg)}
 
 }

@@ -16,6 +16,7 @@
 #' @importFrom dplyr %>% select filter mutate arrange summarise summarise_all group_by ungroup distinct rename pull relocate bind_rows bind_cols left_join right_join inner_join full_join anti_join semi_join rowwise across everything case_when
 #' @export
 #'
+#'
 calculate_path_products <- function(nodes_df, edges_df, root_node = "w0") {
 
   # Initialize a list to store paths and products
@@ -178,6 +179,18 @@ calculate_area_probabilities <- function(path_df, unique_values, selected_indice
 #' @import sf
 #' @importFrom viridis scale_color_viridis scale_colour_viridis scale_fill_viridis viridis
 #' @importFrom dplyr %>% select filter mutate arrange summarise summarise_all group_by ungroup distinct rename pull relocate bind_rows bind_cols left_join right_join inner_join full_join anti_join semi_join rowwise across everything case_when
+#'
+#' @examples
+#' data <- homicides
+#' event_tree <- create_event_tree(data, columns = c(9,2,4,5), "both")
+#' coloured_tree <- ahc_colouring(event_tree)
+#'
+#' # Cannot run this whole chunk at once as specify_priors needs user input
+#' \dontrun{tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
+#' staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
+#' ceg <- create_ceg(staged_tree, view_table = TRUE)
+#' generate_CEG_map(bcu_shapefile, ceg)}
+#'
 #' @export
 generate_CEG_map <- function(shapefile, ceg_object, conditionals = unique(ceg_object$x$edges$label1), colour_by = NULL, color_palette = "viridis") {
 

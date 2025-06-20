@@ -23,8 +23,7 @@ Prints a summary of the event tree to the console, including:
 This function provides a summary of an object of class \code{event_tree}. It outputs key information about the nodes and edges of the event tree, including the number of nodes and edges, unique levels and labels, and the labels of the edges (with newlines replaced by spaces).
 }
 \examples{
-# Example of using the summary function with an event_tree object
-\dontrun{
-summary(event_tree_object)
-}
+data <- homicides
+event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
+homicides_ET_summary <- summary(event_tree)
 }

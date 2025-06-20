@@ -11,10 +11,9 @@
 #'   - The labels of the edges, with newlines replaced by spaces
 #'
 #' @examples
-#' # Example of using the summary function with an event_tree object
-#' \dontrun{
-#' summary(event_tree_object)
-#'}
+#' data <- homicides
+#' event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
+#' homicides_ET_summary <- summary(event_tree)
 #' @export
 summary.event_tree <- function(object, ...) {
   # Ensure the object is of class 'event_tree'
@@ -69,10 +68,14 @@ summary.event_tree <- function(object, ...) {
 #' White-coloured nodes (`#FFFFFF`) that are not in the minimum or maximum level are flagged as "Nodes left to be coloured."
 #'
 #' @examples
-#' \dontrun{
-#' staged_tree <- create_staged_tree(data)
-#' summary(staged_tree)
-#' }
+#' data <- homicides
+#' event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
+#' coloured_tree <- ahc_colouring(event_tree)
+#'
+#' # cannot run this whole chunk as one, as specify_priors needs user input
+#' \dontrun{tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
+#' staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
+#' homicides_ST_summary <- summary(staged_tree)}
 #'
 #' @importFrom grDevices col2rgb
 #' @importFrom crayon make_style
@@ -148,10 +151,15 @@ summary.staged_tree <- function(object, ...) {
 #' It represents the amount of information (prior + observed) available for that stage.
 #'
 #' @examples
-#' \dontrun{
-#' ceg_model <- fit_ceg(my_data)
-#' summary(ceg_model)
-#' }
+#' data <- homicides
+#' event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
+#' coloured_tree <- ahc_colouring(event_tree)
+#'
+#' # Cannot run this whole chunk at once as specify_priors needs user input
+#' \dontrun{tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
+#' staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
+#' ceg <- create_ceg(staged_tree, view_table = TRUE)
+#' homicides_CEG_summary <- summary(ceg)}
 #'
 #' @export
 summary.chain_event_graph <- function(object, ...) {

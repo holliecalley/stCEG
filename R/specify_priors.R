@@ -16,17 +16,13 @@
 #' The "Custom" option allows the user to manually input prior values for each row. If incorrect values are provided, an error will be raised.
 #'
 #' @examples
-#' \dontrun{
-#' data <- data.frame(
-#'   Area = sample(c("Enfield", "Lewisham"), 100, replace = TRUE),
-#'   DomesticAbuse = sample(c("Yes", "No"), 100, replace = TRUE),
-#'   Sex = sample(c("Male", "Female"), 100, replace = TRUE),
-#'   Solved = sample(c("Solved", "Unsolved"), 100, replace = TRUE)
-#' )
-#' event_tree <- create_event_tree(data, columns = c(1:4), "both")
+#' data <- homicides
+#' event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
 #' coloured_tree <- ahc_colouring(event_tree)
+#' \dontrun{
 #' tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")}
 #' @export
+#'
 specify_priors <- function(staged_tree_obj, prior_type = "Uniform") {
   # Ensure necessary columns exist
   # Check if staged_tree_obj contains the necessary structure
@@ -46,6 +42,7 @@ specify_priors <- function(staged_tree_obj, prior_type = "Uniform") {
     stop("Dataframe must contain the required columns: color, level2, outgoing_edges2, and number_nodes.")
   }
 
+  # Error message to catch uncoloured nodes
   if (any(nodes_df$level2 != min_level & nodes_df$level2 != max_level & nodes_df$color == "#FFFFFF")) {
     stop("Error: Nodes with a non-min/max level cannot have color #FFFFFF.")
   }
@@ -53,6 +50,7 @@ specify_priors <- function(staged_tree_obj, prior_type = "Uniform") {
   nodes_df <- nodes_df[nodes_df$level2 != max_level, ]
   nodes_df <- nodes_df[c("color", "level2", "outgoing_edges2", "number_nodes")]
 
+  # Calculate number of nodes for each colour
   nodes_df <- nodes_df %>%
     group_by(color, level2, outgoing_edges2) %>%
     summarise(number_nodes = sum(number_nodes, na.rm = TRUE), .groups = "drop")
@@ -74,25 +72,13 @@ specify_priors <- function(staged_tree_obj, prior_type = "Uniform") {
       crayon::make_style(rgb, bg = TRUE)
     }
 
+    # Display key to match colour codes
     cat("\nStage Colour Key:\n")
     for (hex in unique_colors) {
       style <- hex_to_style(hex)
       cat(style("     "), " ", hex, "\n")
     }
   }
-  #nodes_df <- nodes_df %>%
-  #  mutate(ColorPreview = sapply(color, function(col) {
-  #    style <- make_ansi_style(col, bg = TRUE)  # Create ANSI style with background color
-  #    style("    ")  # Apply ANSI style to a block of space
-  #  }))
-
-  #for (i in 1:nrow(nodes_df)) {
-  #  cat(paste(nodes_df$color[i], " | " ,
-  #            nodes_df$ColorPreview[i], "\n"))
-  #}
-
-  #nodes_df <- nodes_df %>%
-   # select(-ColorPreview)
 
   if (prior_type == "Custom") {
     print(nodes_df)
@@ -120,7 +106,9 @@ specify_priors <- function(staged_tree_obj, prior_type = "Uniform") {
                                mapply(function(edges, nodes) paste(rep(1 * nodes, edges), collapse = ","),
                                       nodes_df$outgoing_edges2, nodes_df$number_nodes),
                                nodes_df$prior)
-    }else if (prior_type == "Phantom") {# Extract nodes and edges data
+    } else if (prior_type == "Phantom") {
+
+      # Extract nodes and edges data
       nodes_df2 <- staged_tree_obj$stagedtree$x$nodes
       edges_df <- staged_tree_obj$stagedtree$x$edges
       # Find the maximum level (to exclude the max level from prior calculation)
@@ -155,10 +143,6 @@ specify_priors <- function(staged_tree_obj, prior_type = "Uniform") {
         }
       }
 
-      # Display the updated nodes dataframe
-      #print("Updated nodes data with Phantom Prior:")
-      #print(nodes_df_filtered)
-
       # Group by colour and outgoing_edges2 to summarize the total prior
       df_grouped_by_colour <- nodes_df_filtered %>%
         group_by(color, level2, outgoing_edges2) %>%
@@ -173,7 +157,6 @@ specify_priors <- function(staged_tree_obj, prior_type = "Uniform") {
         df_grouped_by_colour$prior[i] <- paste(rep(round(as.numeric(df_grouped_by_colour$total_prior[i]) / as.numeric(df_grouped_by_colour$outgoing_edges2[i]), 3), as.numeric(df_grouped_by_colour$outgoing_edges2[i])), collapse = ", ")
       }
 
-      #print(df_grouped_by_colour)
       # Select only the columns that are present in nodes_df
       nodes_df <- full_join(nodes_df, df_grouped_by_colour, by = c("level2", "color", "outgoing_edges2")) %>%
         mutate(
@@ -218,6 +201,7 @@ specify_priors <- function(staged_tree_obj, prior_type = "Uniform") {
       }
     } else {
       # If the choice is "no", return without making any edits
+
       cat("No edits made \n") # Exit the function or stop further execution
     }
 
@@ -242,21 +226,16 @@ nodes_df_table <- nodes_df %>%
   select(
     Stage = stage,
     Colour = color,
-    #ColorPreview,  # The new color preview column
     Level = level2,
     "Outgoing Edges" = outgoing_edges2,
     Nodes = number_nodes,
     Prior = prior,
     "Prior Mean" = prior_mean
   )
-  # Print out the ColorPreview with color blocks rendered
-  # To print out the table and view color blocks:
 
 
-# Return the table with color previews as blocks
+# Return the table
 nodes_df_table %>% print()
-  #select(-ColorPreview) %>%
-  #print()
 
 }
-"#FE5F55"
+
