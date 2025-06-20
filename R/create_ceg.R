@@ -433,7 +433,7 @@ create_ceg <- function(staged_tree_obj, level_separation = 1200, node_distance =
     return(output)
 
   } else {
-    #print(ChainEventGraph)  # Display only the first object if view_table is FALSE
+    print(ChainEventGraph)  # Display only the first object if view_table is FALSE
     output <- list(ceg = ChainEventGraph, update_table = result)
     class(output) <- "chain_event_graph"
     return(output)
