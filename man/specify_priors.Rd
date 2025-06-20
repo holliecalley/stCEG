@@ -4,7 +4,7 @@
 \alias{specify_priors}
 \title{Specify Priors for a Staged Tree Object}
 \usage{
-specify_priors(staged_tree_obj, prior_type = "Uniform")
+specify_priors(staged_tree_obj, prior_type = "Uniform", ask_edit = TRUE)
 }
 \arguments{
 \item{staged_tree_obj}{A staged tree object containing the nodes and edges data for the tree.}
@@ -15,6 +15,8 @@ specify_priors(staged_tree_obj, prior_type = "Uniform")
 \item "Phantom": Calculates a Phantom Individuals prior by initialising an alpha based on the maximum number of outgoing edges in the tree and dividing that evenly throughout the tree.
 \item "Custom": Allows the user to manually specify the prior values for each node.
 }}
+
+\item{ask_edit}{If TRUE, this allows you to edit priors after choosing an uninformative prior type.}
 }
 \value{
 A data frame containing the updated nodes data with the specified priors and their means.

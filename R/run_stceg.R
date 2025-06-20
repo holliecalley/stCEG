@@ -1616,7 +1616,13 @@ run_stceg <- function(){
           summarize(number_nodes = sum(number))
 
         # Join the node colors and levels data with the number of nodes per color/level/outgoing_edges
-        node_colors_levels_data <- full_join(node_colors_levels_data, number_edges, by = c("color", "level2", "outgoing_edges"))
+        if (!is.null(node_colors_levels_data) && !is.null(number_edges)) {
+          node_colors_levels_data <- full_join(
+            node_colors_levels_data,
+            number_edges,
+            by = c("color", "level2", "outgoing_edges")
+          )
+        }
 
         # Store the node colors and levels in the reactive value
         node_colors_levels(node_colors_levels_data)
@@ -1734,9 +1740,8 @@ run_stceg <- function(){
           node_colors_levels2(unique_colors_levels_data)
 
           output$colorLevelTable <- renderDT({
-
             table_df <- node_colors_levels2() %>%
-              arrange(gtools::mixedorder(stage)) %>%  # Order by Stage
+              arrange(gtools::mixedorder(stage)) %>%
               select(
                 `Stage Colour` = color,
                 `Stage` = stage,
@@ -1745,8 +1750,18 @@ run_stceg <- function(){
                 `Number of Nodes` = number_nodes,
                 `Prior Distribution` = prior
               )
+
+            col_names <- c(
+              "Stage Colour" = "color",
+              "Stage" = "stage",
+              "Level" = "level2",
+              "Outgoing Edges" = "outgoing_edges",
+              "Number of Nodes" = "number_nodes",
+              "Prior Distribution" = "prior"
+            )
+
             datatable(
-              table_df,  # Render the table using node_colors_levels2
+              table_df,
               escape = FALSE,
               editable = TRUE,
               options = list(dom = 't', pageLength = 50),
@@ -1766,33 +1781,23 @@ run_stceg <- function(){
       # Observe and handle cell edit events
       observeEvent(input$colorLevelTable_cell_edit, {
         info <- input$colorLevelTable_cell_edit
-        node_colors_levels_data <- node_colors_levels2()  # Get the latest edited data
+        node_colors_levels_data <- node_colors_levels2()
 
-        col_name <- names(node_colors_levels_data)[info$col + 1]  # Adjust for 0-based index from DataTable
+        # Match new name back to original column name
+        col_names <- c(
+          "Stage Colour" = "color",
+          "Stage" = "stage",
+          "Level" = "level2",
+          "Outgoing Edges" = "outgoing_edges",
+          "Number of Nodes" = "number_nodes",
+          "Prior Distribution" = "prior"
+        )
+        edited_col <- names(col_names)[info$col + 1]      # Display name
+        true_col <- col_names[[edited_col]]               # Real column name
 
-        # Update the corresponding cell in node_colors_levels_data
-        node_colors_levels_data[info$row, col_name] <- info$value
-
-        # Store the updated data back into node_colors_levels2
+        # Update the data
+        node_colors_levels_data[info$row, true_col] <- info$value
         node_colors_levels2(node_colors_levels_data)
-
-        # Render the updated table using node_colors_levels2
-        output$colorLevelTable <- renderDT({
-          datatable(
-            node_colors_levels2(),
-            escape = FALSE,
-            editable = TRUE,
-            options = list(dom = 't', pageLength = 50),
-            rownames = FALSE
-          ) %>%
-            formatStyle(
-              columns = "color",
-              valueColumns = "color",
-              backgroundColor = styleEqual(node_colors_levels2()$color, node_colors_levels2()$color),
-              color = styleEqual(node_colors_levels2()$color, node_colors_levels2()$color)
-            ) %>%
-            formatStyle(columns = "level2", textAlign = "left")
-        })
       })
 
 
@@ -2622,8 +2627,10 @@ run_stceg <- function(){
 
 
         # Prepare tooltips for nodes
-        nodes <- nodes %>%
-          full_join(grouped_df3(), by = c("color" = "color")) # Assuming `posterior_variance` is in grouped_df2
+        if (!is.null(nodes) && !is.null(grouped_df3())) {
+          nodes <- nodes %>%
+            full_join(grouped_df3(), by = c("color" = "color"))
+        }
         #print(nodes)
         # Prepare edges (without tooltips)
         # Ensure no tooltip is included for edges

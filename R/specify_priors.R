@@ -7,6 +7,7 @@
 #'   - "Uniform": Assigns a Uniform (1,1) prior based on the outgoing edges.
 #'   - "Phantom": Calculates a Phantom Individuals prior by initialising an alpha based on the maximum number of outgoing edges in the tree and dividing that evenly throughout the tree.
 #'   - "Custom": Allows the user to manually specify the prior values for each node.
+#' @param ask_edit If TRUE, this allows you to edit priors after choosing an uninformative prior type.
 #'
 #' @return A data frame containing the updated nodes data with the specified priors and their means.
 #'
@@ -23,7 +24,7 @@
 #' tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")}
 #' @export
 #'
-specify_priors <- function(staged_tree_obj, prior_type = "Uniform") {
+specify_priors <- function(staged_tree_obj, prior_type = "Uniform", ask_edit = TRUE) {
   # Ensure necessary columns exist
   # Check if staged_tree_obj contains the necessary structure
   if (!("stagedtree" %in% names(staged_tree_obj)) || !("x" %in% names(staged_tree_obj$stagedtree))) {
@@ -174,36 +175,37 @@ specify_priors <- function(staged_tree_obj, prior_type = "Uniform") {
     cat("Calculated priors:\n")
     print(nodes_df)
 
-    cat("\nDo you want to edit specific rows? (yes/no): ")
-    edit_choice <- scan(what = character(), nmax = 1, quiet = TRUE)
+    if (ask_edit) {
+      cat("\nDo you want to edit specific rows? (yes/no): ")
+      edit_choice <- scan(what = character(), nmax = 1, quiet = TRUE)
 
-    if (tolower(edit_choice) == "yes") {
-      cat("Enter row numbers to edit (comma-separated, e.g., 1,3,5): ")
-      edit_rows <- scan(what = character(), nmax = 1, quiet = TRUE)
+      if (tolower(edit_choice) == "yes") {
+        cat("Enter row numbers to edit (comma-separated, e.g., 1,3,5): ")
+        edit_rows <- scan(what = character(), nmax = 1, quiet = TRUE)
 
-      if (nzchar(edit_rows)) {
-        edit_indices <- as.numeric(unlist(strsplit(edit_rows, ",")))
-        edit_indices <- edit_indices[edit_indices %in% seq_len(nrow(nodes_df))]
+        if (nzchar(edit_rows)) {
+          edit_indices <- as.numeric(unlist(strsplit(edit_rows, ",")))
+          edit_indices <- edit_indices[edit_indices %in% seq_len(nrow(nodes_df))]
 
-        if (length(edit_indices) > 0) {
-          for (i in edit_indices) {
-            cat(paste0("Enter new prior for row ", i, " (", nodes_df$outgoing_edges2[i], " values, comma-separated): "))
-            new_prior <- scan(what = character(), nmax = 1, quiet = TRUE)
+          if (length(edit_indices) > 0) {
+            for (i in edit_indices) {
+              cat(paste0("Enter new prior for row ", i, " (", nodes_df$outgoing_edges2[i], " values, comma-separated): "))
+              new_prior <- scan(what = character(), nmax = 1, quiet = TRUE)
 
-            values <- unlist(strsplit(new_prior, ","))
-            if (length(values) != nodes_df$outgoing_edges2[i]) {
-              stop(paste0("Row ", i, ": Incorrect number of values. Expected ", nodes_df$outgoing_edges2[i], "."))
+              values <- unlist(strsplit(new_prior, ","))
+              if (length(values) != nodes_df$outgoing_edges2[i]) {
+                stop(paste0("Row ", i, ": Incorrect number of values. Expected ", nodes_df$outgoing_edges2[i], "."))
+              }
+
+              nodes_df$prior[i] <- new_prior
             }
-
-            nodes_df$prior[i] <- new_prior
           }
         }
+      } else {
+        cat("No edits made \n")
       }
-    } else {
-      # If the choice is "no", return without making any edits
-
-      cat("No edits made \n") # Exit the function or stop further execution
     }
+
 
 
   }
