@@ -1,6 +1,6 @@
 Package: stCEG
 Title: Fully Customisable Chain Event Graphs over Spatial Areas
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: c(
   person("Hollie", "Calley", email = "hc629@exeter.ac.uk", role = c("aut", "cre"),
          comment = c(ORCID = "0009-0002-1814-8428")),
