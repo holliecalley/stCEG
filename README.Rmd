@@ -1,0 +1,62 @@
+---
+output: html_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# stCEG
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of `stCEG` is to facilitate the creation of Chain Event Graphs over spatial areas. It allows users to fully customise both the structure and underlying model of the Chain Event Graph, offering a high degree of flexibility for tailored analyses.
+
+## Installation
+
+You can install the stable version of `stCEG` from CRAN with:
+```{r, eval = FALSE}
+install.packages("stCEG")
+```
+
+Or the development version from [GitHub](https://github.com/) with:
+```{r}
+remotes::install_github("holliecalley/stCEG")
+```
+
+## Usage
+
+With the `stCEG` package, it is simple for a user to create an event tree from a given dataset, colour it to turn it into a staged tree, specify priors over this, and then convert this into a Chain Event Graph (CEG). The package also allows for model comparison and the creation of maps based on spatial CEGs, as well as a `Shiny` user-interface.
+
+```{r}
+library(stCEG)
+data <- homicides
+event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
+event_tree$eventtree
+```
+
+```{r}
+coloured_tree <- ahc_colouring(event_tree)
+coloured_tree$stagedtree
+```
+
+```{r}
+tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform", ask_edit = FALSE)
+```
+```{r}
+staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
+staged_tree$stagedtree
+```
+
+```{r}
+ceg <- create_ceg(staged_tree, view_table = FALSE)
+ceg$ceg
+```

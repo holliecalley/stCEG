@@ -175,6 +175,7 @@ specify_priors <- function(staged_tree_obj, prior_type = "Uniform", ask_edit = T
     cat("Calculated priors:\n")
     print(nodes_df)
 
+
     if (ask_edit) {
       cat("\nDo you want to edit specific rows? (yes/no): ")
       edit_choice <- scan(what = character(), nmax = 1, quiet = TRUE)
