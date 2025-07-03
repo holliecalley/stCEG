@@ -20,7 +20,7 @@
 #'   Default is `"posterior_mean"`.
 #' @param view_table Logical. Whether to display the summary table of the aggregated CEG data in the console. Default is `FALSE`.
 #'
-#' @return A `visNetwork` object representing the Chain Event Graph, including contracted nodes and updated edges.
+#' @return A `visNetwork` object representing the Chain Event Graph, including contracted nodes and updated edges.If view_table = TRUE, a coloured table is returned that can be displayed in the viewer, instead of just an update_table which can be viewed in the console.
 #'
 #' @details This function processes the staged tree and prior table, contracts nodes based on connected nodes,
 #' creates aggregated edge summaries, computes posterior and prior mean values, and visualizes the CEG
@@ -40,9 +40,9 @@
 #' coloured_tree <- ahc_colouring(event_tree)
 #'
 #' # Cannot run this whole chunk at once as specify_priors needs user input
-#' \dontrun{tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
+#' tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform", ask_edit = FALSE)
 #' staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
-#' ceg <- create_ceg(staged_tree, view_table = TRUE)}
+#' ceg <- create_ceg(staged_tree, view_table = TRUE)
 #'
 #'
 #' @export
@@ -209,8 +209,8 @@ create_ceg <- function(staged_tree_obj, level_separation = 1200, node_distance =
 
   # Return the contracted nodes and edges
 
-  print(contracted_nodes)
-  print(merged_edges)
+  #print(contracted_nodes)
+  #print(merged_edges)
 
   if (label == "posterior") {
     merged_edges$label <- merged_edges$label_individuals  # Assign "names" (label1)
@@ -418,26 +418,19 @@ create_ceg <- function(staged_tree_obj, level_separation = 1200, node_distance =
   # Create the result list (with invisible filtereddf)
   result <- merged_table
 
-  print(contracted_nodes)
-  print(merged_edges)
+  #print(contracted_nodes)
+  #print(merged_edges)
 
   # Return both the network plot and the result
 
 
   if (view_table) {
-    print(ChainEventGraph)  # Display the first object
-    readline(prompt = "Press Enter to see the update table:")  # Wait for user to press Enter
-    print(UpdateTable)  # Display the second object
-    output <- list(ceg = ChainEventGraph, update_table = result)
-    class(output) <- "chain_event_graph"
-    return(output)
-
+    output <- list(ceg = ChainEventGraph, coloured_table = UpdateTable, update_table = result)
   } else {
-    print(ChainEventGraph)  # Display only the first object if view_table is FALSE
     output <- list(ceg = ChainEventGraph, update_table = result)
-    class(output) <- "chain_event_graph"
-    return(output)
   }
+  class(output) <- "chain_event_graph"
+  return(output)
 
 }
 
@@ -481,10 +474,10 @@ create_ceg <- function(staged_tree_obj, level_separation = 1200, node_distance =
 #' event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
 #' coloured_tree <- ahc_colouring(event_tree)
 #'
-#' # Cannot run this whole chunk at once as specify_priors needs user input
-#' \dontrun{tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
+#' tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform", ask_edit = FALSE)
 #' staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
-#' ceg <- create_ceg(staged_tree, view_table = TRUE)}
+#' ceg <- create_ceg(staged_tree, view_table = TRUE)
+#'
 #'
 #' # Define node groups and colours
 #' node_groups <- list(c("s1", "s2"), c("s3", "s4"))
@@ -495,14 +488,13 @@ create_ceg <- function(staged_tree_obj, level_separation = 1200, node_distance =
 #' custom_coloured_tree <- ahc_colouring(custom_tree)
 #'
 #' # Cannot run this whole chunk at once as specify_priors needs user input
-#' \dontrun{custom_tree_priors <- specify_priors(custom_coloured_tree, prior_type = "Uniform")
+#' custom_tree_priors <- specify_priors(custom_coloured_tree, prior_type = "Uniform", ask_edit = FALSE)
 #' custom_staged_tree <- staged_tree_prior(custom_coloured_tree, custom_tree_priors)
-#' ceg2 <- create_ceg(custom_staged_tree, view_table = TRUE)}
-#' \dontrun{
+#' ceg2 <- create_ceg(custom_staged_tree, view_table = TRUE)
 #' model1_summary <- summary(ceg)
 #' model2_summary <- summary(ceg2)
 #' compare_ceg_models(model1_summary, model2_summary)
-#' }
+#'
 #'
 #' @export
 compare_ceg_models <- function(summary1, summary2) {

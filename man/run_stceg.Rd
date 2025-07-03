@@ -35,7 +35,7 @@ The app enables the user to apply various spatial and temporal analyses,
 including map visualizations and event tree colourings.
 }
 \examples{
-\dontrun{
+if(interactive()){
 # Run the app
 run_stceg()}
 

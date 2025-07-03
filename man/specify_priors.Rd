@@ -4,7 +4,12 @@
 \alias{specify_priors}
 \title{Specify Priors for a Staged Tree Object}
 \usage{
-specify_priors(staged_tree_obj, prior_type = "Uniform", ask_edit = TRUE)
+specify_priors(
+  staged_tree_obj,
+  prior_type = "Uniform",
+  ask_edit = TRUE,
+  print_colours = TRUE
+)
 }
 \arguments{
 \item{staged_tree_obj}{A staged tree object containing the nodes and edges data for the tree.}
@@ -17,6 +22,8 @@ specify_priors(staged_tree_obj, prior_type = "Uniform", ask_edit = TRUE)
 }}
 
 \item{ask_edit}{If TRUE, this allows you to edit priors after choosing an uninformative prior type.}
+
+\item{print_colours}{If TRUE, this prints a colour key for stages. Default is TRUE.}
 }
 \value{
 A data frame containing the updated nodes data with the specified priors and their means.
@@ -33,6 +40,5 @@ The "Custom" option allows the user to manually input prior values for each row.
 data <- homicides
 event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
 coloured_tree <- ahc_colouring(event_tree)
-\dontrun{
-tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")}
+tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform", ask_edit = FALSE)
 }

@@ -29,7 +29,7 @@
 #' visualizations and data manipulation features.
 #'
 #' @examples
-#' \dontrun{
+#' if(interactive()){
 #' # Run the app
 #' run_stceg()}
 #'
@@ -433,10 +433,9 @@ run_stceg <- function(){
         df <- homicides()
         time_col <- input$selected_time_columns
 
-        if (!time_col %in% colnames(df)) {
-          print("Error: Selected column does not exist in the data frame.")
-          return(NULL)
-        }
+       if (!time_col %in% colnames(df)) {
+          stop("Error: Selected column does not exist in the data frame.")
+      }
 
 
         if (input$time_type == "Month-Year") {
@@ -450,8 +449,7 @@ run_stceg <- function(){
             end_date <- max(df[[time_col]], na.rm = TRUE)
 
             if (is.na(start_date) || is.na(end_date)) {
-              print("Invalid start or end date for month-year slider.")
-              return(NULL)
+              stop("Invalid start or end date for month-year slider.")
             }
 
             # Create sequence of months between start_date and end_date
@@ -470,9 +468,8 @@ run_stceg <- function(){
             )
 
           }, error = function(e) {
-            print("Error generating Month-Year slider:")
-            print(e)
-            return(NULL)
+            stop("Error generating Month-Year slider:")
+            stop(e)
           })
         }
         else if (input$time_type == "Date") {
@@ -596,9 +593,9 @@ run_stceg <- function(){
           time_col <- input$selected_time_columns
           req(time_col)
 
-          print(paste("Time column selected:", time_col))
-          print(paste("Time column type:", class(df_homicides[[time_col]])))
-          print(paste("Timeframe input values:", input$timeframe_slider))
+          #print(paste("Time column selected:", time_col))
+          #print(paste("Time column type:", class(df_homicides[[time_col]])))
+          #print(paste("Timeframe input values:", input$timeframe_slider))
 
           if (input$time_type == "Date") {
             df_homicides[[time_col]] <- as.Date(df_homicides[[time_col]], format = input$date_format)
@@ -639,7 +636,7 @@ run_stceg <- function(){
               df_homicides <- df_homicides %>%
                 filter(df_homicides[[time_col]] >= start_year & df_homicides[[time_col]] <= end_year)
             } else {
-              print("Invalid year range in the slider.")
+              stop("Invalid year range in the slider.")
             }
           }
         }
@@ -1090,8 +1087,6 @@ run_stceg <- function(){
 
           visNetworkProxy("eventtree_network") %>%
             visUpdateNodes(nodes = data$nodes)
-        } else {
-          print("No nodes selected")  # Additional debugging statement
         }
 
         # Reset selected nodes
@@ -1160,10 +1155,10 @@ run_stceg <- function(){
                                  paste(data_before$edges$from, data_before$edges$to))
 
 
-          cat("Edges removed:\n")
+          #cat("Edges removed:\n")
           #print(data_before$edges[with(data_before$edges, paste(from, to)) %in% deleted_edges, ])
 
-          cat("Edges added:\n")
+          #cat("Edges added:\n")
           #print(data$edges[with(data$edges, paste(from, to)) %in% added_edges, ])
 
 
@@ -2151,8 +2146,7 @@ run_stceg <- function(){
         # Check for NAs
         #print("Checking for NAs in updated_edges:")
         if (any(is.na(updated_edges$from)) || any(is.na(updated_edges$to))) {
-          print("NAs found in updated_edges$from or updated_edges$to:")
-          print(updated_edges[is.na(updated_edges$from) | is.na(updated_edges$to), ])
+          stop("NAs found in updated_edges$from or updated_edges$to:")
         }
 
         merged_edges <- updated_edges %>%
@@ -2572,7 +2566,7 @@ run_stceg <- function(){
 
         # If no matching paths exist, return 0 probability
         if (nrow(condition_paths) == 0) {
-          print(paste("P(", last_group, "|", paste(unique_values, collapse = ", "), ") = 0"))
+          #print(paste("P(", last_group, "|", paste(unique_values, collapse = ", "), ") = 0"))
           return(0)
         }
 
@@ -2587,7 +2581,7 @@ run_stceg <- function(){
         # Step 4: Compute conditional probability P(last_group | unique_values)
         conditional_prob <- ifelse(marginal_prob > 0, joint_prob / marginal_prob, 0)
 
-        print(paste("P(", last_group, "|", paste(unique_values, collapse = ", "), ") = ", conditional_prob, sep = ""))
+        #print(paste("P(", last_group, "|", paste(unique_values, collapse = ", "), ") = ", conditional_prob, sep = ""))
         return(conditional_prob)
       }
 
@@ -2906,7 +2900,7 @@ run_stceg <- function(){
             #print("visoutputdata")
             #print(visoutputdata)
             selected_ids <- selected_polygon()
-            print(paste("Selected polygons:", toString(selected_ids)))  # Debugging
+            #print(paste("Selected polygons:", toString(selected_ids)))  # Debugging
 
 
 
@@ -3018,7 +3012,7 @@ run_stceg <- function(){
           current_selection <- selected_polygon()
 
           # Print the current selection to debug
-          print(paste("Current selected polygon(s):", toString(current_selection)))
+          #print(paste("Current selected polygon(s):", toString(current_selection)))
 
           # Check if the clicked polygon is already selected
           if (clicked_id %in% current_selection) {
@@ -3030,7 +3024,7 @@ run_stceg <- function(){
             leafletProxy("map") %>%
               clearGroup("highlighted")
 
-            print(paste("Deselected polygon:", clicked_id))  # Debugging print
+            #print(paste("Deselected polygon:", clicked_id))  # Debugging print
           } else {
             # Select the polygon if it is not already selected (add to selection)
             updated_selection <- c(current_selection, clicked_id)
@@ -3038,11 +3032,11 @@ run_stceg <- function(){
 
 
 
-            print(paste("Selected polygon:", clicked_id))  # Debugging print
+            #print(paste("Selected polygon:", clicked_id))  # Debugging print
           }
 
           # Print the updated list of selected polygons
-          print(paste("Updated selected polygon(s):", toString(selected_polygon())))
+          #print(paste("Updated selected polygon(s):", toString(selected_polygon())))
         }
       })
 
@@ -3225,14 +3219,14 @@ run_stceg <- function(){
       observeEvent(input$colorSelectedModalNodes, {
         # Get selected nodes from the visNetwork
         selected_nodes <- input$dynamic_vis_selectedNodes
-        print(paste("Selected nodes:", toString(selected_nodes)))  # Debugging statement
+        #print(paste("Selected nodes:", toString(selected_nodes)))  # Debugging statement
 
         if (!is.null(all_florets())) {
           # Get the combined edges and nodes from all_florets()
           combined_edges <- all_florets()$edges
           combined_nodes <- all_florets()$nodes
-          print("combined_nodes")
-          print(combined_edges)
+          #print("combined_nodes")
+          #print(combined_edges)
           visoutputdata <- updated_graph_data()
           full_edges <- visoutputdata$edges
           # Function to get the full path from origin to a node (recursive search)
@@ -3341,15 +3335,15 @@ run_stceg <- function(){
           #print(selected_nodes)
           #print("all_paths")
           #print(all_paths)
-          print(toString(selected_ids))
+          #print(toString(selected_ids))
           # Match nodes with the same path as selected nodes
           #matching_nodes <- combined_nodes$id[all_paths %in% sapply(selected_nodes, function(node) get_path_to_origin_standardized(node, full_edges))]
           matching_nodes <- get_nodes_with_same_start(selected_nodes, all_paths, toString(selected_ids))
           # Combine with the initially selected nodes to ensure complete paths are colored
           all_selected_nodes <- unique(c(selected_nodes, matching_nodes))#, matching_nodes))
 
-          print("All selected nodes to be colored:")
-          print(all_selected_nodes)  # Debugging output
+          #print("All selected nodes to be colored:")
+          #print(all_selected_nodes)  # Debugging output
 
           selected_color <- if (input$existing_colors != "") {
             input$existing_colors  # Use the selected colour from the dropdown
@@ -3382,8 +3376,8 @@ run_stceg <- function(){
 
               # Extract all unique color values from both the floret and graph_data
               all_colors <- unique(c(stored_colors$all_colors, selected_color, graph_data$nodes$color))
-              print("All available colors:")
-              print(all_colors)
+              #print("All available colors:")
+              #print(all_colors)
 
               # Update stored_colors to include all unique colors
               stored_colors$all_colors <- all_colors

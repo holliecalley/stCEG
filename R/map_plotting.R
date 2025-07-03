@@ -110,7 +110,7 @@ calculate_conditional_prob <- function(path_df, unique_values, selected_indices,
   # Step 4: Compute conditional probability P(last_group | unique_values)
   conditional_prob <- ifelse(marginal_prob > 0, joint_prob / marginal_prob, 0)
 
-  print(paste("P(", last_group, "|", paste(unique_values, collapse = ", "), ") = ", conditional_prob, sep = ""))
+  #print(paste("P(", last_group, "|", paste(unique_values, collapse = ", "), ") = ", conditional_prob, sep = ""))
   return(conditional_prob)
 }
 
@@ -185,11 +185,10 @@ calculate_area_probabilities <- function(path_df, unique_values, selected_indice
 #' event_tree <- create_event_tree(data, columns = c(9,2,4,5), "both")
 #' coloured_tree <- ahc_colouring(event_tree)
 #'
-#' # Cannot run this whole chunk at once as specify_priors needs user input
-#' \dontrun{tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
+#' tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform", ask_edit = FALSE)
 #' staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
 #' ceg <- create_ceg(staged_tree, view_table = TRUE)
-#' generate_CEG_map(bcu_shapefile, ceg)}
+#' generate_CEG_map(bcu_shapefile, ceg)
 #'
 #' @export
 generate_CEG_map <- function(shapefile, ceg_object, conditionals = unique(ceg_object$x$edges$label1), colour_by = NULL, color_palette = "viridis") {
@@ -250,7 +249,7 @@ generate_CEG_map <- function(shapefile, ceg_object, conditionals = unique(ceg_ob
   shape_data$color_assignment <- assign_colors(shape_data$area_probs, color_palette)
 
   # Step 5: Generate the Leaflet Map
-  leaflet(data = shape_data) %>%
+  map <- leaflet(data = shape_data) %>%
     addTiles() %>%
     addPolygons(
       layerId = shape_data[[1]],
@@ -269,6 +268,14 @@ generate_CEG_map <- function(shapefile, ceg_object, conditionals = unique(ceg_ob
       title = "Probability", position = "bottomright",
       labFormat = labelFormat(transform = function(x) round(x, 2))
     )
+
+  transposed_df <- as.data.frame(area_probs)
+  transposed_df <- as.data.frame(t(transposed_df))
+
+  # Optional: Set column name
+  colnames(transposed_df) <- "Probability"
+
+  return(list(map = map, conditional_probabilities = transposed_df))
 }
 
 

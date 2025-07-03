@@ -34,11 +34,10 @@ data <- homicides
 event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
 coloured_tree <- ahc_colouring(event_tree)
 
-# Cannot run this whole chunk at once as specify_priors needs user input
-\dontrun{tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
+tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform", ask_edit = FALSE)
 staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
 ceg <- create_ceg(staged_tree, view_table = TRUE)
-create_reduced_CEG(ceg, "Adult")}
+create_reduced_CEG(ceg, "Adult")
 
 
 }

@@ -53,6 +53,17 @@ summary.event_tree <- function(object, ...) {
 #' @param object An object of class `staged_tree`, containing components `nodes` and `edges` in `object$stagedtree$x`, and optionally a `priortable`.
 #' @param ... Additional arguments (currently unused).
 #'
+#' @return
+#' Invisibly returns a list containing summary components:
+#' \itemize{
+#'   \item \code{num_nodes}: Total number of nodes in the staged tree.
+#'   \item \code{num_edges}: Total number of edges in the staged tree.
+#'   \item \code{num_uncoloured_middle}: Number of white nodes not in the first or last level.
+#'   \item \code{color_counts}: A named table of node colour frequencies.
+#'   \item \code{priortable}: The prior table, if available; otherwise \code{NULL}.
+#' }
+#' Also prints a human-readable summary to the console.
+#'
 #' @details
 #' This function #prints a summary that includes:
 #' \itemize{
@@ -71,11 +82,9 @@ summary.event_tree <- function(object, ...) {
 #' data <- homicides
 #' event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
 #' coloured_tree <- ahc_colouring(event_tree)
-#'
-#' # cannot run this whole chunk as one, as specify_priors needs user input
-#' \dontrun{tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
+#' tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform", ask_edit = FALSE)
 #' staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
-#' homicides_ST_summary <- summary(staged_tree)}
+#' homicides_ST_summary <- summary(staged_tree)
 #'
 #' @importFrom grDevices col2rgb
 #' @importFrom crayon make_style
@@ -156,10 +165,10 @@ summary.staged_tree <- function(object, ...) {
 #' coloured_tree <- ahc_colouring(event_tree)
 #'
 #' # Cannot run this whole chunk at once as specify_priors needs user input
-#' \dontrun{tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
+#' tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform", ask_edit = FALSE)
 #' staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
 #' ceg <- create_ceg(staged_tree, view_table = TRUE)
-#' homicides_CEG_summary <- summary(ceg)}
+#' homicides_CEG_summary <- summary(ceg)
 #'
 #' @export
 summary.chain_event_graph <- function(object, ...) {

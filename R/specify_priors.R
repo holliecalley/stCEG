@@ -8,6 +8,7 @@
 #'   - "Phantom": Calculates a Phantom Individuals prior by initialising an alpha based on the maximum number of outgoing edges in the tree and dividing that evenly throughout the tree.
 #'   - "Custom": Allows the user to manually specify the prior values for each node.
 #' @param ask_edit If TRUE, this allows you to edit priors after choosing an uninformative prior type.
+#' @param print_colours If TRUE, this prints a colour key for stages. Default is TRUE.
 #'
 #' @return A data frame containing the updated nodes data with the specified priors and their means.
 #'
@@ -20,11 +21,10 @@
 #' data <- homicides
 #' event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
 #' coloured_tree <- ahc_colouring(event_tree)
-#' \dontrun{
-#' tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")}
+#' tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform", ask_edit = FALSE)
 #' @export
 #'
-specify_priors <- function(staged_tree_obj, prior_type = "Uniform", ask_edit = TRUE) {
+specify_priors <- function(staged_tree_obj, prior_type = "Uniform", ask_edit = TRUE, print_colours = TRUE) {
   # Ensure necessary columns exist
   # Check if staged_tree_obj contains the necessary structure
   if (!("stagedtree" %in% names(staged_tree_obj)) || !("x" %in% names(staged_tree_obj$stagedtree))) {
@@ -74,15 +74,19 @@ specify_priors <- function(staged_tree_obj, prior_type = "Uniform", ask_edit = T
     }
 
     # Display key to match colour codes
-    cat("\nStage Colour Key:\n")
-    for (hex in unique_colors) {
-      style <- hex_to_style(hex)
-      cat(style("     "), " ", hex, "\n")
+    if (print_colours) {
+      cat("\nStage Colour Key:\n")
+      for (hex in unique_colors) {
+        style <- hex_to_style(hex)
+        cat(style("     "), " ", hex, "\n")
+      }
     }
   }
 
   if (prior_type == "Custom") {
-    print(nodes_df)
+    print_nodes_df <- nodes_df
+    colnames(print_nodes_df) <- c("Color", "Level", "Outgoing Edges", "Nodes", "Prior", "Stage")
+    print(print_nodes_df)
 
     # Loop through each row and prompt the user for the prior
     for (i in 1:nrow(nodes_df)) {
@@ -172,11 +176,14 @@ specify_priors <- function(staged_tree_obj, prior_type = "Uniform", ask_edit = T
 
     }
 
-    cat("Calculated priors:\n")
-    print(nodes_df)
 
 
     if (ask_edit) {
+      cat("Calculated priors:\n")
+      print_nodes_df <- nodes_df
+      colnames(print_nodes_df) <- c("Color", "Level", "Outgoing Edges", "Nodes", "Prior", "Stage")
+      print(print_nodes_df)
+
       cat("\nDo you want to edit specific rows? (yes/no): ")
       edit_choice <- scan(what = character(), nmax = 1, quiet = TRUE)
 
@@ -238,7 +245,7 @@ nodes_df_table <- nodes_df %>%
 
 
 # Return the table
-nodes_df_table %>% print()
+return(nodes_df_table)
 
 }
 

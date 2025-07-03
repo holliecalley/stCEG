@@ -36,7 +36,7 @@ Default is \code{"posterior_mean"}.
 \item{view_table}{Logical. Whether to display the summary table of the aggregated CEG data in the console. Default is \code{FALSE}.}
 }
 \value{
-A \code{visNetwork} object representing the Chain Event Graph, including contracted nodes and updated edges.
+A \code{visNetwork} object representing the Chain Event Graph, including contracted nodes and updated edges.If view_table = TRUE, a coloured table is returned that can be displayed in the viewer, instead of just an update_table which can be viewed in the console.
 }
 \description{
 This function generates a Chain Event Graph (CEG) from a staged tree object and a prior table.
@@ -56,9 +56,9 @@ event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
 coloured_tree <- ahc_colouring(event_tree)
 
 # Cannot run this whole chunk at once as specify_priors needs user input
-\dontrun{tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
+tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform", ask_edit = FALSE)
 staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
-ceg <- create_ceg(staged_tree, view_table = TRUE)}
+ceg <- create_ceg(staged_tree, view_table = TRUE)
 
 
 }

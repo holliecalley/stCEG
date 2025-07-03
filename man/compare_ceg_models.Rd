@@ -44,10 +44,10 @@ data <- homicides
 event_tree <- create_event_tree(data, columns = c(1,2,4,5), "both")
 coloured_tree <- ahc_colouring(event_tree)
 
-# Cannot run this whole chunk at once as specify_priors needs user input
-\dontrun{tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform")
+tree_priors <- specify_priors(coloured_tree, prior_type = "Uniform", ask_edit = FALSE)
 staged_tree <- staged_tree_prior(coloured_tree, tree_priors)
-ceg <- create_ceg(staged_tree, view_table = TRUE)}
+ceg <- create_ceg(staged_tree, view_table = TRUE)
+
 
 # Define node groups and colours
 node_groups <- list(c("s1", "s2"), c("s3", "s4"))
@@ -58,13 +58,12 @@ custom_tree <- update_node_colours(event_tree, node_groups, colours)
 custom_coloured_tree <- ahc_colouring(custom_tree)
 
 # Cannot run this whole chunk at once as specify_priors needs user input
-\dontrun{custom_tree_priors <- specify_priors(custom_coloured_tree, prior_type = "Uniform")
+custom_tree_priors <- specify_priors(custom_coloured_tree, prior_type = "Uniform", ask_edit = FALSE)
 custom_staged_tree <- staged_tree_prior(custom_coloured_tree, custom_tree_priors)
-ceg2 <- create_ceg(custom_staged_tree, view_table = TRUE)}
-\dontrun{
+ceg2 <- create_ceg(custom_staged_tree, view_table = TRUE)
 model1_summary <- summary(ceg)
 model2_summary <- summary(ceg2)
 compare_ceg_models(model1_summary, model2_summary)
-}
+
 
 }
