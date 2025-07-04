@@ -6,7 +6,7 @@ Authors@R: c(
          comment = c(ORCID = "0009-0002-1814-8428")),
   person("Daniel", "Williamson", role = "ctb",
          comment = c(ORCID = "0000-0001-8917-3300")))
-Description: Enables the creation of Chain Event Graphs over spatial areas, with an optional 'Shiny' user interface. Allows users to fully customise both the structure and underlying model of the Chain Event Graph, offering a high degree of flexibility for tailored analyses. For more details on Chain Event Graphs, see Freeman, G., & Smith, J. Q. (2011) <doi.org/10.1016/j.jmva.2011.03.008>, Collazo R. A., Görgen C. and Smith J. Q. (2018, ISBN:9781498729604) and Barclay, L. M., Hutton, J. L., & Smith, J. Q. (2014) <doi.org/10.1214/13-BA843>.
+Description: Enables the creation of Chain Event Graphs over spatial areas, with an optional 'Shiny' user interface. Allows users to fully customise both the structure and underlying model of the Chain Event Graph, offering a high degree of flexibility for tailored analyses. For more details on Chain Event Graphs, see Freeman, G., & Smith, J. Q. (2011) <doi:10.1016/j.jmva.2011.03.008>, Collazo R. A., Görgen C. and Smith J. Q. (2018, ISBN:9781498729604) and Barclay, L. M., Hutton, J. L., & Smith, J. Q. (2014) <doi:10.1214/13-BA843>.
 URL: https://github.com/holliecalley/stCEG
 BugReports: https://github.com/holliecalley/stCEG/issues
 License: GPL (>= 3)
